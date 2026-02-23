@@ -15,6 +15,7 @@ export default defineConfig([
   // --- Игнорируем папки сборки и node_modules
   globalIgnores([
     '.next/**',
+    'mongo/**',
     'out/**',
     'build/**',
     'next-env.d.ts',

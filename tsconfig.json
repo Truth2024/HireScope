@@ -20,7 +20,13 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@styles/*": ["/app/shared/styles/*"]
+      "@styles/*": ["src/shared/styles/*"],
+      "@lib/*": ["src/shared/lib/*"],
+      "@components": ["src/shared/components/index.ts"],
+      "@ui": ["src/shared/ui/index.ts"],
+      "@models/*": ["mongo/models/*"],
+      "@store/*": ["src/shared/store/*"],
+      "@providers/*": ["src/shared/providers/*"]
     }
   },
   "include": [
@@ -29,7 +35,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "mongo/seed.js"
   ],
   "exclude": ["node_modules"]
 }

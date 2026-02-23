@@ -1,0 +1,17 @@
+@use 'variables' as v;
+
+@mixin arrow-hover($direction: right, $distance: 3px) {
+  svg {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &:hover {
+    svg {
+      @if $direction == right {
+        transform: translateX($distance);
+      } @else if $direction == left {
+        transform: translateX(-$distance);
+      }
+    }
+  }
+}

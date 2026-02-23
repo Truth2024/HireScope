@@ -23,7 +23,11 @@
   "scss.lint.unknownAtRules": "ignore",
 
   "tailwindCSS.includeLanguages": {
-    "typescript": "javascript",
-    "typescriptreact": "javascriptreact"
+    "scss": "scss",
+    "sass": "scss",
+    "html": "html",
+    "javascript": "javascript",
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
   }
 }

@@ -7,8 +7,7 @@ import { TopCandidateList } from './components/TopCandidateList/TopCandidateList
 import { TopVacancyList } from './components/TopVacancyList/TopVacancyList';
 
 export default async function MainPage() {
-  const vacancy = await fetchTopVacancy();
-  const candidate = await fetchNewCandidate();
+  const [vacancy, candidate] = await Promise.all([fetchTopVacancy(), fetchNewCandidate()]);
 
   return (
     <div className="">

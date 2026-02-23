@@ -29,11 +29,9 @@ export default async function MainPage() {
   );
 }
 
-// Общая функция для fetch с обработкой ошибок
 const fetchTopVacancy = async (): Promise<IVacancy[]> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vacancy/top`, {
-      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -49,11 +47,9 @@ const fetchTopVacancy = async (): Promise<IVacancy[]> => {
   }
 };
 
-// Общая функция для fetch с обработкой ошибок
 const fetchNewCandidate = async (): Promise<IUser[]> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/candidate/newUsers`, {
-      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },

@@ -1,0 +1,45 @@
+@use '_variables' as v;
+@use 'mixins';
+@import './tw-helper.css';
+
+:root {
+  --color-bg: #{v.$color-bg};
+  --color-brand: #{v.$color-brand};
+  --color-brand-hover: #{v.$color-brand-hover};
+  --color-header: #{v.$color-header};
+
+  --base-font-color: #{v.$base-font-color};
+  --gray-font-color: #{v.$gray-font-color};
+
+  --border-gray: #{v.$border-gray};
+}
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-family), sans-serif;
+  color: var(--base-font-color);
+  overflow-y: scroll;
+}
+
+.content {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 0 50px;
+
+  @media (max-width: 568px) {
+    padding: 0 10px;
+  }
+}
+
+.main {
+  min-height: calc(100vh - 80px);
+  display: flex;
+}
+
+.hover-arrow-right {
+  @include mixins.arrow-hover('right', 3px);
+}
+
+.hover-arrow-left {
+  @include mixins.arrow-hover('left', 3px);
+}

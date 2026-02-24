@@ -1,0 +1,77 @@
+:root {
+  --brand: #6366f1;
+
+  --input-bg: #f9fafb;
+  --input-border: #e5e7eb;
+  --input-border-hover: #d1d5db;
+
+  --text-primary: #111827;
+  --text-secondary: #9ca3af;
+  --input-text-disabled: #cbd5e1;
+
+  --input-border-danger: #ef4444;
+  --input-bg-danger: #fef2f2;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+
+  padding: 0px 12px;
+  width: 100%;
+  height: 52px;
+  border-radius: 8px;
+
+  transition:
+    border 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.inputWrapper:hover:not(.disabled) {
+  border-color: var(--input-border-hover);
+}
+
+.inputWrapper:focus-within:not(.disabled) {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.input {
+  height: 100%;
+  all: unset;
+  width: 100%;
+  font-size: 16px;
+  line-height: 125%;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.inputWrapper.borderDanger {
+  border-color: var(--input-border-danger);
+  background-color: var(--input-bg-danger);
+}
+
+.inputWrapper.borderDanger:focus-within {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.disabled {
+  background-color: #f3f4f6;
+}
+
+.input.disabled {
+  color: var(--input-text-disabled);
+}
+
+.input.disabled::placeholder {
+  color: var(--input-text-disabled);
+}

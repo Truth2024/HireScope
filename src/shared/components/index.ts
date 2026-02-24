@@ -1,0 +1,10 @@
+export { default as Header } from './Header/Header';
+export { default as Logo } from './Logo/Logo';
+export { default as VacancyCard } from './VacancyCard/VacancyCard';
+export { default as CandidateCard } from './CandidateCard/CandidateCard';
+export { default as Skills } from './Skills/Skills';
+export { default as DateInfo } from './DateInfo/DateInfo';
+export { default as Avatar } from './Avatar/Avatar';
+export { Experience } from './Experience/Experience';
+export { VacancySalary } from './VacancySalary/VacancySalary';
+export { Rating } from './Rating/Rating';

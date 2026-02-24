@@ -1,0 +1,195 @@
+{
+  "Header": {
+    "nav": {
+      "home": "Home",
+      "vacancies": "Vacancies",
+      "candidates": "Candidates",
+      "signIn": "Sign in"
+    }
+  },
+  "Hero": {
+    "title1": "Find talent.",
+    "title2": "Track progress.",
+    "title3": "Hire smarter.",
+    "description1": "A modern recruitment platform with analytics and",
+    "description2": "intelligent matching built for teams and candidates.",
+    "terms": {
+      "text": "By using HireScope, you accept our",
+      "termsLink": "Terms",
+      "privacyLink": "Privacy"
+    },
+    "buttons": {
+      "getStarted": "Get Started",
+      "exploreJobs": "Explore Jobs"
+    }
+  },
+
+  "SectionTitle": {
+    "trendingJobs": "Tranding Jobs",
+    "newcandidate": "New Candidates",
+    "candidates": "Candidates",
+    "vacancies": "Vacancies",
+    "buttonviewall": "View All"
+  },
+
+  "Card": {
+    "viewposition": "View position",
+    "viewprofile": "View Profile",
+    "experience": "Experience",
+    "company": "Company",
+    "notSpecified": "Not specified",
+    "noExperience": "No experience specified",
+    "at": "at",
+    "years": "yrs",
+    "year": "yr",
+    "years_full": "years",
+    "year_full": "year",
+    "morePositions": "+{count} more positions",
+    "skills": "Skills",
+    "noSkills": "No skills specified",
+    "moreSkills": "+{count} more",
+    "requirements": "Requirements",
+    "description": "Description",
+    "apply": "Apply now",
+    "posted": "Posted",
+    "comments": "Comments",
+    "noComments": "No comments yet",
+    "beFirstToLeaveReview": "Be the first to leave a review!",
+    "memberSince": "Member since",
+    "contactCandidate": "Contact candidate"
+  },
+
+  "Auth": {
+    "regtitle": "Register",
+    "regbutton": "Create account",
+    "regdescr": "Already have an account?",
+    "regname": "Enter first name",
+    "regsurname": "Enter surname",
+    "regpatronymic": "Enter patronymic",
+
+    "logintitle": "Login",
+    "loginbutton": "Sign in",
+    "logindescr": "Don’t have an account?",
+
+    "email": "Enter email",
+    "pass": "Enter password",
+    "confirm": "Confirm password"
+  },
+
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "description": "This Privacy Policy explains how <strong>HireScope</strong> collects, uses, and protects your personal data, as well as your rights when using our platform.",
+
+    "sections": {
+      "dataCollection": {
+        "title": "1. Data Collection",
+        "items": [
+          "We collect only the data necessary to provide our services: name, email, phone number, resume information, and other details you provide voluntarily.",
+          "Data may be provided when registering, applying for jobs, or subscribing to newsletters.",
+          "All data is used solely to provide services, connect candidates with recruiters, and send platform updates."
+        ]
+      },
+      "purposeOfProcessing": {
+        "title": "2. Purpose of Data Processing",
+        "items": [
+          "Connecting candidates with recruiters efficiently.",
+          "Providing analytics and insights to improve the hiring process.",
+          "Sending platform updates, newsletters, or promotions (only with user consent).",
+          "Compliance with applicable laws."
+        ]
+      },
+      "dataHandling": {
+        "title": "3. Data Handling and Storage",
+        "items": [
+          "All personal data is stored securely and only retained as long as necessary.",
+          "We do not share personal data with third parties except where required by law or to provide services (e.g., recruiters or payment processors).",
+          "Data retention periods are defined by internal policies and applicable law."
+        ]
+      },
+      "userRights": {
+        "title": "4. User Rights",
+        "items": [
+          "Users can access, correct, or request deletion of their personal data.",
+          "Users may unsubscribe from communications at any time by contacting <email>support@hirescope.com</email>.",
+          "Users can contact regulatory authorities if they believe their data rights are violated."
+        ]
+      },
+      "dataSecurity": {
+        "title": "5. Data Security",
+        "text": "HireScope uses modern security measures, including encryption, secure data transfer protocols, and internal access controls, to protect your personal data."
+      },
+      "changesToPolicy": {
+        "title": "6. Changes to Privacy Policy",
+        "text": "We may update this Privacy Policy from time to time. The latest version will be posted on the platform, and continued use constitutes acceptance of changes."
+      },
+      "contact": {
+        "title": "Contact",
+        "text": "For questions about this Privacy Policy or data processing, contact us:",
+        "email": "Email:",
+        "phone": "Phone:",
+        "address": "Address: 123 Tech Street, San Francisco, CA, USA"
+      }
+    },
+
+    "copyright": "© 2026 HireScope"
+  },
+  "TermsOfService": {
+    "title": "Terms of Service",
+    "description": "Welcome to <strong>HireScope</strong>! By accessing or using our platform, you agree to these Terms of Service. Please read them carefully to understand your rights and responsibilities.",
+
+    "sections": {
+      "useOfPlatform": {
+        "title": "1. Use of the Platform",
+        "items": [
+          "HireScope is designed to efficiently connect candidates and recruiters.",
+          "You may use the platform only for lawful purposes and in accordance with these Terms."
+        ]
+      },
+      "accounts": {
+        "title": "2. Accounts",
+        "items": [
+          "Users are responsible for keeping their account credentials secure.",
+          "Sharing your account or unauthorized access is strictly prohibited."
+        ]
+      },
+      "userContent": {
+        "title": "3. User Content",
+        "items": [
+          "You retain ownership of your content, including resumes, profiles, or posts.",
+          "By using the platform, you grant HireScope permission to display and process your content to provide services."
+        ]
+      },
+      "prohibitedActions": {
+        "title": "4. Prohibited Actions",
+        "items": [
+          "No spamming, hacking, or other illegal activities are allowed.",
+          "Do not attempt to disrupt or harm the platform or other users."
+        ]
+      },
+      "termination": {
+        "title": "5. Termination",
+        "items": [
+          "HireScope may suspend or terminate accounts that violate these Terms.",
+          "Termination does not affect obligations incurred prior to termination."
+        ]
+      },
+      "limitationOfLiability": {
+        "title": "6. Limitation of Liability",
+        "text": "HireScope is provided 'as is' and is not liable for indirect or consequential damages arising from the use of the platform."
+      },
+      "changesToTerms": {
+        "title": "7. Changes to Terms",
+        "text": "We may update these Terms at any time. Continued use of the platform constitutes acceptance of any changes."
+      },
+      "contact": {
+        "title": "Contact",
+        "text": "If you have any questions regarding these Terms, contact us:",
+        "email": "Email:",
+        "phone": "Phone:",
+        "address": "Address: 123 Tech Street, San Francisco, CA, USA"
+      }
+    },
+
+    "copyright": "© 2026 HireScope"
+  }
+}

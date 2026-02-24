@@ -1,6 +1,8 @@
 const config = {
+  syntax: 'postcss-scss',
   plugins: {
-    "@tailwindcss/postcss": {},
+    '@tailwindcss/postcss': {},
+    autoprefixer: {},
   },
 };
 

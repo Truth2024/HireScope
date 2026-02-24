@@ -18,8 +18,17 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@styles/*": ["src/shared/styles/*"],
+      "@lib/*": ["src/shared/lib/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@components": ["src/shared/components/index.ts"],
+      "@ui": ["src/shared/ui/index.ts"],
+      "@models/*": ["mongo/models/*"],
+      "@store/*": ["src/shared/store/*"],
+      "@providers/*": ["src/shared/providers/*"],
+      "@headerComponents": ["src/shared/components/Header/components/index.ts"]
     }
   },
   "include": [
@@ -28,7 +37,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "mongo/seed.js"
   ],
   "exclude": ["node_modules"]
 }

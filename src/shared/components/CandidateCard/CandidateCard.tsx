@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Experience, Avatar } from '@components';
 import { Button, Card } from '@ui';
 import type { IUser } from 'src/shared/types/mongoTypes';
@@ -6,7 +8,8 @@ type CandidateCardProps = {
   candidate: IUser;
 };
 
-const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
+const CandidateCard: React.FC<CandidateCardProps> = async ({ candidate }) => {
+  const t = await getTranslations('Card');
   return (
     <Card className="gap-4">
       <div className="flex flex-col h-full">
@@ -30,14 +33,14 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
 
           <div className="flex flex-col gap-2">
             <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
-              Experience
+              {t('experience')}
             </span>
             <Experience experience={candidate.experience} variant="compact" />
           </div>
         </div>
 
         <Button href={`/candidates/${candidate.id}`} variant="primary" className="mt-4 ">
-          View Profile
+          {t('viewprofile')}
         </Button>
       </div>
     </Card>

@@ -31,7 +31,13 @@ export async function POST(req: Request) {
       await session.abortTransaction();
       session.endSession();
 
-      return NextResponse.json({ error: 'User exists' }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Пользователь с таким email уже существует',
+          message: 'Данный email занят',
+        },
+        { status: 400 }
+      );
     }
 
     const passwordHash = await bcrypt.hash(password, 10);

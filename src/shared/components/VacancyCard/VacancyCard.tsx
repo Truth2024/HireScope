@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Logo, Rating, Skills } from '@components';
 import { Button, Card } from '@ui';
 import type { IVacancy } from 'src/shared/types/mongoTypes';
@@ -8,7 +10,8 @@ type VacancyCardProps = {
   vacancy: IVacancy;
 };
 
-const VacancyCard: React.FC<VacancyCardProps> = ({ vacancy }) => {
+const VacancyCard: React.FC<VacancyCardProps> = async ({ vacancy }) => {
+  const t = await getTranslations('Card');
   return (
     <Card className="gap-4">
       <div className="flex flex-col h-full">
@@ -35,14 +38,14 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ vacancy }) => {
                 <Logo height={20} width={20} />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-gray-400">Company</span>
+                <span className="text-xs text-gray-400">{t('company')}</span>
                 <span className="font-semibold text-gray-900">{vacancy.company}</span>
               </div>
             </div>
           )}
 
           <Button href={`/vacancies/${vacancy.id}`} variant="primary" className="w-full">
-            View position
+            {t('viewposition')}
           </Button>
         </div>
       </div>

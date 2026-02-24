@@ -28,14 +28,26 @@ export async function POST(req: Request) {
     if (!user) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Неверный email или пароль',
+          message: 'Пользователь с таким email не найден',
+        },
+        { status: 401 }
+      );
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: 'Неверный email или пароль',
+          message: 'Неверный пароль',
+        },
+        { status: 401 }
+      );
     }
 
     const accessToken = jwt.sign(
@@ -87,6 +99,15 @@ export async function POST(req: Request) {
 
     const details = e instanceof Error ? e.message : 'Неизвестная ошибка';
 
-    return NextResponse.json({ error: 'Server error', details }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: {
+          message: 'Внутренняя ошибка сервера',
+          code: 'SERVER_ERROR',
+          details,
+        },
+      },
+      { status: 500 }
+    );
   }
 }

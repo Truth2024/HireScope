@@ -1,10 +1,11 @@
+import { debounce } from 'lodash';
 import React from 'react';
 
 import { Input } from '@ui';
-
 // import ArrowDownIcon from '../icons/ArrowDownIcon';
 
 import styles from './multidropdown.module.scss';
+
 export type Option = {
   /** Ключ варианта, используется для отправки на бек/использования в коде */
   key: string;
@@ -42,6 +43,18 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
 
   const [isOpen, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
+  const [debouncedSearch, setDebouncedSearch] = React.useState('');
+
+  const updateDebouncedSearch = React.useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 300),
+    []
+  );
+
+  React.useEffect(() => {
+    return () => {
+      updateDebouncedSearch.cancel();
+    };
+  }, [updateDebouncedSearch]);
 
   const handleOptionClick = (option: Option) => {
     const isSelected = value.some((item) => item.key === option.key);
@@ -53,7 +66,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
   };
 
   const filteredOptions = options.filter((opt) =>
-    opt.value.toLowerCase().includes(search.toLowerCase())
+    opt.value.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
   React.useEffect(() => {
@@ -75,6 +88,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
 
   const handleSearchChange = (val: string) => {
     setSearch(val);
+    updateDebouncedSearch(val);
     setOpen(true);
   };
 

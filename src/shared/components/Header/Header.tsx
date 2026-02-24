@@ -1,8 +1,7 @@
 import Link from 'next/link';
 
 import { Logo } from '@components';
-
-import ActiveNav from './components/ActiveNav/ActiveNav';
+import { ActiveNav } from '@headerComponents';
 
 export default function Header() {
   return (

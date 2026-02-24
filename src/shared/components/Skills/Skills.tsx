@@ -1,15 +1,20 @@
+import { useTranslations } from 'next-intl';
+
 type SkillsProps = {
   skills: string[] | null | undefined;
   title?: string;
   variant?: 'compact' | 'full';
 };
 
-export default function Skills({ skills, title = 'Skills', variant = 'full' }: SkillsProps) {
+export default function Skills({ skills, title, variant = 'full' }: SkillsProps) {
+  const t = useTranslations('Card');
+  const defaultTitle = t('skills');
+
   if (!skills || skills.length === 0) {
     return variant === 'compact' ? (
-      <span className="text-xs text-gray-400 italic">No skills specified</span>
+      <span className="text-xs text-gray-400 italic">{t('noSkills')}</span>
     ) : (
-      <p className="text-gray-400 italic">No skills specified</p>
+      <p className="text-gray-400 italic">{t('noSkills')}</p>
     );
   }
 
@@ -30,7 +35,9 @@ export default function Skills({ skills, title = 'Skills', variant = 'full' }: S
       ))}
 
       {isCompact && skills.length > 3 && (
-        <span className="text-xs text-gray-400 flex items-center">+{skills.length - 3} more</span>
+        <span className="text-xs text-gray-400 flex items-center">
+          {t('moreSkills', { count: skills.length - 3 })}
+        </span>
       )}
     </div>
   );
@@ -41,7 +48,7 @@ export default function Skills({ skills, title = 'Skills', variant = 'full' }: S
     <section className="mb-8">
       <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <span className="w-1 h-5 bg-(--color-brand) rounded-full" />
-        {title}
+        {title || defaultTitle}
       </h2>
       {content}
     </section>

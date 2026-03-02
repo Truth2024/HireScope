@@ -1,5 +1,5 @@
 import { CandidateCard } from '@components';
-import type { IUser } from 'src/shared/types/mongoTypes';
+import type { IUser } from '@myTypes/mongoTypes';
 
 type TopCandidateListProps = {
   newUsersCandidate: IUser[];

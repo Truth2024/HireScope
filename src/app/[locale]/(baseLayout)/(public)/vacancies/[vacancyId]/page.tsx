@@ -1,8 +1,10 @@
 import { getTranslations } from 'next-intl/server';
 
 import { Skills, DateInfo, VacancySalary, Rating, Logo } from '@components';
+import { COMMENTS_LIMIT } from '@constants/constants';
 import { Button, Card } from '@ui';
-import type { IVacancy } from 'src/shared/types/mongoTypes';
+
+import { vacancyServiceById } from '../services/vacancyService';
 
 import { Comments, VacancyDescription, VacancyNotFound } from './components';
 
@@ -12,14 +14,16 @@ type VacancyPageProps = {
   };
 };
 
-const VacancyPage = async ({ params }: VacancyPageProps) => {
+export default async function VacancyPage({ params }: VacancyPageProps) {
   const { vacancyId } = await params;
-  const vacancy = await fetchVacancy(vacancyId);
-  const t = await getTranslations('Card');
+
+  const vacancy = await vacancyServiceById(vacancyId);
 
   if (!vacancy) {
     return <VacancyNotFound />;
   }
+
+  const t = await getTranslations('Card');
 
   return (
     <div className="py-10">
@@ -35,9 +39,11 @@ const VacancyPage = async ({ params }: VacancyPageProps) => {
             {vacancy.company}
           </span>
 
-          <div className="mb-8 flex justify-between items-center max-[480px]:flex-col max-[480px]:gap-4 ">
+          <div className="mb-8 flex justify-between items-center max-[480px]:flex-col max-[480px]:gap-4">
             <VacancySalary salary={vacancy.salary} variant="large" />
-            <Button variant="primary">{t('apply')}</Button>
+            <Button variant="primary" className="max-[480px]:w-full">
+              {t('apply')}
+            </Button>
           </div>
 
           <div className="border-t border-gray-100 my-6" />
@@ -48,28 +54,17 @@ const VacancyPage = async ({ params }: VacancyPageProps) => {
           <div className="border-t border-gray-100 my-6" />
           <DateInfo date={vacancy.createdAt} title={t('posted')} className="text-end" />
         </Card>
-        <Comments vacancy={vacancy} />
+
+        <Comments
+          commentsCount={vacancy.commentsCount}
+          comments={vacancy.comments}
+          vacancyId={vacancy.id}
+          rating={vacancy.rating}
+          ratingDistribution={vacancy.ratingDistribution}
+          currentPage={1}
+          totalPages={Math.ceil(vacancy.commentsCount / COMMENTS_LIMIT)}
+        />
       </div>
     </div>
   );
-};
-
-const fetchVacancy = async (vacancyId: string): Promise<IVacancy | null> => {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vacancy/${vacancyId}`, {
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch {
-    return null;
-  }
-};
-export default VacancyPage;
+}

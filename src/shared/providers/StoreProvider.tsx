@@ -7,7 +7,6 @@ import { RootStore } from '@store/RootStore';
 const StoreContext = createContext<RootStore | null>(null);
 
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
-  // создаётся ОДИН раз
   const [store] = useState(() => new RootStore());
 
   useEffect(() => {

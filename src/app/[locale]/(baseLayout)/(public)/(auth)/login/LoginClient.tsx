@@ -67,12 +67,7 @@ export const LoginClient = observer(() => {
             {loginFormStore.errorServer}
           </div>
         )}
-        <Button
-          className="w-full"
-          form="loginForm"
-          // loading={loginFormStore.isLoading}
-          type="submit"
-        >
+        <Button className="w-full" form="loginForm" type="submit">
           {t('loginbutton')}
         </Button>
       </div>

@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   /* config options here */
 
   images: {
-    domains: ['www.dropbox.com'],
+    domains: ['www.dropbox.com', 'randomuser.me'],
     // или используйте remotePatterns (рекомендуется для Next.js 12.3+):
   },
 };

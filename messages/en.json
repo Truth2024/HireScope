@@ -56,7 +56,27 @@
     "noComments": "No comments yet",
     "beFirstToLeaveReview": "Be the first to leave a review!",
     "memberSince": "Member since",
-    "contactCandidate": "Contact candidate"
+    "contactCandidate": "Contact candidate",
+    "feedback": "Leave a review",
+    "allcomments": "Total comments",
+    "avgrate": "Average rating",
+    "entryaccount": "Sign in",
+    "search": "Search",
+    "unauthorized": "You are not logged in.",
+    "unauthorizedDescr": "Log in to leave a comment.",
+    "yourRating": "Your rating",
+    "placeholder": "Share your opinion...",
+    "ariaText": "Comment text",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "starAria": "{count} star",
+    "errors": {
+      "emptyText": "Please write a comment",
+      "noRating": "Please select a rating"
+    },
+    "notFoundVacancies": "No vacancies found",
+    "notFoundCandidates": "No candidates found",
+    "pickSkills": "Select skills"
   },
 
   "Auth": {

@@ -1,25 +1,26 @@
+'use server';
+
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { Avatar, DateInfo, Skills, Experience } from '@components';
+import type { IUser } from '@myTypes/mongoTypes';
 import { Button, Card } from '@ui';
-import type { IUser } from 'src/shared/types/mongoTypes';
 
 import { CandidateNotFound } from './components/CandidateNotFound/CandidateNotFound';
+import { fetchCandidateById } from './services/candidateService';
+
 type UserCandidatePageProps = {
-  params: {
-    id: string;
-  };
+  params: { id: string };
 };
 
 const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
   const { id } = await params;
-  const user = await fetchUserCandidate(id);
-  const t = await getTranslations('Card');
 
-  if (!user) {
-    return <CandidateNotFound />;
-  }
+  const user: IUser | null = await fetchCandidateById(id);
+  if (!user) return <CandidateNotFound />;
+
+  const t = await getTranslations('Card');
 
   return (
     <div className="py-10">
@@ -30,6 +31,7 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
               firstName={user.firstName}
               secondName={user.secondName}
               avatar={user.avatar ?? null}
+              blurPhoto={user.avatarBlur ?? null}
               size="large"
             />
 
@@ -73,26 +75,5 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
     </div>
   );
 };
+
 export default UserCandidatePage;
-
-const fetchUserCandidate = async (userCandidateId: string): Promise<IUser | null> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/candidate/${userCandidateId}`,
-      {
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch {
-    return null;
-  }
-};

@@ -1,8 +1,7 @@
 import { debounce } from 'lodash';
 import React from 'react';
 
-import { Input } from '@ui';
-// import ArrowDownIcon from '../icons/ArrowDownIcon';
+import { Arrow, Input } from '@ui';
 
 import styles from './multidropdown.module.scss';
 
@@ -127,7 +126,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
       className={`${className} ${styles['wrapper-click']} ${someError ? styles.someError : ''}`}
     >
       <Input
-        // afterSlot={<ArrowDownIcon color="secondary" />}
+        afterSlot={<Arrow dir="down" className="cursor-pointer" />}
         value={isOpen ? search : inputValue}
         placeholder={inputPlaceholder}
         onChange={handleSearchChange}
@@ -138,14 +137,14 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
       />
 
       {isOpen && !disabled && (
-        <ul ref={listRef} className={styles.list}>
+        <ul ref={listRef} className={`border border-gray-200 ${styles.list}`}>
           {filteredOptions.map((item) => {
             const isSelected = value.some((i) => i.key === item.key);
             return (
               <li
                 key={item.key}
                 onClick={() => handleOptionClick(item)}
-                className={`${styles.item} ${isSelected ? styles.color : ''}`}
+                className={`cursor-pointer ${styles.item} ${isSelected ? styles.color : ''}`}
               >
                 {item.value}
               </li>

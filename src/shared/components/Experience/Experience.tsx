@@ -19,7 +19,10 @@ export const Experience = ({ experience, variant = 'full' }: ExperienceProps) =>
       <div className="text-sm text-gray-400 italic">{t('notSpecified')}</div>
     ) : (
       <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('experience')}</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <span className="w-1 h-5 bg-(--color-brand) rounded-full" />
+          {t('experience')}
+        </h2>
         <p className="text-gray-400 italic">{t('noExperience')}</p>
       </section>
     );

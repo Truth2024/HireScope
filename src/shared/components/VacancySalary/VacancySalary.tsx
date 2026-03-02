@@ -1,4 +1,4 @@
-import type { ISalary } from 'src/shared/types/mongoTypes';
+import type { ISalary } from '@myTypes/mongoTypes';
 
 type VacancySalaryProps = {
   salary: ISalary | null | undefined;

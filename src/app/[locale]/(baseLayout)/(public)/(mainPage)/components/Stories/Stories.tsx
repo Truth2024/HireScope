@@ -2,6 +2,8 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 
+import { CloseButton } from '@ui';
+
 import { useStories } from './hooks/useStrories';
 import { stories } from './mockData/mockData';
 
@@ -129,16 +131,18 @@ export default function Stories() {
       </div>
 
       {/* Close button */}
-      <button
-        onClick={closeStory}
-        className="absolute top-8 right-4 text-(--color-brand) hover:text-(--color-brand-hover) text-3xl z-50 transition-colors"
-      >
-        ✕
-      </button>
+      <CloseButton onClick={closeStory} className={'absolute top-8 right-4'} />
 
       {/* Story container по центру, адаптивный */}
       <div className="relative w-[90vw] max-w-sm aspect-9/16 bg-black rounded-2xl overflow-hidden shadow-2xl">
-        <Image src={currentStory.image} alt="Story" fill className="object-cover" />
+        <Image
+          src={currentStory.image}
+          alt="Story"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 384px"
+          className="object-cover"
+        />
         {/* Навигация */}
         <div className="absolute inset-0 flex">
           <div

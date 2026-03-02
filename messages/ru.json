@@ -57,7 +57,27 @@
     "noComments": "Пока нет комментариев",
     "beFirstToLeaveReview": "Будьте первым, кто оставит отзыв!",
     "memberSince": "На платформе с",
-    "contactCandidate": "Связаться с кандидатом"
+    "contactCandidate": "Связаться с кандидатом",
+    "feedback": "Оставить отзыв",
+    "allcomments": "всего комментариев",
+    "avgrate": "средняя оценка",
+    "entryaccount": "Войти",
+    "search": "Поиск",
+    "unauthorized": "Вы не авторизованы.",
+    "unauthorizedDescr": "Войдите, чтобы оставить комментарий.",
+    "yourRating": "Ваша оценка",
+    "placeholder": "Поделитесь своим мнением...",
+    "ariaText": "Текст комментария",
+    "submit": "Отправить",
+    "submitting": "Отправка...",
+    "starAria": "{count} звезда",
+    "errors": {
+      "emptyText": "Пожалуйста, напишите текст комментария",
+      "noRating": "Пожалуйста, поставьте звезды"
+    },
+    "notFoundVacancies": "Вакансий не найдено",
+    "notFoundCandidates": "Кандидатов не найдено",
+    "pickSkills": "Выберите навыки"
   },
 
   "Auth": {

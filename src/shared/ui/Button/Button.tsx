@@ -39,7 +39,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, Props>((props, 
 
   const isDisabled = disabled || loading;
   const baseStyles =
-    'cursor-pointer inline-flex items-center justify-center h-11 px-5 rounded-2xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60';
+    'cursor-pointer inline-flex items-center justify-center h-11 px-5 rounded-2xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60';
 
   const variants = {
     primary: `

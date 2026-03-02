@@ -4,24 +4,67 @@ require('dotenv').config();
 const MONGODB_URI = process.env.DB_URL;
 const DB_NAME = process.env.DB_NAME || 'my-app';
 
+
+
+
 async function seedDatabase() {
   try {
     await mongoose.connect(MONGODB_URI, { dbName: DB_NAME });
-
+    console.log('✅ Connected to DB');
+    const SKILLS = require('../src/shared/constants/skills');
     const User = require('./models/User');
     const Vacancy = require('./models/Vacancy');
     const Candidate = require('./models/Candidate');
     const Comment = require('./models/Comment');
 
-    await User.deleteMany({});
-    await Vacancy.deleteMany({});
-    await Candidate.deleteMany({});
-    await Comment.deleteMany({});
+    // 🧹 Полная очистка
+    await Promise.all([
+      User.deleteMany({}),
+      Vacancy.deleteMany({}),
+      Candidate.deleteMany({}),
+      Comment.deleteMany({}),
+    ]);
+    console.log('🧹 Database cleared');
 
-    // Создаем пользователей   
-  
+    // 👤 Создаём пользователей
     const users = await User.create([
-      { firstName: 'Анна', surname: 'Пирогова', secondName: 'Александровна', email: 'anna@hr.com', password: '123', role: 'hr' },
+      {
+        firstName: 'Алексей',
+        surname: 'Иванов',
+        secondName: 'Петрович',
+        email: 'alexey.ivanov@example.com',
+        password: 'password123',
+        role: 'candidate',
+        avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+        avatarBlur: '/images/23.png',
+        skills: ['JavaScript', 'React', 'Node.js', 'TypeScript', 'HTML', 'CSS', 'Git'],
+        experience: [
+          {
+            company: 'TechCorp',
+            position: 'Senior Frontend Developer',
+            years: 3
+          },
+          {
+            company: 'WebSolutions',
+            position: 'Frontend Developer',
+            years: 2
+          },
+          {
+            company: 'StartupHub',
+            position: 'Junior Developer',
+            years: 1
+          }
+        ],
+      },
+      {
+        firstName: 'Анна',
+        surname: 'Пирогова',
+        secondName: 'Александровна',
+        email: 'anna@hr.com',
+        password: '123',
+        role: 'hr',
+        skills: [],
+      },
       {
         firstName: 'Михаил',
         surname: 'Пирогов',
@@ -29,30 +72,50 @@ async function seedDatabase() {
         email: 'ivan@dev.com',
         password: '123',
         role: 'candidate',
-        experience:[{
-          company: 'Itech',
-          position: 'frontend',
-          years: 3,
-        },{
-          company: 'Google',
-          position: 'backend',
-          years: 1,
-        },
-        {
-          company: 'Yandex',
-          position: 'backend',
-          years: 2,
-        },] 
+        skills: ['Python', 'Django', 'PostgreSQL', 'Docker', 'Git', 'AWS'],
+        experience: [
+          {
+            company: 'DataTech',
+            position: 'Python Developer',
+            years: 4
+          },
+          {
+            company: 'Startup',
+            position: 'Backend Developer',
+            years: 2
+          }
+        ],
       },
-      { firstName: 'Анна', surname: 'Пирогова', secondName: 'Александровна', email: 'maria@design.com', password: '123', role: 'candidate' },
+      {
+        firstName: 'Мария',
+        surname: 'Иванова',
+        secondName: 'Сергеевна',
+        email: 'maria@design.com',
+        password: '123',
+        role: 'candidate',
+        skills: ['HTML', 'CSS', 'SASS', 'Tailwind', 'JavaScript', 'Figma'],
+        experience: [
+          {
+            company: 'Design Studio',
+            position: 'UI/UX Designer',
+            years: 3
+          },
+          {
+            company: 'Web Agency',
+            position: 'Frontend Designer',
+            years: 2
+          }
+        ],
+      },
     ]);
+    console.log('👤 Users created');
 
-    // Создаем вакансии (без комментариев)
+    // 💼 Создаём вакансии
     const vacancies = await Vacancy.create([
       {
         title: 'Senior React Developer',
-        description: 'Ищем React-разработчика для крутого проекта',
-        requirements: ['React', 'TypeScript', 'Next.js'],
+        description: 'Ищем опытного React-разработчика для работы над крупным проектом',
+        requirements: ['React', 'TypeScript', 'Next.js', 'Redux', 'Git'],
         company: 'Itech20',
         level: 'senior',
         salary: { min: 300000, max: 400000 },
@@ -60,49 +123,89 @@ async function seedDatabase() {
       },
       {
         title: 'Middle Frontend Developer',
-        description: 'Разработка интерфейсов',
-        requirements: ['React', 'Redux', 'CSS'],
+        description: 'Разработка интерфейсов для внутренних проектов',
+        requirements: ['React', 'Redux', 'JavaScript', 'HTML', 'CSS'],
         company: 'Google',
         level: 'middle',
         salary: { min: 200000, max: 280000 },
         createdBy: users[0]._id,
       },
       {
-        title: 'Junior Frontend Developer',
-        description: 'Позиция для начинающих',
-        requirements: ['HTML', 'CSS', 'JavaScript'],
-        company: 'Yandex',
-        level: 'junior',
-        salary: { min: 80000, max: 120000 },
+        title: 'Senior Next.js Developer',
+        description: 'Ищем разработчика для работы над Next.js приложением',
+        requirements: ['Next.js', 'React', 'TypeScript', 'Node.js'],
+        company: 'Itech20',
+        level: 'senior',
+        salary: { min: 350000, max: 450000 },
+        createdBy: users[0]._id,
+      },
+      {
+        title: 'Python Backend Developer',
+        description: 'Разработка backend на Python',
+        requirements: ['Python', 'Django', 'PostgreSQL', 'Docker'],
+        company: 'DataTech',
+        level: 'middle',
+        salary: { min: 250000, max: 350000 },
+        createdBy: users[0]._id,
+      },
+      {
+        title: 'DevOps Engineer',
+        description: 'Администрирование и автоматизация',
+        requirements: ['Docker', 'Kubernetes', 'AWS', 'Git'],
+        company: 'CloudCorp',
+        level: 'senior',
+        salary: { min: 400000, max: 500000 },
         createdBy: users[0]._id,
       },
     ]);
+    console.log('💼 Vacancies created');
 
-    // Создаем комментарии отдельно
-    const commentsData = [
-      {
-        vacancy: vacancies[0]._id,
-        user: users[1]._id,
-        text: 'Отличная вакансия! Прошел собеседование, все понравилось',
-        rating: 5,
-      },
-      {
+    // 💬 Создаём комментарии
+    const comments = [];
+    
+    // Комментарии для первой вакансии (с разными оценками)
+    for (let i = 0; i < 15; i++) {
+      comments.push({
         vacancy: vacancies[0]._id,
         user: users[2]._id,
-        text: 'Интересные задачи, но требования завышены',
-        rating: 4,
-      },
-      {
+        text: i < 10 ? 'Отличная вакансия!' : 'Нормальные условия',
+        rating: i < 8 ? 5 : 4,
+      });
+    }
+    
+    for (let i = 0; i < 5; i++) {
+      comments.push({
+        vacancy: vacancies[0]._id,
+        user: users[2]._id,
+        text: 'Плохой опыт',
+        rating: 1,
+      });
+    }
+    
+    // Комментарии для второй вакансии
+    for (let i = 0; i < 8; i++) {
+      comments.push({
         vacancy: vacancies[1]._id,
         user: users[1]._id,
-        text: 'Хорошие условия, дружная команда',
+        text: 'Хорошая команда',
         rating: 5,
-      },
-    ];
+      });
+    }
+    
+    // Комментарии для третьей вакансии
+    for (let i = 0; i < 6; i++) {
+      comments.push({
+        vacancy: vacancies[2]._id,
+        user: users[2]._id,
+        text: 'Интересные задачи',
+        rating: 4,
+      });
+    }
+    
+    await Comment.create(comments);
+    console.log('💬 Comments created');
 
-    const comments = await Comment.create(commentsData);
-
-    // Обновляем вакансии: добавляем комментарии и пересчитываем рейтинг
+    // 🔥 Привязываем комментарии к вакансиям и пересчитываем рейтинг
     for (const vacancy of vacancies) {
       const vacancyComments = comments.filter(
         (c) => c.vacancy.toString() === vacancy._id.toString()
@@ -110,25 +213,49 @@ async function seedDatabase() {
       vacancy.comments = vacancyComments.map((c) => c._id);
       await vacancy.updateRating();
     }
+    console.log('⭐ Ratings calculated');
 
-    // Создаем отклики
+    // 📩 Создаём отклики кандидатов
     await Candidate.create([
-      { userId: users[1]._id, vacancyId: vacancies[0]._id, status: 'interview', matchScore: 95 },
-      { userId: users[2]._id, vacancyId: vacancies[0]._id, status: 'rejected', matchScore: 60 },
-      { userId: users[1]._id, vacancyId: vacancies[1]._id, status: 'new', matchScore: 88 },
+      {
+        userId: users[1]._id,
+        vacancyId: vacancies[0]._id,
+        status: 'interview',
+        matchScore: 95,
+      },
+      {
+        userId: users[2]._id,
+        vacancyId: vacancies[0]._id,
+        status: 'rejected',
+        matchScore: 60,
+      },
+      {
+        userId: users[3]._id,
+        vacancyId: vacancies[1]._id,
+        status: 'new',
+        matchScore: 85,
+      },
+      {
+        userId: users[2]._id,
+        vacancyId: vacancies[2]._id,
+        status: 'offer',
+        matchScore: 92,
+      },
     ]);
+    console.log('📩 Candidates created');
 
-    // Выводим результат
-    const allVacancies = await Vacancy.find()
-      .populate('comments', 'text rating user')
-      .populate('comments.user', 'name');
-  
-    for (const vac of allVacancies) {
-      vac.comments.forEach((c) => {});
-    }
-
+    console.log('🎉 Seed completed successfully');
+    
+    // Вывод статистики
+    console.log('\n📊 Статистика:');
+    console.log(`Пользователей: ${await User.countDocuments()}`);
+    console.log(`Вакансий: ${await Vacancy.countDocuments()}`);
+    console.log(`Комментариев: ${await Comment.countDocuments()}`);
+    console.log(`Кандидатов: ${await Candidate.countDocuments()}`);
+    
     process.exit(0);
   } catch (err) {
+    console.error('❌ Seed error:', err);
     process.exit(1);
   }
 }

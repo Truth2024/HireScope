@@ -2,7 +2,7 @@
 
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { IUser } from 'src/shared/types/mongoTypes';
+import type { IUser } from '@myTypes/mongoTypes';
 
 export class AuthStore {
   user: IUser | null = null;

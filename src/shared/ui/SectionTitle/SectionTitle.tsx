@@ -23,7 +23,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
           <h2 className="text-2xl font-bold">{title}</h2>
           {sectionBtn && path && (
             <Link href={path}>
-              <button className="flex items-center text-lg font-semibold hover:text-(--color-brand-hover) text-(--color-brand) cursor-pointer hover-arrow-right transition-colors duration-300">
+              <button className="flex items-center text-lg font-semibold hover:text-(--color-brand-hover) text-(--color-brand) cursor-pointer hover-arrow-right transition-colors duration-300 text-nowrap">
                 {sectionBtn}
                 <Arrow />
               </button>

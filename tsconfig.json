@@ -22,13 +22,27 @@
     "paths": {
       "@styles/*": ["src/shared/styles/*"],
       "@lib/*": ["src/shared/lib/*"],
+      "@constants/*": ["src/shared/constants/*"],
+      "@myTypes/*": ["src/shared/types/*"],
       "@i18n/*": ["src/i18n/*"],
       "@components": ["src/shared/components/index.ts"],
       "@ui": ["src/shared/ui/index.ts"],
       "@models/*": ["mongo/models/*"],
       "@store/*": ["src/shared/store/*"],
       "@providers/*": ["src/shared/providers/*"],
-      "@headerComponents": ["src/shared/components/Header/components/index.ts"]
+      "@headerComponents": ["src/shared/components/Header/components/index.ts"],
+      "@commentsComponents": [
+        "src/app/[locale]/(baseLayout)/(public)/vacancies/[vacancyId]/components/Comments/components/index.ts"
+      ],
+      "@commentsStore": [
+        "src/app/[locale]/(baseLayout)/(public)/vacancies/[vacancyId]/components/Comments/store/commentsStore.ts"
+      ],
+      "@candidatesStore": [
+        "src/app/[locale]/(baseLayout)/(public)/candidates/store/CandidatesStore.ts"
+      ],
+      "@vacanciesStore": [
+        "src/app/[locale]/(baseLayout)/(public)/vacancies/store/VacanciesStore.ts"
+      ]
     }
   },
   "include": [
@@ -38,7 +52,8 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "mongo/seed.js"
+    "mongo/seed.js",
+    "src/shared/constants/skills.js"
   ],
   "exclude": ["node_modules"]
 }

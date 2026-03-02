@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import styles from './input.module.scss';
@@ -9,11 +10,22 @@ export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onCh
   /** Слот для иконки справа */
   afterSlot?: React.ReactNode;
   type?: string;
+  height?: string;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { value, onChange, afterSlot, className, onClick, disabled = false, type = 'text', ...props },
+    {
+      value,
+      onChange,
+      afterSlot,
+      className,
+      onClick,
+      disabled = false,
+      type = 'text',
+      height = 'h-11',
+      ...props
+    },
     ref
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={`${styles.inputWrapper} ${className}`} onClick={onClick}>
+      <div className={clsx(styles.inputWrapper, height, className)} onClick={onClick}>
         <input
           ref={ref}
           className={`${styles.input} ${disabled ? styles.disabled : ''}`}

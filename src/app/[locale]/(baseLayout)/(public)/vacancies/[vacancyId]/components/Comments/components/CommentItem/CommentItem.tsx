@@ -1,5 +1,5 @@
 import { Avatar } from '@components';
-import type { IUser } from 'src/shared/types/mongoTypes';
+import type { IUser } from '@myTypes/mongoTypes';
 
 type CommentsItemProps = {
   comment: {
@@ -12,7 +12,7 @@ type CommentsItemProps = {
   showEmail?: boolean;
 };
 
-export const CommentsItem = ({ comment, showEmail = false }: CommentsItemProps) => {
+export const CommentItem = ({ comment, showEmail = false }: CommentsItemProps) => {
   return (
     <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 hover:border-gray-200 transition-colors">
       <div className="flex items-center gap-3 mb-3">
@@ -48,7 +48,7 @@ export const CommentsItem = ({ comment, showEmail = false }: CommentsItemProps) 
 
           {comment.rating !== undefined && (
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-amber-400 text-sm">★</span>
+              <span className="text-(--color-brand) text-sm">★</span>
               <span className="text-sm font-medium text-gray-700">{comment.rating.toFixed(1)}</span>
             </div>
           )}

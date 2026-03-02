@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 HireScope — Современная платформа для рекрутинга
 
-## Getting Started
+**HireScope** — это решение для поиска талантов и управления процессом найма. Платформа объединяет в себе интеллектуальный подбор и социальные механики для эффективного взаимодействия между HR и кандидатами.
 
-First, run the development server:
+> **Находите таланты. Отслеживайте прогресс. Нанимайте эффективнее.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Основные функции
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Платформа разделена на два типа профилей: **HR** (для поиска и управления вакансиями) и **Кандидаты** (для поиска работы и демонстрации навыков).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **🔐 Безопасность:** Система авторизации на базе **Access & Refresh tokens**.
+- **🕵️ Умный поиск:** Поиск кандидатов и вакансий с использованием фильтров по навыкам, Search-параметров и встроенной пагинации.
+- **💬 Социальное взаимодействие:** \* Многоуровневая (бесконечная) система комментариев к вакансиям.
+  - **Бесконечный скролл** для удобного чтения контента.
+  - Система рейтинга вакансий.
+- **📸 Recruiting Stories:** Лента новостей в формате историй (как в Instagram) для быстрого ознакомления с обновлениями компаний.
+- **🛡️ AuthWall:** Ограничение контента — аватарки пользователей автоматически блюрятся, если посетитель не авторизован.
+- **🌍 Интернационализация:** Полная поддержка двух языков (**RU / EN**).
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

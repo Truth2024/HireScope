@@ -21,28 +21,26 @@ export class AuthStore {
     if (typeof window === 'undefined') return;
 
     try {
-      const res = await this.fetchWithAuth('/api/auth/me', {
-        method: 'GET',
-      });
+      const newToken = await this.refreshToken();
 
-      if (!res.ok) throw new Error('Не удалось получить пользователя');
-
-      const data = await res.json();
+      if (!newToken) {
+        runInAction(() => {
+          this.user = null;
+          this.accessToken = null;
+          this.isLoading = false;
+        });
+        return;
+      }
 
       runInAction(() => {
-        this.user = data.user;
         this.isLoading = false;
       });
-    } catch (e: unknown) {
+    } catch (e) {
       runInAction(() => {
         this.user = null;
+        this.accessToken = null;
+        this.error = e as string;
         this.isLoading = false;
-
-        if (e instanceof Error) {
-          this.error = e.message;
-        } else {
-          this.error = 'Unknown error';
-        }
       });
     }
   }
@@ -81,7 +79,6 @@ export class AuthStore {
   async refreshToken() {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
-
       this.refreshPromise = (async () => {
         try {
           const refreshRes = await fetch('/api/auth/refresh', {
@@ -89,17 +86,22 @@ export class AuthStore {
             credentials: 'include',
           });
 
-          if (!refreshRes.ok) throw new Error('Refresh failed');
+          if (!refreshRes.ok) throw new Error('Refresh network failed');
 
           const data = await refreshRes.json();
+
+          if (data.authenticated === false) {
+            return null;
+          }
 
           runInAction(() => {
             this.accessToken = data.accessToken;
             this.user = data.user;
           });
 
-          return data.accessToken as string;
-        } catch {
+          return data.accessToken;
+        } catch (error) {
+          console.error('Refresh error:', error);
           return null;
         } finally {
           this.isRefreshing = false;
@@ -107,17 +109,25 @@ export class AuthStore {
         }
       })();
     }
-
     return this.refreshPromise;
   }
-
   setUser(user: IUser, accessToken: string) {
     this.user = user;
     this.accessToken = accessToken;
   }
 
-  logout() {
-    this.user = null;
-    this.accessToken = null;
+  async logout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error as string;
+      });
+    } finally {
+      this.user = null;
+      this.accessToken = null;
+
+      window.location.href = '/';
+    }
   }
 }

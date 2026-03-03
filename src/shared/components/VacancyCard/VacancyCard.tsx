@@ -11,7 +11,7 @@ type VacancyCardProps = {
   vacancy: IVacancy;
 };
 
-const VacancyCard: React.FC<VacancyCardProps> = ({ vacancy }) => {
+const VacancyCard = ({ vacancy }: VacancyCardProps) => {
   const t = useTranslations('Card');
   return (
     <Card className="gap-4 min-h-80.75">

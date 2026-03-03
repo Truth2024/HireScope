@@ -42,6 +42,15 @@
       ],
       "@vacanciesStore": [
         "src/app/[locale]/(baseLayout)/(public)/vacancies/store/VacanciesStore.ts"
+      ],
+      "@vacanciesHooks/*": ["src/app/[locale]/(baseLayout)/(public)/vacancies/hooks/*"],
+      "@vacanciesComponents/*": ["src/app/[locale]/(baseLayout)/(public)/vacancies/components/*"],
+      "@candidatesHooks/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/hooks/*"],
+      "@candidatesComponents/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/components/*"],
+      "@candidatesProvider/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/provider/*"],
+      "@candidatesStore/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/store/*"],
+      "@ProfileClientComponents": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/components/ProfileClient/components/index.ts"
       ]
     }
   },

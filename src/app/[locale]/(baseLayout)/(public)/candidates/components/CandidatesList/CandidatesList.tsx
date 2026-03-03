@@ -33,7 +33,7 @@ export const CandidatesList = ({
       )}
 
       {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-(--z-modal) flex items-center justify-center">
           <Loader />
         </div>
       )}

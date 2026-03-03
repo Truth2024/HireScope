@@ -31,6 +31,8 @@ export async function GET(req: Request) {
     const page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
     const search = url.searchParams.get('search')?.trim() || '';
     const skills = url.searchParams.get('skills')?.split(',').filter(Boolean) || [];
+    const hasExperience = url.searchParams.get('hasExperience') === 'true';
+
     const skip = (page - 1) * CANDIDATES_LIMIT;
 
     const filter: UserFilter = { role: 'candidate' };
@@ -41,11 +43,15 @@ export async function GET(req: Request) {
     }
 
     if (skills.length > 0) {
-      filter.skills = { $in: skills };
+      filter.skills = { $all: skills };
     }
 
-    const total = await User.countDocuments(filter);
-    const totalPages = Math.ceil(total / CANDIDATES_LIMIT);
+    if (hasExperience) {
+      filter.experience = { $ne: [] };
+    }
+
+    const totalResult = await User.countDocuments(filter);
+    const totalPages = Math.ceil(totalResult / CANDIDATES_LIMIT);
 
     const users = await User.find(filter)
       .sort({ createdAt: -1, _id: -1 })
@@ -71,11 +77,9 @@ export async function GET(req: Request) {
     }));
 
     return NextResponse.json({
-      success: true,
       candidates: formattedCandidates,
-      total,
+      totalResult,
       totalPages,
-      currentPage: page,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Неизвестная ошибка';

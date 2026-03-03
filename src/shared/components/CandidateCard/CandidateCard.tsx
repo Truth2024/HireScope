@@ -10,7 +10,7 @@ type CandidateCardProps = {
   candidate: IUser;
 };
 
-const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
+const CandidateCard = ({ candidate }: CandidateCardProps) => {
   const t = useTranslations('Card');
   return (
     <Card className="gap-4 min-h-85.75">

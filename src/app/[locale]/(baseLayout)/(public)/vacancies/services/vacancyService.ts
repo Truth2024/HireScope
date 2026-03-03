@@ -144,6 +144,7 @@ export const vacanciesServiceAll = async (
   page: number = 1,
   searchParam: string = '',
   skillsParam: string[] = [],
+  sortParam: string = 'newest',
   limit: number = VACANCY_LIMIT
 ): Promise<{
   vacancies: IVacancy[];
@@ -156,29 +157,46 @@ export const vacanciesServiceAll = async (
   const skip = (page - 1) * limit;
 
   const filter: VacancyFilter = {};
-  const conditions = [];
 
+  // Поиск по тексту
   if (searchParam.trim()) {
-    const regex = new RegExp(searchParam.trim(), 'i');
-
-    conditions.push({ title: regex }, { description: regex });
+    const escaped = searchParam.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escaped, 'i');
+    filter.$or = [{ title: regex }, { description: regex }];
   }
 
+  // Фильтр по скиллам
   if (skillsParam.length > 0) {
-    conditions.push({ requirements: { $in: skillsParam } });
+    filter.requirements = { $all: skillsParam };
   }
 
-  if (conditions.length > 0) {
-    filter.$or = conditions;
+  // Определяем сортировку
+  let sortOption = {};
+  switch (sortParam) {
+    case 'rating':
+      sortOption = { rating: -1, createdAt: -1 };
+      break;
+    case 'oldest':
+      sortOption = { createdAt: 1, _id: 1 };
+      break;
+    case 'salary_high':
+      sortOption = { 'salary.max': -1, 'salary.min': -1, createdAt: -1 };
+      break;
+    case 'salary_low':
+      sortOption = { 'salary.min': 1, 'salary.max': 1, createdAt: -1 };
+      break;
+    case 'newest':
+    default:
+      sortOption = { createdAt: -1, _id: -1 };
+      break;
   }
 
   const total = await Vacancy.countDocuments(filter);
-
   const totalPages = Math.ceil(total / limit);
 
   const vacancies = await Vacancy.find(filter)
     .populate('createdBy', 'name')
-    .sort({ createdAt: -1, _id: -1 })
+    .sort(sortOption)
     .skip(skip)
     .limit(limit)
     .lean();

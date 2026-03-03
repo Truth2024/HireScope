@@ -2,11 +2,12 @@ import { getTranslations } from 'next-intl/server';
 
 import { Skills, DateInfo, VacancySalary, Rating, Logo } from '@components';
 import { COMMENTS_LIMIT } from '@constants/constants';
-import { Button, Card } from '@ui';
+import { Card } from '@ui';
 
 import { vacancyServiceById } from '../services/vacancyService';
 
 import { Comments, VacancyDescription, VacancyNotFound } from './components';
+import { VacancyApply } from './components/VacancyApply/VacancyApply';
 
 type VacancyPageProps = {
   params: {
@@ -41,9 +42,7 @@ export default async function VacancyPage({ params }: VacancyPageProps) {
 
           <div className="mb-8 flex justify-between items-center max-[480px]:flex-col max-[480px]:gap-4">
             <VacancySalary salary={vacancy.salary} variant="large" />
-            <Button variant="primary" className="max-[480px]:w-full">
-              {t('apply')}
-            </Button>
+            <VacancyApply vacancyId={vacancy.id} />
           </div>
 
           <div className="border-t border-gray-100 my-6" />

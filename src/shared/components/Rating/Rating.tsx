@@ -1,9 +1,12 @@
+import { useTranslations } from 'next-intl';
+
 type RatingProps = {
   rating: number;
   variant?: 'compact' | 'large';
 };
 
 export const Rating = ({ rating, variant = 'large' }: RatingProps) => {
+  const t = useTranslations('Card');
   const variants = {
     large: {
       wrapper: 'px-3 py-1.5',
@@ -22,7 +25,7 @@ export const Rating = ({ rating, variant = 'large' }: RatingProps) => {
   const styles = variants[variant];
 
   if (rating === 0) {
-    return <span className={`text-gray-400 italic ${styles.empty}`}>no rating</span>;
+    return <span className={`text-gray-400 italic ${styles.empty}`}>{t('noRating')}</span>;
   }
   return (
     <div className={`flex items-center gap-1 bg-amber-50 rounded-full w-fit ${styles.wrapper}`}>

@@ -2,15 +2,11 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { VACANCY_LIMIT } from '@constants/constants';
-import User from '@models/User';
 import Vacancy from '@models/Vacancy';
 import type { IVacancyMongo, VacancyFilter } from '@myTypes/mongoTypes';
 import connectDB from 'src/shared/lib/mongodb';
 
 export async function GET(req: NextRequest) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _registerModels = User;
-
   try {
     await connectDB();
 
@@ -19,24 +15,64 @@ export async function GET(req: NextRequest) {
     const page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
     const search = searchParams.get('search')?.trim() || '';
     const skills = searchParams.get('skills')?.split(',').filter(Boolean) || [];
+    const minSalary = searchParams.get('minSalary')
+      ? Number(searchParams.get('minSalary'))
+      : undefined;
+    const maxSalary = searchParams.get('maxSalary')
+      ? Number(searchParams.get('maxSalary'))
+      : undefined;
+    const sort = searchParams.get('sort') || 'newest';
 
     const skip = (page - 1) * VACANCY_LIMIT;
 
     const filter: VacancyFilter = {};
 
-    const conditions = [];
-
     if (search) {
-      const regex = new RegExp(search, 'i');
-      conditions.push({ title: regex }, { description: regex });
+      const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escaped, 'i');
+      filter.$or = [{ title: regex }, { description: regex }];
     }
 
     if (skills.length > 0) {
-      conditions.push({ requirements: { $in: skills } });
+      filter.requirements = { $all: skills };
     }
 
-    if (conditions.length > 0) {
-      filter.$or = conditions;
+    // Фильтр по зарплате
+    if (minSalary !== undefined || maxSalary !== undefined) {
+      filter.salary = { $and: [] };
+
+      if (minSalary !== undefined) {
+        filter.salary.$and?.push({
+          'salary.max': { $gte: minSalary },
+        });
+      }
+
+      if (maxSalary !== undefined) {
+        filter.salary.$and?.push({
+          'salary.min': { $lte: maxSalary },
+        });
+      }
+    }
+
+    // Определяем сортировку
+    let sortOption = {};
+    switch (sort) {
+      case 'rating':
+        sortOption = { rating: -1, createdAt: -1 };
+        break;
+      case 'oldest':
+        sortOption = { createdAt: 1, _id: 1 };
+        break;
+      case 'salary_high':
+        sortOption = { 'salary.max': -1, 'salary.min': -1, createdAt: -1 };
+        break;
+      case 'salary_low':
+        sortOption = { 'salary.min': 1, 'salary.max': 1, createdAt: -1 };
+        break;
+      case 'newest':
+      default:
+        sortOption = { createdAt: -1, _id: -1 };
+        break;
     }
 
     const total = await Vacancy.countDocuments(filter);
@@ -44,7 +80,7 @@ export async function GET(req: NextRequest) {
 
     const vacancies = await Vacancy.find(filter)
       .populate('createdBy', 'name')
-      .sort({ createdAt: -1, _id: -1 })
+      .sort(sortOption)
       .skip(skip)
       .limit(VACANCY_LIMIT)
       .lean();
@@ -55,10 +91,7 @@ export async function GET(req: NextRequest) {
       description: v.description.substring(0, 120) + (v.description.length > 120 ? '...' : ''),
       company: v.company,
       level: v.level,
-      salary: {
-        min: v.salary?.min ?? null,
-        max: v.salary?.max ?? null,
-      },
+      salary: v.salary ?? null,
       rating: v.rating,
       department: v.department || 'Разработка',
       requirements: v.requirements?.slice(0, 4) || [],

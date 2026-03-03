@@ -5,9 +5,10 @@ import { getTranslations } from 'next-intl/server';
 
 import { Avatar, DateInfo, Skills, Experience } from '@components';
 import type { IUser } from '@myTypes/mongoTypes';
-import { Button, Card } from '@ui';
+import { Card } from '@ui';
 
 import { CandidateNotFound } from './components/CandidateNotFound/CandidateNotFound';
+import { ContactCandidate } from './components/ContactCandidate/ContactCandidate';
 import { fetchCandidateById } from './services/candidateService';
 
 type UserCandidatePageProps = {
@@ -68,7 +69,7 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
           <div className="border-t border-gray-100 my-6" />
           <div className="flex justify-between items-center">
             <DateInfo date={user.createdAt} title={t('memberSince')} />
-            {user.role === 'hr' && <Button variant="primary">{t('contactCandidate')}</Button>}
+            <ContactCandidate />
           </div>
         </Card>
       </div>

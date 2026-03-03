@@ -4,6 +4,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Suspense } from 'react';
 
 import { routing } from '@i18n/routing';
+import QueryProvider from '@providers/QueryProvider';
 import { StoreProvider } from '@providers/StoreProvider';
 
 import '@styles/global.scss';
@@ -38,7 +39,9 @@ export default async function RootLayout({
       <body className={`${nunito.variable} antialiased min-h-screen`}>
         <Suspense fallback={<RootLoading />}>
           <NextIntlClientProvider locale={locale}>
-            <StoreProvider>{children}</StoreProvider>
+            <QueryProvider>
+              <StoreProvider>{children}</StoreProvider>
+            </QueryProvider>
           </NextIntlClientProvider>
         </Suspense>
       </body>

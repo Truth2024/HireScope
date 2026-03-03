@@ -13,6 +13,13 @@
 
   --border-gray: #{v.$border-gray};
   --header-height: #{v.$header-height};
+  /* Z-INDEX */
+  --z-dropdown: #{v.$z-dropdown};
+  --z-modal: #{v.$z-modal};
+  --z-modal-overlay: #{v.$z-modal-overlay};
+  --z-header: #{v.$z-header};
+  --z-sticky: #{v.$z-sticky};
+  --z-tooltip: #{v.$z-tooltip};
 }
 body {
   background-color: var(--color-bg);
@@ -96,5 +103,18 @@ body.modal-open {
   50% {
     transform: scale(1.2);
     opacity: 1;
+  }
+}
+
+.loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -16,9 +16,9 @@ export async function POST(req: Request) {
   session.startTransaction();
 
   try {
-    const { email, password, firstName, surname, secondName } = await req.json();
+    const { email, password, firstName, surname, secondName, role } = await req.json();
 
-    if (!email || !password) {
+    if (!email || !password || !role) {
       await session.abortTransaction();
       session.endSession();
 
@@ -50,6 +50,7 @@ export async function POST(req: Request) {
           firstName,
           surname,
           secondName,
+          role,
         },
       ],
       { session }
@@ -59,6 +60,7 @@ export async function POST(req: Request) {
       {
         userId: user._id.toString(),
         email: user.email,
+        role: user.role,
       },
       ACCESS_SECRET,
       { expiresIn: '15m' }

@@ -10,12 +10,12 @@ type SectionTitleProps = {
   className?: string;
 };
 
-const SectionTitle: React.FC<SectionTitleProps> = ({
+const SectionTitle = ({
   title,
   sectionBtn,
   path,
   className = 'justify-between',
-}) => {
+}: SectionTitleProps) => {
   return (
     <div className="mb-10">
       <div className="content">

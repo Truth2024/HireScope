@@ -8,6 +8,7 @@ type VacanciesPageProps = {
     page?: string;
     search?: string;
     skills?: string;
+    sort?: string;
   }>;
 };
 
@@ -17,8 +18,9 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
   const pageParam = Number(params.page) || 1;
   const searchParam = params.search?.trim() || '';
   const skillsParam = params.skills ? params.skills.split(',').filter(Boolean) : [];
+  const sortParam = params.sort || 'newest';
 
-  const data = await vacanciesServiceAll(pageParam, searchParam, skillsParam);
+  const data = await vacanciesServiceAll(pageParam, searchParam, skillsParam, sortParam);
 
   return (
     <div className="py-10">
@@ -32,6 +34,7 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
             currentPage={data.currentPage}
             initialSearch={searchParam}
             initialSkills={skillsParam}
+            initialSort={sortParam}
           />
         </div>
       </Section>

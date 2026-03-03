@@ -21,22 +21,30 @@ export const VacancySalary = ({ salary, variant = 'large' }: VacancySalaryProps)
   if (salary.min && salary.max) {
     return (
       <div className="flex items-baseline gap-1">
-        <span className={`${textSize} text-(--color-brand)`}>{formatMoney(salary.min)}</span>
+        <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
+          {formatMoney(salary.min)}
+        </span>
         <span className="text-gray-400 mx-1">—</span>
-        <span className={`${textSize} text-(--color-brand)`}>{formatMoney(salary.max)}</span>
+        <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
+          {formatMoney(salary.max)}
+        </span>
       </div>
     );
   }
 
   if (salary.min) {
     return (
-      <span className={`${textSize} text-(--color-brand)`}>From {formatMoney(salary.min)}</span>
+      <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
+        From {formatMoney(salary.min)}
+      </span>
     );
   }
 
   if (salary.max) {
     return (
-      <span className={`${textSize} text-(--color-brand)`}>Up to {formatMoney(salary.max)}</span>
+      <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
+        Up to {formatMoney(salary.max)}
+      </span>
     );
   }
 

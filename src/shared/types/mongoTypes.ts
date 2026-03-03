@@ -39,14 +39,14 @@ export type IUserMongo = {
   createdAt: string; // ISO дата
 };
 export type UserFilter = {
-  role: 'candidate';
-  $or?: Array<{
-    firstName?: RegExp;
-    surname?: RegExp;
-    secondName?: RegExp;
-  }>;
-  skills?: { $in: string[] };
+  role?: string;
+  $or?: Array<{ [key: string]: RegExp | { $exists?: boolean; $size?: number } }>;
+  skills?: { $all: string[] };
+  experience?:
+    | { $ne: [] } // для фильтра "только с опытом" (не пустой массив)
+    | { $exists: boolean; $size?: number }; // для других случаев
 };
+
 // ------------------------------
 // Тип комментария
 // ------------------------------
@@ -161,9 +161,13 @@ export type IVacancyMongo = {
 export type VacancyFilter = {
   $or?: Array<{
     title?: RegExp;
-
     description?: RegExp;
-
-    requirements?: { $in: string[] };
   }>;
+  requirements?: { $in: string[] } | { $all: string[] };
+  salary?: {
+    $and?: Array<{
+      'salary.min'?: { $lte?: number; $gte?: number };
+      'salary.max'?: { $lte?: number; $gte?: number };
+    }>;
+  };
 };

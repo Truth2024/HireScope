@@ -36,3 +36,27 @@ export const skills = [
   { key: 'Figma', value: 'Figma' },
   { key: 'Redux', value: 'Redux' },
 ];
+
+export const sortOptions = [
+  { key: 'newest', value: 'sort.newest' },
+  { key: 'oldest', value: 'sort.oldest' },
+  { key: 'rating', value: 'sort.rating' },
+  { key: 'salary_high', value: 'sort.salaryHigh' },
+  { key: 'salary_low', value: 'sort.salaryLow' },
+];
+
+export const FILTERS_CONFIG = {
+  skills,
+  sortOptions,
+} as const;
+
+export const DEFAULT_SORT = 'newest';
+export const DEFAULT_PAGE = 1;
+
+export const CANDIDATES_CONFIG = {
+  skills,
+  defaultPage: 1,
+  defaultHasExperience: false,
+} as const;
+
+export const DEFAULT_CANDIDATES_SORT = 'newest';

@@ -1,17 +1,17 @@
 'use client';
 
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 
-import { skills } from '@constants/constants';
+import { FILTERS_CONFIG, DEFAULT_SORT } from '@constants/constants';
 import type { IVacancy } from '@myTypes/mongoTypes';
 import type { Option } from '@ui';
-import { MultiDropdown, Search } from '@ui';
-import { VacanciesStore } from '@vacanciesStore';
+import { useVacancyFilters } from '@vacanciesHooks/useVacancyFilters';
+import { useVacanciesStore } from '@vacanciesHooks/useVacancyStore';
 
 import { VacancyList } from '../VacancyList/VacancyList';
+
+import { FiltersBar } from './components/FiltersBar/FiltersBar';
 
 type VacanciesClientProps = {
   initialVacancies: IVacancy[];
@@ -20,6 +20,7 @@ type VacanciesClientProps = {
   currentPage: number;
   initialSearch?: string;
   initialSkills?: string[];
+  initialSort?: string;
 };
 
 export const VacanciesClient = observer(
@@ -30,98 +31,85 @@ export const VacanciesClient = observer(
     currentPage,
     initialSearch = '',
     initialSkills = [],
+    initialSort = DEFAULT_SORT,
   }: VacanciesClientProps) => {
-    const searchParams = useSearchParams();
+    const {
+      search: urlSearch,
+      page: urlPage,
+      skillOptions: urlSkillOptions,
+      sort: urlSort,
+    } = useVacancyFilters();
 
-    const initialSkillOptions: Option[] = initialSkills.map((skillValue) => {
-      const skill = skills.find((s) => s.value === skillValue);
-      return {
-        key: skill?.key || skillValue.toLowerCase().replace(/\s+/g, ''),
-        value: skillValue,
-      };
-    });
-
-    const store = useLocalObservable(
+    const initialSkillOptions = React.useMemo(
       () =>
-        new VacanciesStore({
-          vacancies: initialVacancies,
-          total,
-          totalPages,
-          currentPage,
-          search: initialSearch,
-          selectedSkills: initialSkillOptions,
-        })
+        initialSkills.map((skillValue) => {
+          const skill = FILTERS_CONFIG.skills.find((s) => s.value === skillValue);
+          return {
+            key: skill?.key || skillValue.toLowerCase().replace(/\s+/g, ''),
+            value: skillValue,
+          };
+        }),
+      [initialSkills]
     );
 
-    const t = useTranslations('Card');
-
-    const skillOptions: Option[] = skills;
+    const store = useVacanciesStore({
+      initialVacancies,
+      total,
+      totalPages,
+      currentPage,
+      initialSearch,
+      initialSkillOptions,
+      initialSort,
+    });
 
     React.useEffect(() => {
-      const urlSearch = searchParams.get('search') || '';
-      const urlPage = Number(searchParams.get('page')) || 1;
-      const urlSkills = searchParams.get('skills')?.split(',').filter(Boolean) || [];
-
-      const urlSkillOptions: Option[] = urlSkills.map((skillValue) => {
-        const skill = skills.find((s) => s.value === skillValue);
-        return {
-          key: skill?.key || skillValue.toLowerCase().replace(/\s+/g, ''),
-          value: skillValue,
-        };
-      });
-
       if (
         urlSearch !== store.search ||
         urlPage !== store.currentPage ||
-        JSON.stringify(urlSkillOptions.map((s) => s.value)) !==
-          JSON.stringify(store.selectedSkills.map((s) => s.value))
+        JSON.stringify(urlSkillOptions.map((s: Option) => s.value)) !==
+          JSON.stringify(store.selectedSkills.map((s: Option) => s.value)) ||
+        urlSort !== store.sort
       ) {
-        store.fetchVacancies(urlPage, urlSearch, urlSkillOptions);
+        store.fetchVacancies(urlPage, urlSearch, urlSkillOptions, urlSort);
       }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleSearch = React.useCallback(
-      (value: string) => {
-        store.setSearch(value);
-      },
+    const handleSearchChange = React.useCallback(
+      (value: string) => store.setSearch(value),
       [store]
     );
 
     const handleSkillsChange = React.useCallback(
-      (options: Option[]) => {
-        store.setSkills(options);
-      },
+      (options: Option[]) => store.setSkills(options),
       [store]
     );
 
-    const handlePageChange = React.useCallback(
-      (page: number) => {
-        store.setPage(page);
-      },
+    const handleSortChange = React.useCallback(
+      (option: Option) => store.setSort(option.key),
       [store]
+    );
+
+    const handlePageChange = React.useCallback((page: number) => store.setPage(page), [store]);
+
+    const currentSortOption = React.useMemo(
+      () =>
+        FILTERS_CONFIG.sortOptions.find((opt) => opt.key === store.sort) ||
+        FILTERS_CONFIG.sortOptions[0],
+      [store.sort]
     );
 
     return (
       <div>
-        <div className="mb-10 flex flex-col md:flex-row items-start md:items-center gap-4">
-          <Search
-            placeholder={`${t('search')}...`}
-            buttonText={t('search')}
-            handleSearch={handleSearch}
-            initialValue={store.search}
-            className="flex-1"
-          />
-
-          <MultiDropdown
-            options={skillOptions}
-            value={store.selectedSkills}
-            onChange={handleSkillsChange}
-            getTitle={(value) =>
-              value.length ? value.map((v) => v.value).join(', ') : 'Выберите требования'
-            }
-            className="w-full md:w-64"
-          />
-        </div>
+        <FiltersBar
+          search={store.search}
+          selectedSkills={store.selectedSkills}
+          currentSortOption={currentSortOption}
+          sortOptions={FILTERS_CONFIG.sortOptions}
+          skillsOptions={FILTERS_CONFIG.skills}
+          onSearchChange={handleSearchChange}
+          onSkillsChange={handleSkillsChange}
+          onSortChange={handleSortChange}
+        />
 
         <VacancyList
           vacancies={store.vacancies}

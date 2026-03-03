@@ -1,10 +1,10 @@
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { getTranslations } from 'next-intl/server';
 
-import type { IUser } from '@myTypes/mongoTypes';
-import type { Option } from '@ui';
+import { CandidateClient } from '@candidatesComponents/CandidatesClient/CandidatesClient';
+import { FilterProvider } from '@candidatesProvider/filtersProvider';
 import { Section, SectionTitle } from '@ui';
 
-import { CandidateClient } from './components/CandidatesClient/CandidatesClient';
 import { candidatesServiceAll } from './services/candidatesService';
 
 type CandidatesPageProps = {
@@ -12,41 +12,43 @@ type CandidatesPageProps = {
     page?: string;
     search?: string;
     skills?: string;
+    hasExperience?: string;
   }>;
 };
 
 export default async function CandidatesPage({ searchParams }: CandidatesPageProps) {
   const params = await searchParams;
-
+  const queryClient = new QueryClient();
   const pageParam = Number(params.page) || 1;
   const searchParam = params.search?.trim() || '';
   const skillsParam = params.skills?.split(',').filter(Boolean) || [];
+  const hasExperienceParam = params.hasExperience === 'true';
 
-  const selectedSkillOptions: Option[] = skillsParam.map((skill) => ({
-    key: skill,
-    value: skill,
-  }));
-
-  const { candidates, totalPages } = await candidatesServiceAll(
-    pageParam,
-    searchParam,
-    skillsParam
-  );
+  await queryClient.prefetchQuery({
+    queryKey: ['candidates', pageParam, searchParam, skillsParam, hasExperienceParam],
+    queryFn: () => candidatesServiceAll(pageParam, searchParam, skillsParam, hasExperienceParam),
+  });
 
   const t = await getTranslations('SectionTitle');
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <div className="py-10">
       <Section>
         <SectionTitle title={t('candidates')} />
         <div className="content">
-          <CandidateClient
-            initialCandidates={candidates as IUser[]}
-            totalPages={totalPages}
-            currentPage={pageParam}
-            search={searchParam}
-            selectedSkills={selectedSkillOptions}
-          />
+          <FilterProvider
+            initialState={{
+              page: pageParam,
+              search: searchParam,
+              skills: skillsParam,
+              hasExperience: hasExperienceParam,
+            }}
+          >
+            <HydrationBoundary state={dehydratedState}>
+              <CandidateClient />
+            </HydrationBoundary>
+          </FilterProvider>
         </div>
       </Section>
     </div>

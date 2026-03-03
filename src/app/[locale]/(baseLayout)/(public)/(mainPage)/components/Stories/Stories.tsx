@@ -89,6 +89,7 @@ export default function Stories() {
                     alt={`Story ${story.id}`}
                     height={60}
                     width={60}
+                    quality={75}
                     className="rounded-full object-cover"
                   />
                 </div>
@@ -104,7 +105,7 @@ export default function Stories() {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+      className="fixed inset-0 bg-black/70 z-(--z-modal) flex items-center justify-center"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
@@ -112,7 +113,7 @@ export default function Stories() {
       onTouchEnd={handleMouseUp}
     >
       {/* Верхняя панель прогресса */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex gap-1 w-80">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-(--z-modal) flex gap-1 w-80">
         {stories.map((_, index) => (
           <div
             key={index}
@@ -140,6 +141,7 @@ export default function Stories() {
           alt="Story"
           fill
           priority
+          quality={75}
           sizes="(max-width: 768px) 100vw, 384px"
           className="object-cover"
         />

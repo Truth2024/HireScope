@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const refreshToken = req.headers.get('cookie')?.split('refreshToken=')[1]?.split(';')[0];
 
     if (!refreshToken) {
-      return NextResponse.json({ error: 'Refresh token missing' }, { status: 401 });
+      return NextResponse.json({ authenticated: false }, { status: 200 });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let decoded: any;

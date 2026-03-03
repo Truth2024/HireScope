@@ -1,17 +1,19 @@
+'use server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 import { CANDIDATES_LIMIT } from '@constants/constants';
+import connectDB from '@lib/mongodb';
 import User from '@models/User';
 import type { IUser, IUserMongo, UserFilter } from '@myTypes/mongoTypes';
-import connectDB from 'src/shared/lib/mongodb';
 
 const REFRESH_SECRET = process.env.REFRESH_SECRET!;
 
 export const candidatesServiceAll = async (
   page: number = 1,
   searchParam: string = '',
-  skillsParam: string[] = []
+  skillsParam: string[] = [],
+  hasExperience?: boolean
 ): Promise<{
   candidates: IUser[];
   totalResult: number;
@@ -45,7 +47,11 @@ export const candidatesServiceAll = async (
   }
 
   if (skillsParam.length > 0) {
-    filter.skills = { $in: skillsParam };
+    filter.skills = { $all: skillsParam };
+  }
+
+  if (hasExperience) {
+    filter.experience = { $ne: [] };
   }
 
   const totalResult = await User.countDocuments(filter);

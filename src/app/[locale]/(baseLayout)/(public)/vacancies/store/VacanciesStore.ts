@@ -12,6 +12,7 @@ export class VacanciesStore {
   error: string | null = null;
   search = '';
   selectedSkills: Option[] = [];
+  sort = 'newest';
 
   constructor(initialData?: {
     vacancies: IVacancy[];
@@ -20,6 +21,7 @@ export class VacanciesStore {
     currentPage: number;
     search?: string;
     selectedSkills?: Option[];
+    sort?: string;
   }) {
     makeAutoObservable(this);
 
@@ -30,10 +32,16 @@ export class VacanciesStore {
       this.currentPage = initialData.currentPage;
       this.search = initialData.search || '';
       this.selectedSkills = initialData.selectedSkills || [];
+      this.sort = initialData.sort || 'newest';
     }
   }
 
-  async fetchVacancies(page: number, search: string, skills: Option[] = []) {
+  fetchVacancies = async (
+    page: number,
+    search: string,
+    skills: Option[] = [],
+    sort: string = this.sort
+  ) => {
     this.loading = true;
     this.error = null;
 
@@ -50,6 +58,10 @@ export class VacanciesStore {
         url += `&skills=${skillValues.join(',')}`;
       }
 
+      if (sort !== 'newest') {
+        url += `&sort=${sort}`;
+      }
+
       const res = await fetch(url);
       if (!res.ok) throw new Error('Ошибка загрузки вакансий');
 
@@ -62,6 +74,7 @@ export class VacanciesStore {
         this.currentPage = data.currentPage;
         this.search = search;
         this.selectedSkills = skills;
+        this.sort = sort;
 
         if (typeof window !== 'undefined') {
           const params = new URLSearchParams(window.location.search);
@@ -79,6 +92,12 @@ export class VacanciesStore {
             params.delete('skills');
           }
 
+          if (sort !== 'newest') {
+            params.set('sort', sort);
+          } else {
+            params.delete('sort');
+          }
+
           const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
           window.history.replaceState({}, '', newUrl);
         }
@@ -92,19 +111,24 @@ export class VacanciesStore {
         this.loading = false;
       });
     }
-  }
+  };
 
-  setPage(page: number) {
+  setPage = (page: number) => {
     if (page < 1 || page > this.totalPages) return;
-    this.fetchVacancies(page, this.search, this.selectedSkills);
-  }
+    this.fetchVacancies(page, this.search, this.selectedSkills, this.sort);
+  };
 
-  setSearch(value: string) {
+  setSearch = (value: string) => {
     if (value === this.search) return;
-    this.fetchVacancies(1, value, this.selectedSkills);
-  }
+    this.fetchVacancies(1, value, this.selectedSkills, this.sort);
+  };
 
-  setSkills(skills: Option[]) {
-    this.fetchVacancies(1, this.search, skills);
-  }
+  setSkills = (skills: Option[]) => {
+    this.fetchVacancies(1, this.search, skills, this.sort);
+  };
+
+  setSort = (value: string) => {
+    if (value === this.sort) return;
+    this.fetchVacancies(1, this.search, this.selectedSkills, value);
+  };
 }

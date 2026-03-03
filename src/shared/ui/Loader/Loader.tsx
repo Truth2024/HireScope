@@ -1,6 +1,3 @@
-import React from 'react';
-
-import styles from './Loader.module.scss';
 export type LoaderProps = {
   /** Размер */
   size?: 'xs' | 's' | 'm' | 'l';
@@ -8,19 +5,19 @@ export type LoaderProps = {
   className?: string;
 };
 
-export const Loader: React.FC<LoaderProps> = ({ className, size = 'l' }: LoaderProps) => {
-  const map = {
-    xs: '20',
-    s: '24',
-    m: '48',
-    l: '60',
-  };
+const SIZE_MAP = {
+  xs: '20',
+  s: '24',
+  m: '48',
+  l: '60',
+} as const;
 
+export const Loader = ({ className, size = 'l' }: LoaderProps) => {
   return (
     <svg
-      className={`${styles.loader} ${className}`}
-      width={map[size]}
-      height={map[size]}
+      className={`loader ${className}`}
+      width={SIZE_MAP[size]}
+      height={SIZE_MAP[size]}
       viewBox="0 0 60 60"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

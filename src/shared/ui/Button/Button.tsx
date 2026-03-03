@@ -1,9 +1,10 @@
 'use client';
 
-import clsx from 'clsx';
 import Link from 'next/link';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { forwardRef } from 'react';
+
+import { cn } from '@lib/utils';
 
 type BaseProps = {
   children: ReactNode;
@@ -38,39 +39,30 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, Props>((props, 
   } = props;
 
   const isDisabled = disabled || loading;
-  const baseStyles =
-    'cursor-pointer inline-flex items-center justify-center h-11 px-5 rounded-2xl text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60';
 
-  const variants = {
-    primary: `
-    bg-[var(--color-brand)]
-    text-white
-    hover:bg-[var(--color-brand-hover)]
-    focus:ring-[var(--color-brand)]
-  `,
-    secondary: `
-    text-white
-    bg-white/15 
-    backdrop-blur-sm
-    border
-    border-white/30
-    transition-all
-    duration-200
-    hover:bg-white/25
-    focus:ring-[var(--border-gray)]
-  `,
-    danger: `
-    bg-red-600
-    text-white
-    hover:bg-red-700
-    focus:ring-red-500
-  `,
-  };
-  const classes = clsx(
-    baseStyles,
-    variants[variant],
+  const classes = cn(
+    'cursor-pointer inline-flex items-center justify-center h-11 px-5 rounded-2xl',
+    'text-base font-medium transition-all duration-200',
+    'focus:outline-none focus:ring-2 focus:ring-offset-2',
+    'disabled:opacity-60',
+
+    variant === 'primary' && [
+      'bg-[var(--color-brand)] text-white',
+      'hover:bg-[var(--color-brand-hover)]',
+      'focus:ring-[var(--color-brand)]',
+    ],
+    variant === 'secondary' && [
+      'text-white bg-white/15 backdrop-blur-sm',
+      'border border-white/30',
+      'transition-all duration-200',
+      'hover:bg-white/25',
+      'focus:ring-[var(--border-gray)]',
+    ],
+    variant === 'danger' && ['bg-red-600 text-white', 'hover:bg-red-700', 'focus:ring-red-500'],
+
     fullWidth && 'w-full',
     isDisabled && 'cursor-not-allowed opacity-70',
+
     className
   );
 

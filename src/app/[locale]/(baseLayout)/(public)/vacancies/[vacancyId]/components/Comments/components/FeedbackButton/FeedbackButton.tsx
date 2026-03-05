@@ -54,7 +54,14 @@ export const FeedbackButton = observer(({ store }: FeedbackButtonProps) => {
       href="/login"
       className="gap-3 w-full lg:max-w-90 py-5 px-2 h-80 bg-(--color-brand) hover:bg-(--color-brand-hover) transition-colors duration-300 flex flex-col rounded-xl justify-center items-center"
     >
-      <Image height={250} width={250} alt="ur" src="/images/entryAccount1.png" />
+      <Image
+        height={250}
+        width={250}
+        alt="ur"
+        priority
+        src="/images/entryAccount1.png"
+        className="w-auto h-auto"
+      />
       <p className="text-white font-semibold text-base text-center">
         {t('unauthorized')}
         <br /> {t('unauthorizedDescr')}

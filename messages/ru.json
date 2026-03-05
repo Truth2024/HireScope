@@ -86,7 +86,30 @@
       "rating": "С высоким рейтингом",
       "salaryHigh": "С высокой зарплатой",
       "salaryLow": "С низкой зарплатой"
-    }
+    },
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "edit": "Редактировать",
+    "add": "Добавить",
+    "positionPlaceholder": "Например: Senior Developer",
+    "companyPlaceholder": "Например: Google",
+    "yearsLabel": "Лет опыта",
+    "yearsPlaceholder": "Например: 3",
+    "position": "Должность",
+    "newPosition": "Добавить место работы",
+    "noExperienceAdd": "Добавьте опыт работы",
+    "companyRequired": "Название компании обязательно",
+    "companyMax": "Название компании не может быть длиннее 100 символов",
+    "positionRequired": "Название должности обязательно",
+    "positionMax": "Название должности не может быть длиннее 100 символов",
+    "yearsMin": "Опыт не может быть меньше 1 года",
+    "yearsMax": "Максимум 50 лет",
+    "formComplete": "Заполните все поля",
+    "fillAllFields": "Заполните все поля в каждом элементе опыта",
+    "fixFormErrors": "Пожалуйста, исправьте ошибки в форме",
+    "saveFailed": "Не удалось сохранить",
+    "unknownError": "Неизвестная ошибка",
+    "userNotAuthenticated": "Пользователь не авторизован"
   },
 
   "Auth": {

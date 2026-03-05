@@ -32,7 +32,7 @@ export const ProfileClient = observer(() => {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || user) {
+  if (isLoading) {
     return (
       <div className="fixed inset-0 z-(--z-modal) flex items-center justify-center bg-white">
         <Loader />

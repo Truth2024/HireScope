@@ -1,10 +1,11 @@
-import { Card, Section } from '@ui';
+import { ProfileMainClient } from '@profileMainCandidate';
+import { Section } from '@ui';
 
 export default function ProfileMainPage() {
   return (
     <Section>
       <div className="content">
-        <Card>конент</Card>
+        <ProfileMainClient />
       </div>
     </Section>
   );

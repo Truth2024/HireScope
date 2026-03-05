@@ -100,8 +100,8 @@ export class AuthStore {
           });
 
           return data.accessToken;
-        } catch (error) {
-          console.error('Refresh error:', error);
+        } catch {
+          await this.logout();
           return null;
         } finally {
           this.isRefreshing = false;

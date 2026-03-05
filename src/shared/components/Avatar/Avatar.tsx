@@ -11,7 +11,7 @@ type AvatarProps = {
 };
 
 function Avatar({ firstName, secondName, avatar, blurPhoto, size = 'large' }: AvatarProps) {
-  const styleText = size === 'large' ? 'text-4xl md:text-5xl' : 'text-xl';
+  const styleText = size === 'large' ? 'text-3xl md:text-4xl' : 'text-xl';
 
   const styleRound = size === 'large' ? 'w-24 h-24' : 'w-14 h-14';
 

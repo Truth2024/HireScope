@@ -8,7 +8,7 @@ import type { IUser, IUserMongo, IVacancy, IVacancyMongo } from '@myTypes/mongoT
 
 const REFRESH_SECRET = process.env.REFRESH_SECRET!;
 
-export const fetchTopCandidates = async (limit = 6): Promise<IUser[]> => {
+export const fetchTopCandidates = async (limit = 4): Promise<IUser[]> => {
   await connectDB();
 
   const cookieStore = await cookies();

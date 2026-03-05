@@ -3,11 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { observer } from 'mobx-react-lite';
 
+import { CandidatesFiltersBar } from '@candidatesComponents/CandidatesClient/components/CandidatesFiltersBar/CandidatesFiltersBar';
+import { CandidatesList } from '@candidatesComponents/CandidatesList/CandidatesList';
 import { useFilters } from '@candidatesProvider/filtersProvider';
 import type { CandidateFilterState } from '@candidatesStore/CandidateFilterStore';
-
-import { CandidatesList } from '@candidatesComponents/CandidatesList/CandidatesList';
-import { CandidatesFiltersBar } from '@candidatesComponents/CandidatesClient/components/CandidatesFiltersBar/CandidatesFiltersBar';
 
 export const CandidateClient = observer(() => {
   const filterStore = useFilters();

@@ -51,6 +51,15 @@
       "@candidatesStore/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/store/*"],
       "@ProfileClientComponents": [
         "src/app/[locale]/(baseLayout)/(protected)/profile/components/ProfileClient/components/index.ts"
+      ],
+      "@experienceStore/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(candidate)/main/components/ExperienceChanger/store/*"
+      ],
+      "@experienceSchema/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(candidate)/main/components/ExperienceChanger/schema/*"
+      ],
+      "@profileMainCandidate": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(candidate)/main/components/index.ts"
       ]
     }
   },

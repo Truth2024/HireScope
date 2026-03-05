@@ -49,7 +49,7 @@ export const ProfileNavCandidate = observer(() => {
                       <motion.span
                         layoutId="active-nav-line"
                         initial={false}
-                        className="absolute left-0 right-0 bottom-0 block h-0.5 z-50 bg-(--color-brand)"
+                        className="absolute left-0 right-0 bottom-0 block h-0.5 z-11 bg-(--color-brand)"
                         transition={{
                           type: 'spring',
                           stiffness: 500,

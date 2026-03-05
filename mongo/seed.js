@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-
+const bcrypt = require('bcryptjs');
 const MONGODB_URI = process.env.DB_URL;
 const DB_NAME = process.env.DB_NAME || 'my-app';
 
@@ -32,8 +32,8 @@ async function seedDatabase() {
         firstName: 'Алексей',
         surname: 'Иванов',
         secondName: 'Петрович',
-        email: 'alexey.ivanov@example.com',
-        password: 'password123',
+        email: 'leszczynski114@gmail.com',
+        password:  await bcrypt.hash('12345678', 5),
         role: 'candidate',
         avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
         avatarBlur: '/images/23.png',
@@ -61,7 +61,7 @@ async function seedDatabase() {
         surname: 'Пирогова',
         secondName: 'Александровна',
         email: 'anna@hr.com',
-        password: '123',
+        password:  await bcrypt.hash('12345678', 5),
         role: 'hr',
         skills: [],
       },

@@ -12,3 +12,4 @@ export { Pagination } from './Pagination/Pagination';
 export { Search } from './Search/Search';
 export { SingleDropdown } from './SingleDropdown/SingleDropdown';
 export { Checkbox } from './Checkbox/Checkbox';
+export { default as ActionButton } from './ActionButton/ActionButton';

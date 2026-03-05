@@ -63,9 +63,9 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
           <section className="mb-8">
             <Skills skills={user.skills} title={t('skills')} variant="full" />
           </section>
-
-          <Experience experience={user.experience} variant="full" />
-
+          <section className="mb-8">
+            <Experience experience={user.experience} variant="full" />
+          </section>
           <div className="border-t border-gray-100 my-6" />
           <div className="flex justify-between items-center">
             <DateInfo date={user.createdAt} title={t('memberSince')} />

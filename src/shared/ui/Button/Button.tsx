@@ -11,7 +11,7 @@ type BaseProps = {
   className?: string;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'danger' | 'cancel';
   fullWidth?: boolean;
 };
 
@@ -59,7 +59,13 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, Props>((props, 
       'focus:ring-[var(--border-gray)]',
     ],
     variant === 'danger' && ['bg-red-600 text-white', 'hover:bg-red-700', 'focus:ring-red-500'],
-
+    variant === 'cancel' && [
+      'bg-transparent text-gray-700',
+      'border-2 border-gray-200',
+      'hover:bg-gray-50 hover:border-gray-300',
+      'focus:ring-gray-400',
+      'active:bg-gray-100',
+    ],
     fullWidth && 'w-full',
     isDisabled && 'cursor-not-allowed opacity-70',
 

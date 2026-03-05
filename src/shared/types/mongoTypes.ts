@@ -14,7 +14,8 @@ export type IUser = {
   avatar?: string | null;
   avatarBlur?: string | null;
   skills: string[];
-  experience?: Array<{
+  experience: Array<{
+    id?: string;
     company?: string;
     position?: string;
     years?: number;
@@ -38,6 +39,16 @@ export type IUserMongo = {
   }>;
   createdAt: string; // ISO дата
 };
+export type ExperienceItem = {
+  id?: string;
+  company?: string;
+  position?: string;
+  years?: number;
+};
+export type ExperienceItemWithMeta = {
+  isNew?: boolean;
+} & ExperienceItem;
+
 export type UserFilter = {
   role?: string;
   $or?: Array<{ [key: string]: RegExp | { $exists?: boolean; $size?: number } }>;

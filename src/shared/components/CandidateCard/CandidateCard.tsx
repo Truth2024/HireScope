@@ -1,23 +1,26 @@
-import { getTranslations } from 'next-intl/server';
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 import { Experience, Avatar } from '@components';
+import type { IUser } from '@myTypes/mongoTypes';
 import { Button, Card } from '@ui';
-import type { IUser } from 'src/shared/types/mongoTypes';
 
 type CandidateCardProps = {
   candidate: IUser;
 };
 
-const CandidateCard: React.FC<CandidateCardProps> = async ({ candidate }) => {
-  const t = await getTranslations('Card');
+const CandidateCard = ({ candidate }: CandidateCardProps) => {
+  const t = useTranslations('Card');
   return (
-    <Card className="gap-4">
+    <Card className="gap-4 min-h-85.75">
       <div className="flex flex-col h-full">
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <Avatar
               size="small"
               avatar={candidate.avatar ?? null}
+              blurPhoto={candidate.avatarBlur ?? null}
               secondName={candidate.secondName}
               firstName={candidate.firstName}
             />

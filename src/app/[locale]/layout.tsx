@@ -1,10 +1,15 @@
 import { Nunito } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { Suspense } from 'react';
 
 import { routing } from '@i18n/routing';
+import QueryProvider from '@providers/QueryProvider';
 import { StoreProvider } from '@providers/StoreProvider';
+
 import '@styles/global.scss';
+
+import RootLoading from './loading';
 
 const nunito = Nunito({
   variable: '--font-family',
@@ -12,6 +17,7 @@ const nunito = Nunito({
   weight: ['400', '500', '700'],
   display: 'swap',
 });
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -31,9 +37,13 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className={`${nunito.variable} antialiased min-h-screen`}>
-        <NextIntlClientProvider locale={locale}>
-          <StoreProvider>{children}</StoreProvider>
-        </NextIntlClientProvider>
+        <Suspense fallback={<RootLoading />}>
+          <NextIntlClientProvider locale={locale}>
+            <QueryProvider>
+              <StoreProvider>{children}</StoreProvider>
+            </QueryProvider>
+          </NextIntlClientProvider>
+        </Suspense>
       </body>
     </html>
   );

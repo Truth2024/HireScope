@@ -1,5 +1,5 @@
 import { VacancyCard } from '@components';
-import type { IVacancy } from 'src/shared/types/mongoTypes';
+import type { IVacancy } from '@myTypes/mongoTypes';
 
 type TopVacancyListProps = {
   vacancy: IVacancy[];

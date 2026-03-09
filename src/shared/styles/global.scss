@@ -12,6 +12,14 @@
   --gray-font-color: #{v.$gray-font-color};
 
   --border-gray: #{v.$border-gray};
+  --header-height: #{v.$header-height};
+  /* Z-INDEX */
+  --z-dropdown: #{v.$z-dropdown};
+  --z-modal: #{v.$z-modal};
+  --z-modal-overlay: #{v.$z-modal-overlay};
+  --z-header: #{v.$z-header};
+  --z-sticky: #{v.$z-sticky};
+  --z-tooltip: #{v.$z-tooltip};
 }
 body {
   background-color: var(--color-bg);
@@ -36,10 +44,77 @@ body {
   display: flex;
 }
 
+.header-height {
+  height: var(--header-height);
+}
+
+.min-content-height {
+  min-height: calc(100vh - var(--header-height));
+}
+
 .hover-arrow-right {
   @include mixins.arrow-hover('right', 3px);
 }
 
 .hover-arrow-left {
   @include mixins.arrow-hover('left', 3px);
+}
+
+@keyframes muiSlideDownEnter {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes muiSlideDownExit {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.slide-down {
+  animation: muiSlideDownEnter 225ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-up {
+  animation: muiSlideDownExit 195ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+body.modal-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+@keyframes apple-pulse {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

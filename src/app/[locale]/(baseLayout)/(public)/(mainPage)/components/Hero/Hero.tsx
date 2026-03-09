@@ -51,8 +51,10 @@ export const Hero = () => {
                 .
               </div>
               <div className="flex gap-6">
-                <Button>{t('buttons.getStarted')}</Button>
-                <Button variant="secondary">{t('buttons.exploreJobs')}</Button>
+                <Button href="/started">{t('buttons.getStarted')}</Button>
+                <Button variant="secondary" href="/vacancies">
+                  {t('buttons.exploreJobs')}
+                </Button>
               </div>
             </div>
           </div>

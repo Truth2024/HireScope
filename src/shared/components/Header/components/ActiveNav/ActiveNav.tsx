@@ -15,7 +15,7 @@ const ActiveNav = () => {
   const t = useTranslations('Header');
 
   return (
-    <nav className="flex flex-1 justify-end items-center gap-5 sm:gap-6">
+    <nav className="flex flex-1 justify-between sm:justify-end items-center gap-5 sm:gap-6">
       <Link href="/" className={getLinkClasses('/', pathname)}>
         <span className="hidden sm:inline">{t('nav.home')}</span>
         <span className="sm:hidden text-white">
@@ -44,11 +44,11 @@ export default ActiveNav;
 
 export const getLinkClasses = (href: string, pathname: string) => {
   const base =
-    'text-white font-medium text-sm sm:text-base no-underline transition-colors duration-300 hover:text-(--color-brand-hover) whitespace-nowrap px-1 sm:px-2';
+    'text-white font-medium text-sm sm:text-base no-underline transition-colors duration-300 hover:text-(--color-brand-hover) whitespace-nowrap pb-1';
   const active = 'opacity-100 border-b-2 border-(--color-brand)';
-
+  const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/') || '/';
   if (href === '/') {
-    return pathname === href ? `${base} ${active}` : base;
+    return pathnameWithoutLocale === href ? `${base} ${active}` : base;
   }
-  return pathname.startsWith(href) ? `${base} ${active}` : base;
+  return pathnameWithoutLocale.startsWith(href) ? `${base} ${active}` : base;
 };

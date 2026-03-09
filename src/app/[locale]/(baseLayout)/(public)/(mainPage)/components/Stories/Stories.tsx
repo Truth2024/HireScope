@@ -2,6 +2,8 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 
+import { CloseButton } from '@ui';
+
 import { useStories } from './hooks/useStrories';
 import { stories } from './mockData/mockData';
 
@@ -87,6 +89,7 @@ export default function Stories() {
                     alt={`Story ${story.id}`}
                     height={60}
                     width={60}
+                    quality={75}
                     className="rounded-full object-cover"
                   />
                 </div>
@@ -102,7 +105,7 @@ export default function Stories() {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+      className="fixed inset-0 bg-black/70 z-(--z-modal) flex items-center justify-center"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
@@ -110,7 +113,7 @@ export default function Stories() {
       onTouchEnd={handleMouseUp}
     >
       {/* Верхняя панель прогресса */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex gap-1 w-80">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-(--z-modal) flex gap-1 w-80">
         {stories.map((_, index) => (
           <div
             key={index}
@@ -129,16 +132,19 @@ export default function Stories() {
       </div>
 
       {/* Close button */}
-      <button
-        onClick={closeStory}
-        className="absolute top-8 right-4 text-(--color-brand) hover:text-(--color-brand-hover) text-3xl z-50 transition-colors"
-      >
-        ✕
-      </button>
+      <CloseButton onClick={closeStory} className={'absolute top-8 right-4'} />
 
       {/* Story container по центру, адаптивный */}
       <div className="relative w-[90vw] max-w-sm aspect-9/16 bg-black rounded-2xl overflow-hidden shadow-2xl">
-        <Image src={currentStory.image} alt="Story" fill className="object-cover" />
+        <Image
+          src={currentStory.image}
+          alt="Story"
+          fill
+          priority
+          quality={75}
+          sizes="(max-width: 768px) 100vw, 384px"
+          className="object-cover"
+        />
         {/* Навигация */}
         <div className="absolute inset-0 flex">
           <div

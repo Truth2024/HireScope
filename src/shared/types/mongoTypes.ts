@@ -1,8 +1,11 @@
 // ------------------------------
 // Тип пользователя
+
+import type mongoose from 'mongoose';
+
 // ------------------------------
 export type IUser = {
-  id: string; // _id.toString()
+  id: string;
   firstName: string;
   surname: string;
   secondName: string;
@@ -10,8 +13,9 @@ export type IUser = {
   role: 'hr' | 'candidate';
   avatar?: string | null;
   avatarBlur?: string | null;
-  skills: string[]; // может быть пустым
-  experience?: Array<{
+  skills: string[];
+  experience: Array<{
+    id?: string;
     company?: string;
     position?: string;
     years?: number;
@@ -19,7 +23,7 @@ export type IUser = {
   createdAt: string; // ISO дата
 };
 export type IUserMongo = {
-  _id: string; // _id.toString()
+  _id: string;
   firstName: string;
   surname: string;
   secondName: string;
@@ -27,7 +31,7 @@ export type IUserMongo = {
   role: 'hr' | 'candidate';
   avatar?: string | null;
   avatarBlur?: string | null;
-  skills: string[]; // может быть пустым
+  skills: string[];
   experience?: Array<{
     company?: string;
     position?: string;
@@ -35,16 +39,49 @@ export type IUserMongo = {
   }>;
   createdAt: string; // ISO дата
 };
+export type ExperienceItem = {
+  id?: string;
+  company?: string;
+  position?: string;
+  years?: number;
+};
+export type ExperienceItemWithMeta = {
+  isNew?: boolean;
+} & ExperienceItem;
+
+export type UserFilter = {
+  role?: string;
+  $or?: Array<{ [key: string]: RegExp | { $exists?: boolean; $size?: number } }>;
+  skills?: { $all: string[] };
+  experience?:
+    | { $ne: [] } // для фильтра "только с опытом" (не пустой массив)
+    | { $exists: boolean; $size?: number }; // для других случаев
+};
 
 // ------------------------------
 // Тип комментария
 // ------------------------------
 export type IComment = {
   _id: string; // _id.toString()
-  user: IUser; // пользователь, оставивший комментарий
+  user: IUser;
   text: string;
   rating: number; // 1-5
   createdAt: string; // ISO дата
+};
+export type CommentWithUser = {
+  _id: mongoose.Types.ObjectId;
+  text: string;
+  rating: number;
+  createdAt: Date;
+  user: {
+    _id: mongoose.Types.ObjectId;
+    firstName: string;
+    surname: string;
+    secondName: string;
+    avatar?: string | null;
+    avatarBlur?: string | null;
+    email: string;
+  };
 };
 
 // ------------------------------
@@ -72,8 +109,16 @@ export type ICandidate = {
 // ------------------------------
 // Тип вакансии
 // ------------------------------
+export type IRatingDistribution = {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+};
+
 export type IVacancy = {
-  id: string; // _id.toString()
+  id: string;
   title: string;
   description: string;
   requirements: string[];
@@ -83,27 +128,57 @@ export type IVacancy = {
   level: 'junior' | 'middle' | 'senior' | null;
   rating: number;
   comments: IComment[];
-  commentsCount: number; // количество комментариев
+  commentsCount: number;
+  ratingDistribution: IRatingDistribution;
   createdBy: IUser | null;
   candidates: ICandidate[];
-  createdAt: string; // ISO дата
+  createdAt: string;
 };
+
+export type ICommentsStatsMongo = {
+  total: number;
+  distribution: {
+    1: number;
+    2: number;
+    3: number;
+    4: number;
+    5: number;
+  };
+  lastUpdated: Date;
+};
+
 export type IVacancyMongo = {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   title: string;
-  description?: string;
+  description: string;
   company: string;
-  level: string;
+  level: 'junior' | 'middle' | 'senior';
   salary?: {
     min?: number;
     max?: number;
   };
   rating?: number;
+  commentsStats?: ICommentsStatsMongo;
   department?: string;
   requirements?: string[];
   createdBy?: {
-    _id: string;
+    _id: mongoose.Types.ObjectId;
     name: string;
   };
+  candidates?: mongoose.Types.ObjectId[];
   createdAt: Date;
+};
+
+export type VacancyFilter = {
+  $or?: Array<{
+    title?: RegExp;
+    description?: RegExp;
+  }>;
+  requirements?: { $in: string[] } | { $all: string[] };
+  salary?: {
+    $and?: Array<{
+      'salary.min'?: { $lte?: number; $gte?: number };
+      'salary.max'?: { $lte?: number; $gte?: number };
+    }>;
+  };
 };

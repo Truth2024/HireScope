@@ -39,15 +39,13 @@
     "company": "Company",
     "notSpecified": "Not specified",
     "noExperience": "No experience specified",
+    "noRating": "No rating",
     "at": "at",
-    "years": "yrs",
-    "year": "yr",
-    "years_full": "years",
-    "year_full": "year",
-    "morePositions": "+{count} more positions",
+    "years": "{count, plural, one {# year} other {# years}}",
+    "morePositions": "{count, plural, one {+1 more position} other {+# more positions}}",
     "skills": "Skills",
     "noSkills": "No skills specified",
-    "moreSkills": "+{count} more",
+    "moreSkills": "{count, plural, one {+1 more} other {+# more}}",
     "requirements": "Requirements",
     "description": "Description",
     "apply": "Apply now",
@@ -56,7 +54,60 @@
     "noComments": "No comments yet",
     "beFirstToLeaveReview": "Be the first to leave a review!",
     "memberSince": "Member since",
-    "contactCandidate": "Contact candidate"
+    "contactCandidate": "Contact candidate",
+    "feedback": "Leave a review",
+    "allcomments": "Total comments",
+    "avgrate": "Average rating",
+    "entryaccount": "Sign in",
+    "search": "Search",
+    "unauthorized": "You are not logged in.",
+    "unauthorizedDescr": "Log in to leave a comment.",
+    "yourRating": "Your rating",
+    "placeholder": "Share your opinion...",
+    "ariaText": "Comment text",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "starAria": "{count} {count, plural, one {star} other {stars}}",
+    "errors": {
+      "emptyText": "Please write a comment",
+      "noRating": "Please select a rating"
+    },
+    "notFoundVacancies": "No vacancies found",
+    "notFoundCandidates": "No candidates found",
+    "pickSkills": "Select skills",
+    "selectRequirements": "Select requirements",
+    "withExp": "With experience",
+    "sortPlaceholder": "Sort by",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "rating": "Highest rated",
+      "salaryHigh": "Highest salary",
+      "salaryLow": "Lowest salary"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "add": "Add",
+    "positionPlaceholder": "For example: Senior Developer",
+    "companyPlaceholder": "For example: Google",
+    "yearsLabel": "Years of experience",
+    "yearsPlaceholder": "For example: 3",
+    "position": "Your position",
+    "newPosition": "Add a place of work",
+    "noExperienceAdd": "Add work experience",
+    "companyRequired": "Company name is required",
+    "companyMax": "Company name cannot exceed 100 characters",
+    "positionRequired": "Position is required",
+    "positionMax": "Position cannot exceed 100 characters",
+    "yearsMin": "Experience cannot be less than 1 year",
+    "yearsMax": "Maximum 50 years",
+    "formComplete": "Please fill in all fields",
+    "fillAllFields": "Please fill in all fields in each experience item",
+    "fixFormErrors": "Please fix the errors in the form",
+    "saveFailed": "Failed to save",
+    "unknownError": "Unknown error",
+    "userNotAuthenticated": "User not authenticated"
   },
 
   "Auth": {
@@ -73,7 +124,58 @@
 
     "email": "Enter email",
     "pass": "Enter password",
-    "confirm": "Confirm password"
+    "confirm": "Confirm password",
+    "role_candidate": "Open to work",
+    "role_hr": "Hiring"
+  },
+  "ProfileNavHR": {
+    "profile": "Profile",
+    "resumes": "My Resumes",
+    "applications": "Applications",
+    "logout": "Logout"
+  },
+  "ProfileNavCandidate": {
+    "profile": "Profile",
+    "resumes": "My Resumes",
+    "applications": "Applications",
+    "logout": "Logout"
+  },
+  "GetStarted": {
+    "badge": "Fast Start",
+    "title": "Your career starts here",
+    "description": "We've simplified the hiring process to 4 simple steps. No bureaucracy — just results.",
+    "steps": {
+      "step": "Step",
+      "start": "Start",
+      "process": "Process",
+      "finish": "Finish",
+      "1": {
+        "title": "Registration",
+        "desc": "Create an account in 30 seconds. Choose your role: Candidate to find work or HR to find talent."
+      },
+      "2": {
+        "title": "Profile Completion",
+        "desc": "Tell us about your skills or company. A more detailed profile increases your chances of success."
+      },
+      "3": {
+        "title": "Active Search",
+        "desc": "Use AI filters for instant matching of vacancies or resumes to your criteria."
+      },
+      "4": {
+        "title": "Direct Contact",
+        "desc": "Chat in the built-in messenger, schedule interviews, and receive offers without intermediaries."
+      }
+    },
+    "features": {
+      "speed": { "title": "Speed", "text": "Hiring twice as fast" },
+      "security": { "title": "Security", "text": "Verified companies" },
+      "quality": { "title": "Quality", "text": "Only relevant offers" }
+    },
+    "cta": {
+      "title": "Ready to find your dream job?",
+      "register": "Sign Up",
+      "vacancies": "Explore Vacancies"
+    }
   },
 
   "PrivacyPolicy": {

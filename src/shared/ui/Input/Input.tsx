@@ -1,6 +1,7 @@
 import React from 'react';
 
-import styles from './input.module.scss';
+import { cn } from '@lib/utils';
+
 export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
   /** Значение поля */
   value: string;
@@ -9,11 +10,22 @@ export type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onCh
   /** Слот для иконки справа */
   afterSlot?: React.ReactNode;
   type?: string;
+  height?: string;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { value, onChange, afterSlot, className, onClick, disabled = false, type = 'text', ...props },
+    {
+      value,
+      onChange,
+      afterSlot,
+      className,
+      onClick,
+      disabled = false,
+      type = 'text',
+      height = 'h-11',
+      ...props
+    },
     ref
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,10 +33,28 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={`${styles.inputWrapper} ${className}`} onClick={onClick}>
+      <div
+        className={cn(
+          'flex items-center justify-between w-full px-3 rounded-lg transition-all duration-200',
+          height,
+
+          !disabled && [
+            'bg-[#f9fafb] border border-[#e5e7eb]',
+            'hover:border-[#d1d5db]',
+            'focus-within:border-[#6366f1] focus-within:shadow-[0_0_0_3px_rgba(99,102,241,0.15)]',
+          ],
+          disabled && 'bg-[#f3f4f6] pointer-events-none',
+          className
+        )}
+        onClick={onClick}
+      >
         <input
           ref={ref}
-          className={`${styles.input} ${disabled ? styles.disabled : ''}`}
+          className={cn(
+            'w-full h-full bg-transparent text-base font-normal text-[#111827] outline-none',
+            'placeholder:text-[#9ca3af] placeholder:font-light',
+            disabled && 'text-[#cbd5e1] placeholder:text-[#cbd5e1]'
+          )}
           type={type}
           value={value}
           disabled={disabled}
@@ -32,9 +62,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
 
-        {afterSlot}
+        {afterSlot && <div className="shrink-0 ml-2">{afterSlot}</div>}
       </div>
     );
   }
 );
+
+Input.displayName = 'Input';
+
 export default Input;

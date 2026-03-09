@@ -1,8 +1,9 @@
-import { getTranslations } from 'next-intl/server';
+'use client';
+import { useTranslations } from 'next-intl';
 
 import { Logo, Rating, Skills } from '@components';
+import type { IVacancy } from '@myTypes/mongoTypes';
 import { Button, Card } from '@ui';
-import type { IVacancy } from 'src/shared/types/mongoTypes';
 
 import { VacancySalary } from '../VacancySalary/VacancySalary';
 
@@ -10,10 +11,10 @@ type VacancyCardProps = {
   vacancy: IVacancy;
 };
 
-const VacancyCard: React.FC<VacancyCardProps> = async ({ vacancy }) => {
-  const t = await getTranslations('Card');
+const VacancyCard = ({ vacancy }: VacancyCardProps) => {
+  const t = useTranslations('Card');
   return (
-    <Card className="gap-4">
+    <Card className="gap-4 min-h-80.75">
       <div className="flex flex-col h-full">
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex justify-between items-start gap-2">

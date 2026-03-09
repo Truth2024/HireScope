@@ -14,12 +14,20 @@ type ExperienceProps = {
 export const Experience = ({ experience, variant = 'full' }: ExperienceProps) => {
   const t = useTranslations('Card');
 
+  // Функция для склонения слова "год/года/лет"
+  const getYearsText = (years: number) => {
+    return t('years', { count: years });
+  };
+
   if (!experience || experience.length === 0) {
     return variant === 'compact' ? (
       <div className="text-sm text-gray-400 italic">{t('notSpecified')}</div>
     ) : (
       <section className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('experience')}</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <span className="w-1 h-5 bg-(--color-brand) rounded-full" />
+          {t('experience')}
+        </h2>
         <p className="text-gray-400 italic">{t('noExperience')}</p>
       </section>
     );
@@ -38,9 +46,7 @@ export const Experience = ({ experience, variant = 'full' }: ExperienceProps) =>
               </span>
             )}
             {exp.years && (
-              <span className="text-gray-400 text-xs ml-2">
-                ({exp.years} {exp.years > 1 ? t('years') : t('year')})
-              </span>
+              <span className="text-gray-400 text-xs ml-2">({getYearsText(exp.years)})</span>
             )}
           </div>
         ))}
@@ -55,7 +61,7 @@ export const Experience = ({ experience, variant = 'full' }: ExperienceProps) =>
   }
 
   return (
-    <section className="mb-8">
+    <>
       <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <span className="w-1 h-5 bg-(--color-brand) rounded-full" />
         {t('experience')}
@@ -69,7 +75,7 @@ export const Experience = ({ experience, variant = 'full' }: ExperienceProps) =>
 
               {exp.years && (
                 <span className="text-sm text-gray-500 bg-white px-2 py-1 rounded-full">
-                  {exp.years} {exp.years > 1 ? t('years_full') : t('year_full')}
+                  {getYearsText(exp.years)}
                 </span>
               )}
             </div>
@@ -80,6 +86,6 @@ export const Experience = ({ experience, variant = 'full' }: ExperienceProps) =>
           </div>
         ))}
       </div>
-    </section>
+    </>
   );
 };

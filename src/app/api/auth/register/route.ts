@@ -1,24 +1,35 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 import { NextResponse } from 'next/server';
 
 import User from '@models/User';
 import connectToDatabase from 'src/shared/lib/mongodb';
 
+type ExperienceDocument = {
+  _id?: mongoose.Types.ObjectId;
+  company?: string;
+  position?: string;
+  years?: number;
+};
+
 const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_SECRET!;
 
 export async function POST(req: Request) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _register = { Document };
+
   await connectToDatabase();
 
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const { email, password, firstName, surname, secondName } = await req.json();
+    const { email, password, firstName, surname, secondName, role } = await req.json();
 
-    if (!email || !password) {
+    if (!email || !password || !role) {
       await session.abortTransaction();
       session.endSession();
 
@@ -50,6 +61,7 @@ export async function POST(req: Request) {
           firstName,
           surname,
           secondName,
+          role,
         },
       ],
       { session }
@@ -59,6 +71,7 @@ export async function POST(req: Request) {
       {
         userId: user._id.toString(),
         email: user.email,
+        role: user.role,
       },
       ACCESS_SECRET,
       { expiresIn: '15m' }
@@ -89,7 +102,12 @@ export async function POST(req: Request) {
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
           skills: user.skills ?? [],
-          experience: user.experience ?? [],
+          experience: (user.experience || []).map((exp: ExperienceDocument) => ({
+            id: exp._id?.toString(),
+            company: exp.company,
+            position: exp.position,
+            years: exp.years,
+          })),
           createdAt: user.createdAt.toISOString(),
         },
       },

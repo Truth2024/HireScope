@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import { Avatar } from '@components';
 import { useStore } from '@providers/StoreProvider';
+import { Loader } from '@ui';
 
 import { getLinkClasses } from '../ActiveNav/ActiveNav';
 
@@ -21,7 +22,11 @@ export const Profile = observer(() => {
   }, []);
 
   if (!isMounted || authStore.isLoading) {
-    return <span className="text-white">loading...</span>;
+    return (
+      <div className="h-14 w-14 flex justify-center items-center">
+        <Loader size="m" />
+      </div>
+    );
   }
 
   if (!authStore.user) {

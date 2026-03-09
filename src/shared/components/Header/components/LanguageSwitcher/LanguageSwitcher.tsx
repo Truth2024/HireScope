@@ -19,7 +19,7 @@ export function LanguageSwitcher() {
       <button
         onClick={() => switchLocale('en')}
         className={`
-          w-7 h-7 text-xs font-medium rounded transition-all duration-300
+          w-7 h-7 text-xs font-medium rounded transition-all duration-300 cursor-pointer
           ${
             currentLocale === 'en'
               ? 'bg-(--color-brand) text-white'
@@ -32,7 +32,7 @@ export function LanguageSwitcher() {
       <button
         onClick={() => switchLocale('ru')}
         className={`
-          w-7 h-7 text-xs font-medium rounded transition-all duration-300
+          w-7 h-7 text-xs font-medium rounded transition-all duration-300 cursor-pointer
           ${
             currentLocale === 'ru'
               ? 'bg-(--color-brand) text-white'

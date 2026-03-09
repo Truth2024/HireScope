@@ -8,3 +8,12 @@ $base-font-color: #000;
 $gray-font-color: #768694;
 
 $border-gray: #dce3eb;
+$header-height: 80px;
+
+/* ===== Z-INDEX ===== */
+$z-dropdown: 50;
+$z-modal: 100;
+$z-modal-overlay: 90;
+$z-header: 40;
+$z-sticky: 30;
+$z-tooltip: 60;

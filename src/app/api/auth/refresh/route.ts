@@ -1,8 +1,17 @@
 import jwt from 'jsonwebtoken';
+import type mongoose from 'mongoose';
+import { Document } from 'mongoose';
 import { NextResponse } from 'next/server';
 
 import User from '@models/User';
 import connectToDatabase from 'src/shared/lib/mongodb';
+
+type ExperienceDocument = {
+  _id?: mongoose.Types.ObjectId;
+  company?: string;
+  position?: string;
+  years?: number;
+};
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_SECRET!;
@@ -11,11 +20,13 @@ export async function POST(req: Request) {
   try {
     await connectToDatabase();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _register = { Document };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const cookieHeader = req.headers.get('cookie');
     const refreshToken = req.headers.get('cookie')?.split('refreshToken=')[1]?.split(';')[0];
 
     if (!refreshToken) {
-      return NextResponse.json({ error: 'Refresh token missing' }, { status: 401 });
+      return NextResponse.json({ authenticated: false }, { status: 200 });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let decoded: any;
@@ -56,7 +67,12 @@ export async function POST(req: Request) {
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
           skills: user.skills ?? [],
-          experience: user.experience ?? [],
+          experience: (user.experience || []).map((exp: ExperienceDocument) => ({
+            id: exp._id?.toString(),
+            company: exp.company,
+            position: exp.position,
+            years: exp.years,
+          })),
           createdAt: user.createdAt.toISOString(),
         },
       },

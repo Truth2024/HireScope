@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const SKILLS = require('../../src/shared/constants/skills');
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   surname: { type: String, required: true },
@@ -9,7 +9,10 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, enum: ['hr', 'candidate'], default: 'candidate' },
   avatar: { type: String },
   avatarBlur: { type: String },
-  skills: [{ type: String }],
+  skills: [{ 
+    type: String, 
+    enum: SKILLS,  // 👈 только из списка
+  }],
   experience: [
     {
       company: String,

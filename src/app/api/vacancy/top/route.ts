@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
+import connectDB from '@lib/mongodb';
 import User from '@models/User';
 import Vacancy from '@models/Vacancy';
-import connectDB from 'src/shared/lib/mongodb';
-import type { IVacancyMongo } from 'src/shared/types/mongoTypes';
+import type { IVacancyMongo } from '@myTypes/mongoTypes';
 
 export async function GET() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -23,7 +23,7 @@ export async function GET() {
     const formattedVacancies = vacancies.map((v: IVacancyMongo) => ({
       id: v._id.toString(),
       title: v.title,
-      description: v.description?.substring(0, 120) + '...',
+      description: v.description.substring(0, 120) + '...',
       company: v.company,
       level: v.level,
       salary: {

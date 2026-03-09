@@ -1,10 +1,11 @@
-import { debounce } from 'lodash';
+'use client';
+
 import React from 'react';
 
-import { Input } from '@ui';
-// import ArrowDownIcon from '../icons/ArrowDownIcon';
+import { cn } from '@lib/utils';
+import { Arrow, Input } from '@ui';
 
-import styles from './multidropdown.module.scss';
+import { useMultiDropdown } from './hooks/useMultiDropdown';
 
 export type Option = {
   /** Ключ варианта, используется для отправки на бек/использования в коде */
@@ -29,7 +30,7 @@ export type MultiDropdownProps = {
   getTitle: (value: Option[]) => string;
 };
 
-const MultiDropdown: React.FC<MultiDropdownProps> = ({
+const MultiDropdown = ({
   options,
   value,
   getTitle,
@@ -37,120 +38,79 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
   onChange,
   disabled,
   className,
-}) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const listRef = React.useRef<HTMLUListElement>(null);
-
-  const [isOpen, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState('');
-  const [debouncedSearch, setDebouncedSearch] = React.useState('');
-
-  const updateDebouncedSearch = React.useMemo(
-    () => debounce((value: string) => setDebouncedSearch(value), 300),
-    []
-  );
-
-  React.useEffect(() => {
-    return () => {
-      updateDebouncedSearch.cancel();
-    };
-  }, [updateDebouncedSearch]);
-
-  const handleOptionClick = (option: Option) => {
-    const isSelected = value.some((item) => item.key === option.key);
-    if (isSelected) {
-      onChange(value.filter((item) => item.key !== option.key));
-    } else {
-      onChange([...value, option]);
-    }
-  };
-
-  const filteredOptions = options.filter((opt) =>
-    opt.value.toLowerCase().includes(debouncedSearch.toLowerCase())
-  );
-
-  React.useEffect(() => {
-    const listener = (event: MouseEvent) => {
-      if (
-        inputRef.current &&
-        listRef.current &&
-        !inputRef.current.contains(event.target as Node) &&
-        !listRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-    };
-  }, []);
-
-  const handleSearchChange = (val: string) => {
-    setSearch(val);
-    updateDebouncedSearch(val);
-    setOpen(true);
-  };
-
-  const actualTitle = getTitle(value);
-  const isValueEmpty = value.length === 0;
-  let inputValue: string;
-  let inputPlaceholder: string;
-
-  if (isOpen) {
-    inputValue = search;
-    inputPlaceholder = actualTitle;
-  } else {
-    if (isValueEmpty) {
-      inputValue = '';
-      inputPlaceholder = actualTitle;
-    } else {
-      inputValue = actualTitle;
-      inputPlaceholder = '';
-    }
-  }
-
-  const handleInputFocus = () => {
-    if (!disabled) {
-      setOpen(true);
-    }
-  };
-
-  const handleWrapperClick = () => {
-    if (disabled) return;
-    inputRef.current?.focus();
-  };
+}: MultiDropdownProps) => {
+  const {
+    isOpen,
+    inputRef,
+    listRef,
+    inputValue,
+    inputPlaceholder,
+    filteredOptions,
+    handleSearchChange,
+    handleInputFocus,
+    handleWrapperClick,
+    handleOptionClick,
+  } = useMultiDropdown({
+    options,
+    value,
+    onChange,
+    disabled,
+    getTitle,
+    searchDelay: 300,
+  });
 
   return (
     <div
       onClick={handleWrapperClick}
-      className={`${className} ${styles['wrapper-click']} ${someError ? styles.someError : ''}`}
+      className={cn(
+        'relative w-full max-w-92',
+        someError && 'text-red-500 [&_input]:placeholder:text-red-400',
+        className
+      )}
     >
       <Input
-        // afterSlot={<ArrowDownIcon color="secondary" />}
-        value={isOpen ? search : inputValue}
+        afterSlot={<Arrow dir="down" className="cursor-pointer" />}
+        value={inputValue}
         placeholder={inputPlaceholder}
         onChange={handleSearchChange}
         onFocus={handleInputFocus}
         ref={inputRef}
-        className={styles.input}
         disabled={disabled || someError}
+        className={cn(someError && 'border-red-300 focus:ring-red-200')}
       />
 
       {isOpen && !disabled && (
-        <ul ref={listRef} className={styles.list}>
-          {filteredOptions.map((item) => {
-            const isSelected = value.some((i) => i.key === item.key);
-            return (
-              <li
-                key={item.key}
-                onClick={() => handleOptionClick(item)}
-                className={`${styles.item} ${isSelected ? styles.color : ''}`}
-              >
-                {item.value}
-              </li>
-            );
-          })}
+        <ul
+          ref={listRef}
+          className="
+            absolute top-full left-0 w-full mt-2.5 max-h-48 overflow-y-auto overflow-x-hidden
+            bg-white border border-gray-200 rounded-lg shadow-lg z-(--z-dropdown)
+            hover:shadow-xl transition-shadow
+            [&::-webkit-scrollbar]:w-2
+            [&::-webkit-scrollbar-track]:bg-gray-100
+            [&::-webkit-scrollbar-thumb]:bg-gray-400
+            [&::-webkit-scrollbar-thumb]:rounded-full
+          "
+        >
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((item) => {
+              const isSelected = value.some((i) => i.key === item.key);
+              return (
+                <li
+                  key={item.key}
+                  onClick={() => handleOptionClick(item)}
+                  className={cn(
+                    'h-12 px-3 py-3.5 cursor-pointer transition-colors hover:bg-gray-50',
+                    isSelected ? 'text-indigo-600 font-medium' : 'text-gray-700'
+                  )}
+                >
+                  {item.value}
+                </li>
+              );
+            })
+          ) : (
+            <li className="h-12 px-3 py-3.5 text-gray-400 text-center">Ничего не найдено</li>
+          )}
         </ul>
       )}
     </div>

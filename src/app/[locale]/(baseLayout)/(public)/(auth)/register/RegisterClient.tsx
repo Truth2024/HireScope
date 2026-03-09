@@ -18,12 +18,10 @@ export const RegisterClient = observer(() => {
     e.preventDefault();
 
     if (registerStore.validation()) {
-      const data = await registerStore.register();
+      const response = await registerStore.register();
 
-      if (data.user && data.accessToken) {
-        authStore.setUser(data.user, data.accessToken);
-        window.location.href = data.user.role === 'hr' ? '/profile/hr/main' : '/profile/main';
-      }
+      authStore.setUser(response.user, response.accessToken);
+      window.location.href = '/';
     }
   };
 

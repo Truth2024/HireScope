@@ -4,11 +4,10 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import { Skills } from '@components';
+import { SkillButton, Skills } from '@components';
 import type { AuthStore } from '@store/AuthStore/AuthStore';
 import { ActionButton, Button, Loader, type Option } from '@ui';
 
-import { SkillButton } from './components/SkillButton/SkillButton';
 import { SkillChangerStore } from './store/SkillChangerStore';
 
 type SkillsChangerProps = {
@@ -23,6 +22,7 @@ export const SkillsChanger = observer(({ className = '', authStore }: SkillsChan
     if (authStore.user) {
       skillsChangerStore.setSkills(authStore.user.skills);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStore.user]);
 
   const t = useTranslations('Card');

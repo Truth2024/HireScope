@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
       title: v.title,
       description: v.description.substring(0, 120) + (v.description.length > 120 ? '...' : ''),
       company: v.company,
-      level: v.level,
+
       salary: v.salary ?? null,
       rating: v.rating,
       department: v.department || 'Разработка',

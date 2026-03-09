@@ -1,8 +1,10 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 import { CandidateClient } from '@candidatesComponents/CandidatesClient/CandidatesClient';
 import { FilterProvider } from '@candidatesProvider/filtersProvider';
+import { generatePageMetadata } from '@lib/generateMetadata';
 import { Section, SectionTitle } from '@ui';
 
 import { candidatesServiceAll } from './services/candidatesService';
@@ -15,6 +17,20 @@ type CandidatesPageProps = {
     hasExperience?: string;
   }>;
 };
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  return generatePageMetadata({
+    locale,
+    namespace: 'candidates',
+    path: '/candidates',
+  });
+}
 
 export default async function CandidatesPage({ searchParams }: CandidatesPageProps) {
   const params = await searchParams;

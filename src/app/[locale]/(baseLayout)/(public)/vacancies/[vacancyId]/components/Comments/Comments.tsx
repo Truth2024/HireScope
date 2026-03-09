@@ -71,8 +71,7 @@ export const Comments = observer(
       return () => observer.disconnect();
     }, [store]);
 
-    const hasNoComments = commentsCount === 0;
-
+    const hasNoComments = store.commentsCount === 0;
     if (hasNoComments) {
       return (
         <Card className="mt-10">

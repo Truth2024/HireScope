@@ -49,7 +49,7 @@ export const ExperienceEditorItem = observer(({ store, item }: ExperienceEditorI
               </span>
             )}
           </div>
-          {item.years && (
+          {item.years !== 0 && item.years && (
             <span className="text-xs text-gray-400">{t('years', { count: item.years })}</span>
           )}
         </div>

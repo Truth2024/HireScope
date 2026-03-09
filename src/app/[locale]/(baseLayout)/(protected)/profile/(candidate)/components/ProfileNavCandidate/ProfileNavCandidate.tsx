@@ -25,7 +25,7 @@ export const ProfileNavCandidate = observer(() => {
   const currentPath = normalizePath(rawPathname);
 
   return (
-    <nav className="relative w-full border-b border-gray-200 bg-white mb-8 z-10">
+    <nav className="relative w-full border-b border-gray-200 bg-white mb-8 z-(--z-header)">
       <div className="content">
         <div className="flex items-center justify-between">
           <LayoutGroup id="profile-navigation">

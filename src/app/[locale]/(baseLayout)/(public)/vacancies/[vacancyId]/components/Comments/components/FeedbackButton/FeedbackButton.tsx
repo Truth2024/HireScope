@@ -37,6 +37,10 @@ export const FeedbackButton = observer(({ store }: FeedbackButtonProps) => {
     );
   }
 
+  if (authStore.user?.role === 'hr') {
+    return null;
+  }
+
   const openModal = () => setOpenModal(true);
   const closeModal = () => setOpenModal(false);
 

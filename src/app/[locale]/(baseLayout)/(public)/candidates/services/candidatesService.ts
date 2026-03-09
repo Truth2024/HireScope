@@ -67,6 +67,8 @@ export const candidatesServiceAll = async (
     id: u._id.toString(),
     firstName: u.firstName,
     surname: u.surname,
+    role: u.role,
+    email: u.email,
     secondName: u.secondName,
     avatar: isAuthorized ? (u.avatar ?? null) : (u.avatarBlur ?? null),
     avatarBlur: u.avatarBlur ?? null,

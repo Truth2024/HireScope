@@ -35,9 +35,13 @@
     "next": "16.1.6",
     "next-intl": "^4.8.3",
     "node-fetch": "^3.3.2",
+    "pusher": "^5.3.2",
+    "pusher-js": "^8.4.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hot-toast": "^2.6.0",
     "react-insta-stories": "^2.8.0",
+    "swr": "^2.4.1",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },

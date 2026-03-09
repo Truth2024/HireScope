@@ -15,11 +15,15 @@ export const fetchCandidateById = async (id: string): Promise<IUser | null> => {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get('refreshToken')?.value;
   let isAuthorized = false;
+  let isOwner = false;
 
   if (refreshToken) {
     try {
       const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { userId: string };
-      if (decoded.userId) isAuthorized = true;
+      if (decoded.userId) {
+        isOwner = decoded.userId === id;
+        isAuthorized = true;
+      }
     } catch {
       isAuthorized = false;
     }
@@ -36,6 +40,7 @@ export const fetchCandidateById = async (id: string): Promise<IUser | null> => {
       secondName: userDoc.secondName,
       email: userDoc.email,
       role: userDoc.role,
+      isOwner: isOwner,
       avatar: isAuthorized ? (userDoc.avatar ?? null) : null,
       avatarBlur: userDoc.avatarBlur ?? null,
       skills: userDoc.skills,

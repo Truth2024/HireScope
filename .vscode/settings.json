@@ -29,5 +29,7 @@
     "javascript": "javascript",
     "typescript": "typescript",
     "typescriptreact": "typescriptreact"
-  }
+  },
+  "postman.settings.dotenv-detection-notification-visibility": false,
+  "files.eol": "\n"
 }

@@ -1,13 +1,11 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 
 type UsePaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange?: (page: number) => void;
-  search?: string;
+  onPageChange: (page: number) => void; // только callback, без URL
   delta?: number;
 };
 
@@ -24,29 +22,14 @@ export const usePagination = ({
   currentPage,
   totalPages,
   onPageChange,
-  search,
   delta = 2,
 }: UsePaginationProps): UsePaginationReturn => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
   const goToPage = useCallback(
     (page: number) => {
       if (page < 1 || page > totalPages) return;
-
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('page', String(page));
-
-      if (search?.trim()) {
-        params.set('search', search);
-      } else {
-        params.delete('search');
-      }
-
-      onPageChange?.(page);
-      router.push(`?${params.toString()}`);
+      onPageChange(page); // просто вызываем callback, без навигации
     },
-    [totalPages, searchParams, search, onPageChange, router]
+    [totalPages, onPageChange]
   );
 
   const goToPrev = useCallback(() => {

@@ -6,7 +6,11 @@ import React from 'react';
 import { useStore } from '@providers/StoreProvider';
 import { Button, Loader } from '@ui';
 
-export const ContactCandidate = observer(() => {
+type ContactCandidateProps = {
+  isOwner: boolean;
+};
+
+export const ContactCandidate = observer(({ isOwner = false }: ContactCandidateProps) => {
   const t = useTranslations('Card');
   const { authStore } = useStore();
   const [mounted, setMounted] = React.useState(false);
@@ -17,6 +21,13 @@ export const ContactCandidate = observer(() => {
 
   if (!mounted || authStore.isLoading) {
     return <Loader size="m" />;
+  }
+  if (isOwner) {
+    return (
+      <Button href="/profile" variant="primary">
+        {t('edit')}
+      </Button>
+    );
   }
 
   if (authStore.user?.role === 'candidate') {

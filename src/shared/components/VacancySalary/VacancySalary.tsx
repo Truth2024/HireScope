@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import type { ISalary } from '@myTypes/mongoTypes';
 
 type VacancySalaryProps = {
@@ -9,11 +11,16 @@ const formatMoney = (value: number) => `$${value.toLocaleString()}`;
 
 export const VacancySalary = ({ salary, variant = 'large' }: VacancySalaryProps) => {
   const textSize = variant === 'large' ? 'text-2xl font-bold' : 'text-base font-semibold';
+  const t = useTranslations('Card');
 
   if (!salary || (!salary.min && !salary.max)) {
     return (
-      <span className={variant === 'large' ? 'text-base text-gray-400' : 'text-sm text-gray-400'}>
-        Salary not specified
+      <span
+        className={
+          variant === 'large' ? 'text-base text-gray-400 italic' : 'text-sm text-gray-400 italic'
+        }
+      >
+        {t('SalaryNotSpecified')}
       </span>
     );
   }

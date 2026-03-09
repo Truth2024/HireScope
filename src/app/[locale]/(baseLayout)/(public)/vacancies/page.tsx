@@ -1,3 +1,6 @@
+import type { Metadata } from 'next';
+
+import { generatePageMetadata } from '@lib/generateMetadata';
 import { Section, SectionTitle } from '@ui';
 
 import { VacanciesClient } from './components/VacanciesClient/VacanciesClient';
@@ -11,7 +14,18 @@ type VacanciesPageProps = {
     sort?: string;
   }>;
 };
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
 
+  return generatePageMetadata({
+    locale,
+    namespace: 'vacancies',
+    path: '/vacancies',
+  });
+}
 export default async function VacanciesPage({ searchParams }: VacanciesPageProps) {
   const params = await searchParams;
 

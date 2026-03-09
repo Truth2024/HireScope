@@ -54,6 +54,7 @@ export const useSearch = ({
     return () => {
       debouncedSearch.cancel();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, debouncedSearch]);
 
   const handleSubmit = useCallback(() => {

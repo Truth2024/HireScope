@@ -14,6 +14,7 @@ export type IUser = {
   avatar?: string | null;
   avatarBlur?: string | null;
   skills: string[];
+  isOwner?: boolean;
   experience: Array<{
     id?: string;
     company?: string;
@@ -62,28 +63,30 @@ export type UserFilter = {
 // Тип комментария
 // ------------------------------
 export type IComment = {
-  _id: string; // _id.toString()
-  user: IUser;
+  _id: string;
+  user: ICommentUser; // ← исправить
   text: string;
-  rating: number; // 1-5
-  createdAt: string; // ISO дата
+  rating: number;
+  createdAt: string;
+  email?: string;
 };
 export type CommentWithUser = {
   _id: mongoose.Types.ObjectId;
   text: string;
   rating: number;
   createdAt: Date;
-  user: {
-    _id: mongoose.Types.ObjectId;
-    firstName: string;
-    surname: string;
-    secondName: string;
-    avatar?: string | null;
-    avatarBlur?: string | null;
-    email: string;
-  };
+  user: ICommentUser;
 };
 
+export type ICommentUser = {
+  _id: string;
+  firstName: string;
+  surname: string;
+  secondName: string;
+  avatar: string | null;
+  avatarBlur: string | null;
+  email?: string;
+};
 // ------------------------------
 // Тип зарплаты
 // ------------------------------
@@ -99,6 +102,17 @@ export type ICandidate = {
   id: string; // _id.toString()
   userId: string;
   user?: IUser; // ссылка на пользователя-кандидата
+  vacancyId: string;
+  status: 'new' | 'viewed' | 'interview' | 'offer' | 'rejected';
+  matchScore?: number | null;
+  notes?: string | null;
+  appliedAt: string; // ISO дата
+};
+
+export type ICandidateMongo = {
+  _id: string; // _id.toString()
+  userId: string;
+  user?: IUserMongo; // ссылка на пользователя-кандидата
   vacancyId: string;
   status: 'new' | 'viewed' | 'interview' | 'offer' | 'rejected';
   matchScore?: number | null;
@@ -125,14 +139,15 @@ export type IVacancy = {
   company: string;
   salary: ISalary | null;
   department?: string | null;
-  level: 'junior' | 'middle' | 'senior' | null;
+  isOwner?: boolean;
   rating: number;
-  comments: IComment[];
+  comments?: IComment[];
   commentsCount: number;
   ratingDistribution: IRatingDistribution;
-  createdBy: IUser | null;
-  candidates: ICandidate[];
+  createdBy: string | null;
+  candidates?: ICandidate[];
   createdAt: string;
+  hasApplied?: boolean;
 };
 
 export type ICommentsStatsMongo = {
@@ -152,7 +167,6 @@ export type IVacancyMongo = {
   title: string;
   description: string;
   company: string;
-  level: 'junior' | 'middle' | 'senior';
   salary?: {
     min?: number;
     max?: number;
@@ -167,6 +181,21 @@ export type IVacancyMongo = {
   };
   candidates?: mongoose.Types.ObjectId[];
   createdAt: Date;
+};
+
+export type HRVacancyListItem = {
+  id: string;
+  title: string;
+  description: string;
+  company: string;
+  requirements: string[];
+  salary: {
+    min?: number | null;
+    max?: number | null;
+  } | null;
+  rating: number;
+  createdAt: string;
+  candidates: string[];
 };
 
 export type VacancyFilter = {

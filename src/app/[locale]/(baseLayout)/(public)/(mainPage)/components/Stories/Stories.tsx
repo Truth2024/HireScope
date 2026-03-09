@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { CloseButton } from '@ui';
 
@@ -21,6 +21,17 @@ export default function Stories() {
     setIsPaused,
   } = useStories(stories);
 
+  const [loading, setLoading] = useState(true);
+
+  // Preload всех изображений при монтировании
+  useEffect(() => {
+    stories.forEach((story) => {
+      const img = new window.Image();
+      img.src = story.image;
+    });
+  }, []);
+
+  // Сбрасываем overflow при открытии/закрытии
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -32,7 +43,7 @@ export default function Stories() {
     };
   }, [isOpen]);
 
-  // Управление клавишами
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -57,20 +68,6 @@ export default function Stories() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, goToNextStory, goToPrevStory, closeStory, setIsPaused]);
-
-  const handleMouseDown = () => setIsPaused(true);
-  const handleMouseUp = () => setIsPaused(false);
-  const handleMouseLeave = () => setIsPaused(false);
-
-  const handleProgressBarClick = (index: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const bar = e.currentTarget as HTMLDivElement;
-    const rect = bar.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = (x / rect.width) * 100;
-
-    setProgressManually(index, percentage);
-  };
 
   if (!isOpen) {
     return (
@@ -103,6 +100,18 @@ export default function Stories() {
 
   const currentStory = stories[currentIndex];
 
+  const handleMouseDown = () => setIsPaused(true);
+  const handleMouseUp = () => setIsPaused(false);
+  const handleMouseLeave = () => setIsPaused(false);
+
+  const handleProgressBarClick = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    setProgressManually(index, percentage);
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black/70 z-(--z-modal) flex items-center justify-center"
@@ -112,7 +121,7 @@ export default function Stories() {
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
     >
-      {/* Верхняя панель прогресса */}
+      {/* Прогресс-бары */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-(--z-modal) flex gap-1 w-80">
         {stories.map((_, index) => (
           <div
@@ -131,21 +140,27 @@ export default function Stories() {
         ))}
       </div>
 
-      {/* Close button */}
-      <CloseButton onClick={closeStory} className={'absolute top-8 right-4'} />
+      {/* Close */}
+      <CloseButton onClick={closeStory} className="absolute top-8 right-4" />
 
-      {/* Story container по центру, адаптивный */}
+      {/* Story container */}
       <div className="relative w-[90vw] max-w-sm aspect-9/16 bg-black rounded-2xl overflow-hidden shadow-2xl">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black">
+            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
         <Image
           src={currentStory.image}
           alt="Story"
           fill
-          priority
-          quality={75}
           sizes="(max-width: 768px) 100vw, 384px"
           className="object-cover"
+          unoptimized
+          onLoadingComplete={() => setLoading(false)}
         />
-        {/* Навигация */}
+
+        {/* Навигация кликами */}
         <div className="absolute inset-0 flex">
           <div
             className="w-1/3 h-full cursor-pointer"

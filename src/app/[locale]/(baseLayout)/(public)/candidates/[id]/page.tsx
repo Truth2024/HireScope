@@ -1,9 +1,11 @@
 'use server';
 
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { Avatar, DateInfo, Skills, Experience } from '@components';
+import { generateCandidateMetadata } from '@lib/generateMetadata';
 import type { IUser } from '@myTypes/mongoTypes';
 import { Card } from '@ui';
 
@@ -12,8 +14,32 @@ import { ContactCandidate } from './components/ContactCandidate/ContactCandidate
 import { fetchCandidateById } from './services/candidateService';
 
 type UserCandidatePageProps = {
-  params: { id: string };
+  params: Promise<{ id: string; locale: string }>; // Добавили locale
 };
+
+// Генерируем метаданные для страницы кандидата
+export async function generateMetadata({ params }: UserCandidatePageProps): Promise<Metadata> {
+  const { id, locale } = await params;
+
+  const user = await fetchCandidateById(id);
+
+  if (!user) {
+    // Если кандидат не найден, возвращаем метаданные для 404
+    const t = await getTranslations({ locale, namespace: 'SEO' });
+    return {
+      title: t('notFound.title'),
+      description: t('notFound.description'),
+    };
+  }
+
+  // Используем наш генератор метаданных для кандидата
+  return generateCandidateMetadata(locale, {
+    firstName: user.firstName,
+    secondName: user.secondName,
+    skills: user.skills,
+    id: id,
+  });
+}
 
 const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
   const { id } = await params;
@@ -69,7 +95,7 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
           <div className="border-t border-gray-100 my-6" />
           <div className="flex justify-between items-center">
             <DateInfo date={user.createdAt} title={t('memberSince')} />
-            <ContactCandidate />
+            <ContactCandidate isOwner={user.isOwner ?? false} />
           </div>
         </Card>
       </div>

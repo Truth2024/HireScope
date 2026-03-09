@@ -1,15 +1,17 @@
+import { baseMetadata } from '@siteConfig';
 import { Nunito } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Suspense } from 'react';
 
 import { routing } from '@i18n/routing';
+import { NotificationProvider } from '@providers/NotificationListener';
 import QueryProvider from '@providers/QueryProvider';
 import { StoreProvider } from '@providers/StoreProvider';
-
-import '@styles/global.scss';
+import ToasterProvider from '@providers/Toaster';
 
 import RootLoading from './loading';
+import '@styles/global.scss';
 
 const nunito = Nunito({
   variable: '--font-family',
@@ -17,6 +19,8 @@ const nunito = Nunito({
   weight: ['400', '500', '700'],
   display: 'swap',
 });
+
+export const metadata = baseMetadata;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -40,7 +44,11 @@ export default async function RootLayout({
         <Suspense fallback={<RootLoading />}>
           <NextIntlClientProvider locale={locale}>
             <QueryProvider>
-              <StoreProvider>{children}</StoreProvider>
+              <StoreProvider>
+                <ToasterProvider>
+                  <NotificationProvider>{children}</NotificationProvider>
+                </ToasterProvider>
+              </StoreProvider>
             </QueryProvider>
           </NextIntlClientProvider>
         </Suspense>

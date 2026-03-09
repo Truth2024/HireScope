@@ -8,3 +8,6 @@ export { default as Avatar } from './Avatar/Avatar';
 export { Experience } from './Experience/Experience';
 export { VacancySalary } from './VacancySalary/VacancySalary';
 export { Rating } from './Rating/Rating';
+export { SkillButton } from './SkillButton/SkillButton';
+export { ToasterHR } from './Toaster/ToasterHR';
+export { ToasterCandidate } from './Toaster/ToasterCandidate';

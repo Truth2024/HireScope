@@ -10,8 +10,7 @@ import { usePagination } from './hooks/usePagination';
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange?: (page: number) => void;
-  search?: string;
+  onPageChange: (page: number) => void; // делаем обязательным
   className?: string;
   delta?: number;
 };
@@ -20,7 +19,6 @@ export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
-  search,
   className,
   delta = 2,
 }: PaginationProps) => {
@@ -28,7 +26,6 @@ export const Pagination = ({
     currentPage,
     totalPages,
     onPageChange,
-    search,
     delta,
   });
 

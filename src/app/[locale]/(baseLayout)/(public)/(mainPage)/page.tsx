@@ -1,11 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
-import { Section, SectionTitle } from '@ui';
+import { EmptyList, Section, SectionTitle } from '@ui';
 
-import { Hero } from './components/Hero/Hero';
-import Stories from './components/Stories/Stories';
-import { TopCandidateList } from './components/TopCandidateList/TopCandidateList';
-import { TopVacancyList } from './components/TopVacancyList/TopVacancyList';
+import { Hero, Stories, TopCandidateList, TopVacancyList } from './components';
 import { fetchTopCandidates, fetchTopVacancy } from './services/topVacancyAndCandidate';
 
 export default async function MainPage() {
@@ -22,7 +19,11 @@ export default async function MainPage() {
 
       <Section>
         <SectionTitle title={t('trendingJobs')} sectionBtn={t('buttonviewall')} path="/vacancies" />
-        <TopVacancyList vacancy={vacancies} />
+        {vacancies.length === 0 ? (
+          <EmptyList type="vacancies" />
+        ) : (
+          <TopVacancyList vacancy={vacancies} />
+        )}
       </Section>
 
       <Section>
@@ -31,7 +32,11 @@ export default async function MainPage() {
           sectionBtn={t('buttonviewall')}
           path="/candidates"
         />
-        <TopCandidateList newUsersCandidate={candidates} />
+        {candidates.length === 0 ? (
+          <EmptyList type="candidates" icon="candidate" />
+        ) : (
+          <TopCandidateList newUsersCandidate={candidates} />
+        )}
       </Section>
     </div>
   );

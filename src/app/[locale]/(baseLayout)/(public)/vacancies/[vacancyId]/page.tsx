@@ -1,7 +1,9 @@
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 import { Skills, DateInfo, VacancySalary, Rating, Logo } from '@components';
 import { COMMENTS_LIMIT } from '@constants/constants';
+import { generateVacancyMetadata } from '@lib/generateMetadata';
 import { Card } from '@ui';
 
 import { vacancyServiceById } from '../services/vacancyService';
@@ -10,10 +12,29 @@ import { Comments, VacancyDescription, VacancyNotFound } from './components';
 import { VacancyApply } from './components/VacancyApply/VacancyApply';
 
 type VacancyPageProps = {
-  params: {
-    vacancyId: string;
-  };
+  params: Promise<{ vacancyId: string; locale: string }>;
 };
+
+export async function generateMetadata({ params }: VacancyPageProps): Promise<Metadata> {
+  const { vacancyId, locale } = await params;
+
+  const vacancy = await vacancyServiceById(vacancyId);
+
+  if (!vacancy) {
+    const t = await getTranslations({ locale, namespace: 'SEO' });
+    return {
+      title: t('notFound.title'),
+      description: t('notFound.description'),
+    };
+  }
+
+  return generateVacancyMetadata(locale, {
+    title: vacancy.title,
+    description: vacancy.description,
+    requirements: vacancy.requirements,
+    id: vacancy.id,
+  });
+}
 
 export default async function VacancyPage({ params }: VacancyPageProps) {
   const { vacancyId } = await params;
@@ -42,7 +63,11 @@ export default async function VacancyPage({ params }: VacancyPageProps) {
 
           <div className="mb-8 flex justify-between items-center max-[480px]:flex-col max-[480px]:gap-4">
             <VacancySalary salary={vacancy.salary} variant="large" />
-            <VacancyApply vacancyId={vacancy.id} />
+            <VacancyApply
+              vacancyId={vacancy.id}
+              isOwner={vacancy.isOwner}
+              hasApplied={vacancy.hasApplied}
+            />
           </div>
 
           <div className="border-t border-gray-100 my-6" />
@@ -56,7 +81,7 @@ export default async function VacancyPage({ params }: VacancyPageProps) {
 
         <Comments
           commentsCount={vacancy.commentsCount}
-          comments={vacancy.comments}
+          comments={vacancy.comments || []}
           vacancyId={vacancy.id}
           rating={vacancy.rating}
           ratingDistribution={vacancy.ratingDistribution}

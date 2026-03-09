@@ -65,7 +65,7 @@ export const fetchTopVacancy = async (limit = 4): Promise<IVacancy[]> => {
       title: v.title,
       description: v.description.substring(0, 120) + '...',
       company: v.company,
-      level: v.level,
+
       salary: {
         min: v.salary?.min ?? null,
         max: v.salary?.max ?? null,

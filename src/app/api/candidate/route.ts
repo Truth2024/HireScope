@@ -7,8 +7,6 @@ import User from '@models/User';
 import type { IUserMongo, UserFilter } from '@myTypes/mongoTypes';
 import connectDB from 'src/shared/lib/mongodb';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export async function GET(req: Request) {
   try {
     await connectDB();
@@ -19,7 +17,7 @@ export async function GET(req: Request) {
 
     if (refreshToken) {
       try {
-        jwt.verify(refreshToken, REFRESH_SECRET);
+        jwt.verify(refreshToken, process.env.REFRESH_SECRET!);
         isAuthorized = true;
       } catch {
         isAuthorized = false;

@@ -13,9 +13,6 @@ type ExperienceDocument = {
   years?: number;
 };
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
@@ -31,7 +28,7 @@ export async function POST(req: Request) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let decoded: any;
     try {
-      decoded = jwt.verify(refreshToken, REFRESH_SECRET);
+      decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!);
     } catch (err) {
       return NextResponse.json(
         { error: `Invalid or expired refresh token ${err}` },
@@ -46,11 +43,11 @@ export async function POST(req: Request) {
 
     const newAccessToken = jwt.sign(
       { userId: user._id.toString(), email: user.email },
-      ACCESS_SECRET,
+      process.env.ACCESS_SECRET!,
       { expiresIn: '15m' }
     );
 
-    const newRefreshToken = jwt.sign({ userId: user._id.toString() }, REFRESH_SECRET, {
+    const newRefreshToken = jwt.sign({ userId: user._id.toString() }, process.env.REFRESH_SECRET!, {
       expiresIn: '7d',
     });
 

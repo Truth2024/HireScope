@@ -1,6 +1,7 @@
 'use client';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
@@ -15,7 +16,7 @@ export const LoginClient = observer(() => {
   const loginInputs = useLoginInputs();
   const loginFormStore = useLocalObservable(() => new LoginFormStore());
   const { authStore } = useStore();
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -23,7 +24,7 @@ export const LoginClient = observer(() => {
       const data = await loginFormStore.login();
       if (data?.user && data?.accessToken) {
         authStore.setUser(data.user, data.accessToken);
-        window.location.href = '/';
+        router.push('/profile');
       }
     }
   };

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { VacancyCandidateCard, EmptyCandidates } from '@HRVacancyCandidateComponents';
+import { VacancyCandidateCard } from '@HRVacancyCandidateComponents';
 import type { ICandidate } from '@myTypes/mongoTypes';
 import { useStore } from '@providers/StoreProvider';
-import { Loader } from '@ui';
+import { EmptyList, Loader } from '@ui';
 
 type ListProps = {
   vacancyId: string;
@@ -72,7 +72,7 @@ export const VacancyCandidatesList = ({
   }
 
   if (candidates.length === 0) {
-    return <EmptyCandidates />;
+    return <EmptyList type="candidatesHR" />;
   }
 
   return (

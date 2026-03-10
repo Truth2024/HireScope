@@ -11,8 +11,6 @@ import User from '@models/User';
 import Vacancy from '@models/Vacancy';
 import type { ICandidate, IUserMongo } from '@myTypes/mongoTypes';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 type CandidatePopulated = {
   _id: Types.ObjectId;
   userId: IUserMongo | null;
@@ -41,13 +39,7 @@ type UserDocument = {
   createdAt: Date;
 };
 
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -78,7 +70,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     let isAuthorized = false;
 
     try {
-      const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
       currentUserId = decoded.userId;
       const authUser = await User.findById(currentUserId).lean<UserDocument>();
       if (authUser) isAuthorized = true;

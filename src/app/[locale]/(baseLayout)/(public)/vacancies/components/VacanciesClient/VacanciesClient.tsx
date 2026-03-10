@@ -1,126 +1,73 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 
-import { FILTERS_CONFIG, DEFAULT_SORT } from '@constants/constants';
-import type { IVacancy } from '@myTypes/mongoTypes';
-import type { Option } from '@ui';
-import { useVacancyFilters } from '@vacanciesHooks/useVacancyFilters';
-import { useVacanciesStore } from '@vacanciesHooks/useVacancyStore';
+import { FILTERS_CONFIG } from '@constants/constants';
+import type { SortKey, VacanciesFilterState } from '@vacanciesStore';
+import { VacanciesStore } from '@vacanciesStore';
 
 import { VacancyList } from '../VacancyList/VacancyList';
 
 import { FiltersBar } from './components/FiltersBar/FiltersBar';
 
-type VacanciesClientProps = {
-  initialVacancies: IVacancy[];
-  total: number;
-  totalPages: number;
-  currentPage: number;
-  initialSearch?: string;
-  initialSkills?: string[];
-  initialSort?: string;
-};
+export const VacanciesClient = observer(() => {
+  const store = useLocalObservable(() => new VacanciesStore());
 
-export const VacanciesClient = observer(
-  ({
-    initialVacancies,
-    total,
-    totalPages,
-    currentPage,
-    initialSearch = '',
-    initialSkills = [],
-    initialSort = DEFAULT_SORT,
-  }: VacanciesClientProps) => {
-    const {
-      search: urlSearch,
-      page: urlPage,
-      skillOptions: urlSkillOptions,
-      sort: urlSort,
-    } = useVacancyFilters();
+  const { filters } = store;
 
-    const initialSkillOptions = React.useMemo(
-      () =>
-        initialSkills.map((skillValue) => {
-          const skill = FILTERS_CONFIG.skills.find((s) => s.value === skillValue);
-          return {
-            key: skill?.key || skillValue.toLowerCase().replace(/\s+/g, ''),
-            value: skillValue,
-          };
-        }),
-      [initialSkills]
-    );
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['vacancies', filters.page, filters.search, filters.skills.join(','), filters.sort],
+    queryFn: () => fetchVacancies(filters),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
-    const store = useVacanciesStore({
-      initialVacancies,
-      total,
-      totalPages,
-      currentPage,
-      initialSearch,
-      initialSkillOptions,
-      initialSort,
-    });
+  return (
+    <div>
+      <FiltersBar
+        search={filters.search}
+        selectedSkills={filters.skills.map((value) => ({ key: value, value }))}
+        currentSortOption={
+          FILTERS_CONFIG.sortOptions.find((opt) => opt.key === filters.sort) ||
+          FILTERS_CONFIG.sortOptions[0]
+        }
+        sortOptions={FILTERS_CONFIG.sortOptions}
+        skillsOptions={FILTERS_CONFIG.skills}
+        onReset={store.resetFilters}
+        onSearchChange={store.setSearch}
+        onSkillsChange={(options) => store.setSkills(options.map((o) => o.value))}
+        onSortChange={(option) => store.setSort(option.key as SortKey)}
+      />
 
-    React.useEffect(() => {
-      if (
-        urlSearch !== store.search ||
-        urlPage !== store.currentPage ||
-        JSON.stringify(urlSkillOptions.map((s: Option) => s.value)) !==
-          JSON.stringify(store.selectedSkills.map((s: Option) => s.value)) ||
-        urlSort !== store.sort
-      ) {
-        store.fetchVacancies(urlPage, urlSearch, urlSkillOptions, urlSort);
-      }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      <VacancyList
+        vacancies={data?.vacancies || []}
+        totalPages={data?.totalPages || 1}
+        currentPage={filters.page}
+        search={filters.search}
+        loading={isLoading}
+        error={error instanceof Error ? error.message : null}
+        onPageChange={store.setPage}
+      />
+    </div>
+  );
+});
 
-    const handleSearchChange = React.useCallback(
-      (value: string) => store.setSearch(value),
-      [store]
-    );
+export const fetchVacancies = async (filters: VacanciesFilterState) => {
+  const params = new URLSearchParams({
+    page: String(filters.page),
+  });
 
-    const handleSkillsChange = React.useCallback(
-      (options: Option[]) => store.setSkills(options),
-      [store]
-    );
+  if (filters.search) params.set('search', filters.search);
+  if (filters.skills.length) params.set('skills', filters.skills.join(','));
+  if (filters.sort !== 'newest') params.set('sort', filters.sort);
 
-    const handleSortChange = React.useCallback(
-      (option: Option) => store.setSort(option.key),
-      [store]
-    );
+  const res = await fetch(`/api/vacancy?${params}`);
 
-    const handlePageChange = React.useCallback((page: number) => store.setPage(page), [store]);
-
-    const currentSortOption = React.useMemo(
-      () =>
-        FILTERS_CONFIG.sortOptions.find((opt) => opt.key === store.sort) ||
-        FILTERS_CONFIG.sortOptions[0],
-      [store.sort]
-    );
-
-    return (
-      <div>
-        <FiltersBar
-          search={store.search}
-          selectedSkills={store.selectedSkills}
-          currentSortOption={currentSortOption}
-          sortOptions={FILTERS_CONFIG.sortOptions}
-          skillsOptions={FILTERS_CONFIG.skills}
-          onSearchChange={handleSearchChange}
-          onSkillsChange={handleSkillsChange}
-          onSortChange={handleSortChange}
-        />
-
-        <VacancyList
-          vacancies={store.vacancies}
-          totalPages={store.totalPages}
-          currentPage={store.currentPage}
-          loading={store.loading}
-          error={store.error}
-          onPageChange={handlePageChange}
-          search={store.search}
-        />
-      </div>
-    );
+  if (!res.ok) {
+    throw new Error('Ошибка загрузки вакансий');
   }
-);
+
+  return res.json();
+};

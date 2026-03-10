@@ -1,6 +1,7 @@
-import { baseMetadata } from '@siteConfig';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+
+import { baseMetadata } from '@siteConfig';
 
 type GenerateMetadataProps = {
   locale: string;

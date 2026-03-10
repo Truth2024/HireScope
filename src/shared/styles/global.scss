@@ -118,3 +118,11 @@ body.modal-open {
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 579px) {
+  .mobile-hero-bg {
+    // background-image: none !important;
+    background-color: black;
+    background-image: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  }
+}

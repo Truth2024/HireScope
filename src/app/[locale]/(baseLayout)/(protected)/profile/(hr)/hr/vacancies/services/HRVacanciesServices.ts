@@ -23,14 +23,12 @@ import type {
   VacancyDocument,
 } from './types';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export async function getHRVacancies(token?: string): Promise<HRVacancyListItem[]> {
   if (!token) throw new Error('Unauthorized');
 
   await connectDB();
 
-  const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+  const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
 
   const user = await User.findById(decoded.userId);
   if (!user || user.role !== 'hr') throw new Error('Forbidden');
@@ -62,7 +60,7 @@ export const vacancyBaseService = async (vacancyId: string): Promise<IVacancy | 
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
       currentUserId = decoded.userId;
     } catch {
       // Ignore token errors
@@ -129,7 +127,7 @@ export const vacancyCandidatesService = async (
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
       currentUserId = decoded.userId;
       const authUser = await User.findById(currentUserId).lean<UserDocument>();
       if (authUser) isAuthorized = true;

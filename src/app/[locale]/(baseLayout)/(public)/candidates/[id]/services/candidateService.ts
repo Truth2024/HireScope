@@ -7,8 +7,6 @@ import User from '@models/User';
 import type { IUser, IUserMongo } from '@myTypes/mongoTypes';
 import connectDB from 'src/shared/lib/mongodb';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export const fetchCandidateById = async (id: string): Promise<IUser | null> => {
   await connectDB();
 
@@ -19,7 +17,7 @@ export const fetchCandidateById = async (id: string): Promise<IUser | null> => {
 
   if (refreshToken) {
     try {
-      const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as { userId: string };
       if (decoded.userId) {
         isOwner = decoded.userId === id;
         isAuthorized = true;

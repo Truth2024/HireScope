@@ -7,9 +7,7 @@ import connectDB from '@lib/mongodb';
 import Candidate from '@models/Candidate';
 import Vacancy from '@models/Vacancy';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -23,7 +21,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
 
     // Проверяем, что вакансия принадлежит пользователю
     const vacancy = await Vacancy.findById(id).select('createdBy').lean();

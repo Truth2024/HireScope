@@ -1,134 +1,95 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
-import type { IVacancy } from '@myTypes/mongoTypes';
-import type { Option } from '@ui';
+export type SortKey = 'newest' | 'oldest' | 'salary';
+
+export type VacanciesFilterState = {
+  page: number;
+  search: string;
+  skills: string[];
+  sort: SortKey;
+};
 
 export class VacanciesStore {
-  vacancies: IVacancy[] = [];
-  total = 0;
-  totalPages = 1;
-  currentPage = 1;
-  loading = false;
-  error: string | null = null;
-  search = '';
-  selectedSkills: Option[] = [];
-  sort = 'newest';
+  filters: VacanciesFilterState = {
+    page: 1,
+    search: '',
+    skills: [],
+    sort: 'newest',
+  };
 
-  constructor(initialData?: {
-    vacancies: IVacancy[];
-    total: number;
-    totalPages: number;
-    currentPage: number;
-    search?: string;
-    selectedSkills?: Option[];
-    sort?: string;
-  }) {
+  constructor(initialState: Partial<VacanciesFilterState> = {}) {
     makeAutoObservable(this);
-
-    if (initialData) {
-      this.vacancies = initialData.vacancies;
-      this.total = initialData.total;
-      this.totalPages = initialData.totalPages;
-      this.currentPage = initialData.currentPage;
-      this.search = initialData.search || '';
-      this.selectedSkills = initialData.selectedSkills || [];
-      this.sort = initialData.sort || 'newest';
-    }
+    this.filters = { ...this.filters, ...initialState };
   }
 
-  fetchVacancies = async (
-    page: number,
-    search: string,
-    skills: Option[] = [],
-    sort: string = this.sort
-  ) => {
-    this.loading = true;
-    this.error = null;
-
-    try {
-      const skillValues = skills.map((s) => s.value);
-
-      let url = `/api/vacancy?page=${page}`;
-
-      if (search) {
-        url += `&search=${encodeURIComponent(search)}`;
-      }
-
-      if (skillValues.length > 0) {
-        url += `&skills=${skillValues.join(',')}`;
-      }
-
-      if (sort !== 'newest') {
-        url += `&sort=${sort}`;
-      }
-
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Ошибка загрузки вакансий');
-
-      const data = await res.json();
-
-      runInAction(() => {
-        this.vacancies = data.vacancies;
-        this.total = data.total;
-        this.totalPages = data.totalPages;
-        this.currentPage = data.currentPage;
-        this.search = search;
-        this.selectedSkills = skills;
-        this.sort = sort;
-
-        if (typeof window !== 'undefined') {
-          const params = new URLSearchParams(window.location.search);
-          params.set('page', String(data.currentPage));
-
-          if (search) {
-            params.set('search', search);
-          } else {
-            params.delete('search');
-          }
-
-          if (skillValues.length > 0) {
-            params.set('skills', skillValues.join(','));
-          } else {
-            params.delete('skills');
-          }
-
-          if (sort !== 'newest') {
-            params.set('sort', sort);
-          } else {
-            params.delete('sort');
-          }
-
-          const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
-          window.history.replaceState({}, '', newUrl);
-        }
-      });
-    } catch (err: unknown) {
-      runInAction(() => {
-        this.error = err instanceof Error ? err.message : 'Неизвестная ошибка';
-      });
-    } finally {
-      runInAction(() => {
-        this.loading = false;
-      });
+  updateFilters = (updates: Partial<VacanciesFilterState>) => {
+    if (
+      updates.search !== undefined ||
+      updates.skills !== undefined ||
+      updates.sort !== undefined
+    ) {
+      updates.page = 1;
     }
+
+    this.filters = { ...this.filters, ...updates };
+    this.updateURL(this.filters);
+  };
+
+  private updateURL = (newFilters: VacanciesFilterState) => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams();
+
+      if (newFilters.page > 1) {
+        params.set('page', newFilters.page.toString());
+      }
+
+      if (newFilters.search) {
+        params.set('search', newFilters.search);
+      }
+
+      if (newFilters.skills.length > 0) {
+        params.set('skills', newFilters.skills.join(','));
+      }
+
+      if (newFilters.sort !== 'newest') {
+        params.set('sort', newFilters.sort);
+      }
+
+      const url = params.toString() ? `?${params.toString()}` : window.location.pathname;
+      window.history.pushState(null, '', url);
+    }
+  };
+
+  setSearch = (search: string) => {
+    this.updateFilters({ search });
+  };
+
+  setSkills = (skills: string[]) => {
+    this.updateFilters({ skills });
+  };
+
+  toggleSkill = (skill: string) => {
+    const { skills } = this.filters;
+    const newSkills = skills.includes(skill)
+      ? skills.filter((s) => s !== skill)
+      : [...skills, skill];
+    this.updateFilters({ skills: newSkills });
+  };
+
+  setSort = (sort: SortKey) => {
+    this.updateFilters({ sort });
   };
 
   setPage = (page: number) => {
-    if (page < 1 || page > this.totalPages) return;
-    this.fetchVacancies(page, this.search, this.selectedSkills, this.sort);
+    this.updateFilters({ page });
   };
 
-  setSearch = (value: string) => {
-    if (value === this.search) return;
-    this.fetchVacancies(1, value, this.selectedSkills, this.sort);
-  };
-
-  setSkills = (skills: Option[]) => {
-    this.fetchVacancies(1, this.search, skills, this.sort);
-  };
-
-  setSort = (value: string) => {
-    if (value === this.sort) return;
-    this.fetchVacancies(1, this.search, this.selectedSkills, value);
+  resetFilters = () => {
+    this.updateFilters({
+      page: 1,
+      search: '',
+      skills: [],
+      sort: 'newest',
+    });
   };
 }

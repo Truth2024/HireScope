@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 type EmptyListProps = {
-  type: 'vacancies' | 'candidates' | 'notifications' | 'messages' | 'custom';
+  type: 'vacancies' | 'candidates' | 'notifications' | 'messages' | 'custom' | 'candidatesHR';
   customTitle?: string;
   customDescription?: string;
   icon?: 'vacancy' | 'candidate' | 'search' | 'folder' | 'inbox';

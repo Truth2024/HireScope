@@ -132,15 +132,21 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
     const baseStyle = variantClasses[variant].base;
 
     // Определяем цвет фокуса
-    const focusRingClass =
-      finalTone === 'danger'
-        ? 'focus:ring-red-500/20'
-        : finalTone === 'success'
-          ? 'focus:ring-green-500/20'
-          : 'focus:ring-(--color-brand)/20';
+    const focusRingClasses: Record<string, string> = {
+      danger: 'focus:ring-red-500/20',
+      success: 'focus:ring-green-500/20',
+      brand: 'focus:ring-(--color-brand)/20',
+    };
 
+    // Выбираем класс, используя значение по умолчанию
+    const focusRingClass = focusRingClasses[finalTone] || focusRingClasses.brand;
     // Текст для отображения (либо loadingText, либо обычный label)
-    const displayText = isLoading && loadingText ? loadingText : label || t(action);
+    const validActions = ['edit', 'add', 'delete', 'check', 'accept', 'reject', 'addNote'];
+
+    const displayText =
+      isLoading && loadingText
+        ? loadingText
+        : label || (validActions.includes(action) ? t(`actions.${action}`) : '');
 
     return (
       <button

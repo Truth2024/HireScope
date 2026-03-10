@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
 
   images: {
     domains: ['www.dropbox.com', 'dl.dropboxusercontent.com', 'randomuser.me'],
-    // или используйте remotePatterns (рекомендуется для Next.js 12.3+):
   },
 };
 const withNextIntl = createNextIntlPlugin();

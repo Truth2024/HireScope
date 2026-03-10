@@ -12,7 +12,7 @@ export default async function MainPage() {
 
   return (
     <div>
-      <div className="flex flex-col min-h-[calc(100vh-80px)]">
+      <div className="flex flex-col min-[579px]:min-h-[calc(100vh-80px)]">
         <Stories />
         <Hero />
       </div>

@@ -1,6 +1,6 @@
 export const COMMENTS_LIMIT = 5;
 export const VACANCY_LIMIT = 4;
-export const CANDIDATES_LIMIT = 2;
+export const CANDIDATES_LIMIT = 4;
 export const CANDIDATES_LIMIT_IN_VACANCY = 1;
 
 export const skills = [
@@ -51,13 +51,11 @@ export const FILTERS_CONFIG = {
   sortOptions,
 } as const;
 
-export const DEFAULT_SORT = 'newest';
-export const DEFAULT_PAGE = 1;
-
 export const CANDIDATES_CONFIG = {
   skills,
   defaultPage: 1,
   defaultHasExperience: false,
 } as const;
 
-export const DEFAULT_CANDIDATES_SORT = 'newest';
+export const DEFAULT_VACANCIES_SORT = 'newest';
+export const SEARCH_DEBOUNCE_DELAY = 500;

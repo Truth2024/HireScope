@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { normalizePath } from '@lib/utils';
 import { useStore } from '@providers/StoreProvider';
 
 const NAV_ITEMS = [
@@ -12,10 +13,6 @@ const NAV_ITEMS = [
   { key: 'resumes', href: '/profile/resumes' },
   { key: 'applications', href: '/profile/applications' },
 ];
-
-const normalizePath = (path: string) => {
-  return path.replace(/^\/(ru|en)(\/|$)/, '/').replace(/\/$/, '') || '/';
-};
 
 export const ProfileNavCandidate = observer(() => {
   const { authStore } = useStore();

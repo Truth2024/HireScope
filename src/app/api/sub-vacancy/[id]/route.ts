@@ -1,15 +1,13 @@
-import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getAuthUser } from '@lib/auth';
 import connectToDatabase from '@lib/mongodb';
 import { pusherServer } from '@lib/pusherServer';
 import Candidate from '@models/Candidate';
 import User from '@models/User';
 import Vacancy from '@models/Vacancy';
-
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -26,19 +24,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return NextResponse.json({ message: 'Invalid candidate ID' }, { status: 400 });
     }
 
-    // Проверка токена
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    let decoded: { userId: string };
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      decoded = jwt.verify(authHeader.replace('Bearer ', ''), ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-    }
+    await getAuthUser(req);
 
     // Находим вакансию
     const vacancy = await Vacancy.findOne({ _id: vacancyId });

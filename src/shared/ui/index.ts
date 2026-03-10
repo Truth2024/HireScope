@@ -15,3 +15,4 @@ export { type Option as OptionSingle } from './SingleDropdown/SingleDropdown';
 export { Checkbox } from './Checkbox/Checkbox';
 export { default as ActionButton } from './ActionButton/ActionButton';
 export { EmptyList } from './EmptyList/EmptyList';
+export { ResetButton } from './ResetButton/ResetButton';

@@ -16,7 +16,7 @@ type ExperienceEditorItemProps = {
 
 export const ExperienceEditorItem = observer(({ store, item }: ExperienceEditorItemProps) => {
   const t = useTranslations('Card');
-  const [isVisible, setIsVisible] = React.useState(item.isNew ?? false);
+  const [isVisible, setIsVisible] = React.useState(() => item.isNew ?? false);
 
   const toggle = () => {
     setIsVisible((prev) => !prev);
@@ -39,6 +39,15 @@ export const ExperienceEditorItem = observer(({ store, item }: ExperienceEditorI
       <div
         className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
         onClick={toggle}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isVisible}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        }}
       >
         <div className="flex-1">
           <div className="flex items-center gap-2">
@@ -59,14 +68,14 @@ export const ExperienceEditorItem = observer(({ store, item }: ExperienceEditorI
             action="delete"
             variant="ghost"
             size="sm"
-            iconOnly
+            iconOnly={true}
             onClick={deleteExpItem}
           />
           <ActionButton
             action={isVisible ? 'chevronUp' : 'chevronDown'}
             variant="ghost"
             size="sm"
-            iconOnly
+            iconOnly={true}
           />
         </div>
       </div>

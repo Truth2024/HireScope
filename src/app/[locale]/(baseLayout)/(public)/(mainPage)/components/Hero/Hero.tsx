@@ -8,9 +8,9 @@ export const Hero = () => {
   const t = useTranslations('Hero');
 
   return (
-    <section className="w-full max-w-392 px-4 mx-auto flex flex-col flex-1 h-full pb-10">
+    <section className="w-full max-w-392 px-0 min-[579px]:px-4  mx-auto flex flex-col min-[579px]:flex-1 h-full pb-10">
       <div
-        className="w-full flex flex-col justify-center flex-1 rounded-2xl bg-cover bg-no-repeat bg-center py-8.75"
+        className="w-full flex flex-col justify-center flex-1 min-[579px]:rounded-2xl bg-cover bg-no-repeat bg-center min-[579px]:py-8.75 py-20 mobile-hero-bg"
         style={{ backgroundImage: 'url(https://hhcdn.ru/file/18320865.jpg)' }}
       >
         <div className="content min-h-full flex flex-col max-[480px]:flex-col-reverse">
@@ -18,8 +18,8 @@ export const Hero = () => {
             <Logo />
           </div>
 
-          <div className="flex flex-1 items-center max-[480px]:mb-10">
-            <div className="flex flex-1 flex-col justify-between">
+          <div className="flex flex-1 items-center min-[579px]:mb-10">
+            <div className="flex flex-1 flex-col min-[579px]:items-start items-center justify-between min-[579px]:text-start text-center">
               <div className="mb-2">
                 <h1 className="text-white text-5xl font-bold leading-[1.1] mb-4">
                   <p>{t('title1')}</p>
@@ -31,12 +31,12 @@ export const Hero = () => {
                 <p className="text-white/90 text-[18px] leading-normal">{t('description2')}</p>
               </div>
 
-              <div className="w-full text-white text-[14px] mb-7.5">
+              <div className="w-full text-gray-300 text-[14px] mb-7.5">
                 {t('terms.text')}{' '}
                 <Link
                   href="/terms"
                   target="_blank"
-                  className="underline transition-colors duration-200 hover:text-indigo-600"
+                  className="underline transition-colors duration-200 hover:text-white tracking-widest"
                 >
                   {t('terms.termsLink')}
                 </Link>{' '}
@@ -44,7 +44,7 @@ export const Hero = () => {
                 <Link
                   href="/privacy"
                   target="_blank"
-                  className="underline transition-colors duration-200 hover:text-indigo-600"
+                  className="underline transition-colors duration-200 hover:text-white tracking-widest"
                 >
                   {t('terms.privacyLink')}
                 </Link>

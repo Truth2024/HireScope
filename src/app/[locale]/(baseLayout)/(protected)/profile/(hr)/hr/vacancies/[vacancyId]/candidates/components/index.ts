@@ -1,4 +1,3 @@
-export { EmptyCandidates } from './EmptyCandidates/EmptyCandidates';
 export { NoteModal } from './NoteModal/NoteModal';
 export { VacancyCandidate } from './VacancyCandidate/VacancyCandidate';
 export { VacancyCandidateCard } from './VacancyCandidateCard/VacancyCandidateCard';

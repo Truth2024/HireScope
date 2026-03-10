@@ -9,11 +9,8 @@ import User from '@models/User';
 import Vacancy from '@models/Vacancy';
 import type { CommentWithUser, IVacancy, IVacancyMongo, VacancyFilter } from '@myTypes/mongoTypes';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export const vacancyServiceById = async (
   vacancyId: string,
-
   page: number = 1
 ): Promise<IVacancy | null> => {
   await connectDB();
@@ -24,7 +21,7 @@ export const vacancyServiceById = async (
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
       currentUserId = decoded.userId;
       const authUser = await User.findById(currentUserId).lean();
       if (authUser) isAuthorized = true;

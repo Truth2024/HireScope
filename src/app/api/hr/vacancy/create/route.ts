@@ -1,29 +1,14 @@
-import jwt from 'jsonwebtoken';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getAuthUser } from '@lib/auth';
 import connectToDatabase from '@lib/mongodb';
 import Vacancy from '@models/Vacancy';
-
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
-
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    let decoded: { userId: string };
-
-    try {
-      decoded = jwt.verify(token, ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-    }
+    const user = await getAuthUser(req);
 
     const { title, requirements, description, salary, company } = await req.json();
 
@@ -50,14 +35,13 @@ export async function POST(req: NextRequest) {
         max: salary?.max ?? null,
       },
       company,
-      createdBy: decoded.userId,
+      createdBy: user._id,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
     return NextResponse.json(
       {
-        message: 'Vacancy created successfully',
         result: 'success',
         data: newVacancy,
       },

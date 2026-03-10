@@ -15,7 +15,7 @@ const ActiveNav = () => {
   const t = useTranslations('Header');
 
   return (
-    <nav className="flex flex-1 justify-between sm:justify-end items-center gap-5 sm:gap-6">
+    <nav className="flex flex-1 justify-end items-center gap-6">
       <Link href="/" className={getLinkClasses('/', pathname)}>
         <span className="hidden sm:inline">{t('nav.home')}</span>
         <span className="sm:hidden text-white">

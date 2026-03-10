@@ -1,4 +1,3 @@
-import { baseMetadata } from '@siteConfig';
 import { Nunito } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
@@ -9,6 +8,7 @@ import { NotificationProvider } from '@providers/NotificationListener';
 import QueryProvider from '@providers/QueryProvider';
 import { StoreProvider } from '@providers/StoreProvider';
 import ToasterProvider from '@providers/Toaster';
+import { baseMetadata } from '@siteConfig';
 
 import RootLoading from './loading';
 import '@styles/global.scss';

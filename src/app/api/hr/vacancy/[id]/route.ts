@@ -1,31 +1,16 @@
-import jwt from 'jsonwebtoken';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getAuthUser } from '@lib/auth';
 import connectToDatabase from '@lib/mongodb';
 import Candidate from '@models/Candidate';
 import Vacancy from '@models/Vacancy';
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectToDatabase();
     const p = await params;
-
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    let decoded: { userId: string };
-
-    try {
-      decoded = jwt.verify(token, ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-    }
+    const user = await getAuthUser(req);
 
     const vacancyId = p.id;
     const { title, requirements, description, salary, company } = await req.json();
@@ -33,7 +18,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const updatedVacancy = await Vacancy.findOneAndUpdate(
       {
         _id: vacancyId,
-        createdBy: decoded.userId,
+        createdBy: user._id,
       },
       {
         $set: {
@@ -74,28 +59,17 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectToDatabase();
     const { id: vacancyId } = await params;
 
-    // Проверка токена
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    let decoded: { userId: string };
-    try {
-      decoded = jwt.verify(authHeader.replace('Bearer ', ''), ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-    }
+    const user = await getAuthUser(req);
 
     // Удаляем вакансию
     const deletedVacancy = await Vacancy.findOneAndDelete({
       _id: vacancyId,
-      createdBy: decoded.userId,
+      createdBy: user._id,
     });
 
     if (!deletedVacancy) {

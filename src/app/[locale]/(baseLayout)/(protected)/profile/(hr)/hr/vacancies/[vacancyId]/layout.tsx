@@ -4,7 +4,7 @@ import { VacancyModeSelector } from './components/VacancyModeSelector';
 
 type VacancyLayoutProps = {
   children: React.ReactNode;
-  params: { vacancyId: string };
+  params: Promise<{ vacancyId: string }>;
 };
 
 export default async function VacancyLayout({ children, params }: VacancyLayoutProps) {

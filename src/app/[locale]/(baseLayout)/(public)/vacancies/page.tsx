@@ -1,5 +1,7 @@
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 
+import { DEFAULT_VACANCIES_SORT } from '@constants/constants';
 import { generatePageMetadata } from '@lib/generateMetadata';
 import { Section, SectionTitle } from '@ui';
 
@@ -28,28 +30,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 export default async function VacanciesPage({ searchParams }: VacanciesPageProps) {
   const params = await searchParams;
-
+  const queryClient = new QueryClient();
   const pageParam = Number(params.page) || 1;
   const searchParam = params.search?.trim() || '';
   const skillsParam = params.skills ? params.skills.split(',').filter(Boolean) : [];
-  const sortParam = params.sort || 'newest';
+  const sortParam = params.sort || DEFAULT_VACANCIES_SORT;
 
-  const data = await vacanciesServiceAll(pageParam, searchParam, skillsParam, sortParam);
+  await queryClient.prefetchQuery({
+    queryKey: ['vacancies', pageParam, searchParam, skillsParam.join(','), sortParam],
+    queryFn: () => vacanciesServiceAll(pageParam, searchParam, skillsParam, sortParam),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <div className="py-10">
       <Section>
         <SectionTitle title="Vacancies" />
         <div className="content">
-          <VacanciesClient
-            initialVacancies={data.vacancies}
-            total={data.total}
-            totalPages={data.totalPages}
-            currentPage={data.currentPage}
-            initialSearch={searchParam}
-            initialSkills={skillsParam}
-            initialSort={sortParam}
-          />
+          <HydrationBoundary state={dehydratedState}>
+            <VacanciesClient />
+          </HydrationBoundary>
         </div>
       </Section>
     </div>

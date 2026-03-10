@@ -185,17 +185,6 @@ export default function Stories() {
           </div>
         )}
       </div>
-
-      {/* Нижняя панель */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm flex justify-between w-80">
-        <span>
-          {currentIndex + 1} / {stories.length}
-        </span>
-        <span className="flex gap-4">
-          <span>← → to navigate</span>
-          <span>space to pause</span>
-        </span>
-      </div>
     </div>
   );
 }

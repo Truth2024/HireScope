@@ -142,7 +142,11 @@
     "actions": {
       "accept": "Accept",
       "reject": "Reject",
-      "addNote": "Add note"
+      "addNote": "Add note",
+      "edit": "Edit",
+      "add": "Add",
+      "delete": "Delete",
+      "check": "Confirm"
     },
     "moreDetails": "More details",
     "matchScore": "Match score",
@@ -166,9 +170,13 @@
       "title": "No vacancies found",
       "description": "There are no vacancies available at the moment. Please check back later or create a new vacancy."
     },
+    "candidatesHR": {
+      "title": "No responses",
+      "description": "At the moment, there are no responses to this vacancy. Please wait until candidates start applying."
+    },
     "candidates": {
       "title": "No candidates found",
-      "description": "There are no applications for this vacancy yet. Wait for candidates to start applying."
+      "description": "At the moment, there are no candidates available. Please check back later."
     },
     "notifications": {
       "title": "No notifications",

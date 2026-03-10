@@ -9,13 +9,10 @@ import Vacancy from '@models/Vacancy';
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 
-type RouteParams = {
-  params: {
-    candidateId: string;
-  };
-};
-
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ candidateId: string }> }
+) {
   try {
     const { candidateId } = await params;
 

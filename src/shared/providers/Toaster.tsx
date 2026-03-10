@@ -9,7 +9,6 @@ export default function ToasterProvider({ children }: { children: React.ReactNod
         reverseOrder={true}
         position="bottom-right"
         toastOptions={{
-          // duration: Infinity,
           duration: 5000,
           style: {
             background: '#333',

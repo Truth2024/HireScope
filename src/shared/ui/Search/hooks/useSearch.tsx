@@ -3,6 +3,8 @@
 import { debounce } from 'lodash';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 
+import { SEARCH_DEBOUNCE_DELAY } from '@constants/constants';
+
 type UseSearchProps = {
   onSearch: (value: string) => void;
   initialValue?: string;
@@ -19,7 +21,7 @@ type UseSearchReturn = {
 export const useSearch = ({
   onSearch,
   initialValue = '',
-  delay = 500,
+  delay = SEARCH_DEBOUNCE_DELAY,
 }: UseSearchProps): UseSearchReturn => {
   const [value, setValue] = useState(initialValue);
   const [isSearching, setIsSearching] = useState(false);
@@ -54,8 +56,7 @@ export const useSearch = ({
     return () => {
       debouncedSearch.cancel();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, debouncedSearch]);
+  }, [value, debouncedSearch, initialValue]);
 
   const handleSubmit = useCallback(() => {
     const trimmed = value.trim();

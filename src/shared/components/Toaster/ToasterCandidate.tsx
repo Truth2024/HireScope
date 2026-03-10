@@ -62,7 +62,7 @@ export const ToasterCandidate = ({
       <Link
         href={`/vacancies/${vacancyId}`}
         onClick={() => toast.dismiss(id)}
-        className={`text-xs font-medium ${styles.buttonColor} hover:underline flex-shrink-0`}
+        className={`text-xs font-medium ${styles.buttonColor} hover:underline shrink-0`}
       >
         Открыть
       </Link>

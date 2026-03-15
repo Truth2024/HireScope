@@ -1,8 +1,8 @@
 export const COMMENTS_LIMIT = 5;
 export const VACANCY_LIMIT = 4;
 export const CANDIDATES_LIMIT = 4;
-export const CANDIDATES_LIMIT_IN_VACANCY = 1;
-export const NOTIFICATION_LIMIT = 1;
+export const CANDIDATES_LIMIT_IN_VACANCY = 4;
+export const NOTIFICATION_LIMIT = 4;
 
 export const skills = [
   { key: 'JavaScript', value: 'JavaScript' },

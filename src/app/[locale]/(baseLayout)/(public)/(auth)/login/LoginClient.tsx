@@ -64,7 +64,7 @@ export const LoginClient = observer(() => {
       <div className="flex flex-col items-center gap-5">
         <Link
           href={siteNavigation.register}
-          className="hover:text-(--color-brand-hover) transition-colors duration-300"
+          className="hover:text-(--color-brand-hover) transition-colors duration-300 text-sm"
         >
           {t('logindescr')}
         </Link>
@@ -74,7 +74,7 @@ export const LoginClient = observer(() => {
           </div>
         )}
         <Button className="w-full" form="loginForm" type="submit">
-          {loginFormStore.isLoading ? <Loader color="white" /> : t('loginbutton')}
+          {loginFormStore.isLoading ? <Loader color="white" size="s" /> : t('loginbutton')}
         </Button>
       </div>
     </>

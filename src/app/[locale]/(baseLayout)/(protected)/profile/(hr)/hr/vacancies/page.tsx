@@ -28,7 +28,7 @@ export default async function HRMainPage() {
     <Section>
       <div className="content">
         <Card>
-          <h1 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+          <h1 className="text-center text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
             {t('myVacancies')}
           </h1>
 

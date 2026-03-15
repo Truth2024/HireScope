@@ -78,7 +78,7 @@ export const DropdownTrigger: React.FC<DropdownTriggerProps> = ({
     <div
       onClick={disabled ? undefined : onClick}
       className={cn(
-        'flex items-center justify-between w-full px-3 rounded-lg transition-all duration-200 h-11',
+        'flex items-center justify-between w-full px-3 rounded-lg transition-all duration-200 h-9 sm:h-11',
         'cursor-pointer select-none',
 
         !disabled && [

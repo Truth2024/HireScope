@@ -18,14 +18,14 @@ export const NotificationCard = observer(({ notification }: NotificationCardProp
   const { data, read, createdAt } = notification;
 
   return (
-    <Card>
-      <div className="flex flex-col lg:flex-row items-start justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
-        <div className="flex gap-3 sm:gap-4 flex-1 min-w-0 w-full lg:w-auto">
+    <Card className="py-4 sm:py-6">
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-2 sm:gap-4 mb-2 sm:mb-4">
+        <div className="flex gap-2 sm:gap-4 flex-1 min-w-0 w-full lg:w-auto">
           <Avatar
             firstName={data.firstName || ''}
             secondName={data.secondName || ''}
             avatar={data.avatar || ''}
-            size="large"
+            size="medium"
           />
 
           <div className="min-w-0 flex-1">
@@ -41,7 +41,7 @@ export const NotificationCard = observer(({ notification }: NotificationCardProp
           </div>
         </div>
       </div>
-      <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg w-fit">
+      <div className="text-sm text-gray-600 bg-transparent sm:bg-gray-50 p-3 rounded-lg w-fit">
         {t('applied', {
           title: data.title || 'вакансия',
           company: data.company || 'компания',

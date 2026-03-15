@@ -36,7 +36,7 @@ export const ButtonMarkAll = () => {
     <div className="mb-4 flex justify-end">
       <div className="flex flex-col gap-2">
         <Button onClick={markAllAsRead}>
-          {isLoading ? <Loader color="white" /> : t('markAllAsRead')}
+          {isLoading ? <Loader color="white" size="s" /> : t('markAllAsRead')}
         </Button>
         {isError && <p className="text-sm text-red-400">{t('markError')}</p>}
       </div>

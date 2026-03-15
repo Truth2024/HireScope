@@ -36,7 +36,25 @@
     "details": "Details",
     "markAllAsRead": "Mark all as read",
     "markError": "Failed to mark all as read",
-    "applied": "Candidate applied to vacancy {title} at {company}"
+    "applied": "Candidate applied to vacancy {title} at {company}",
+    "filters": {
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "default": "Sort by"
+      },
+      "status": {
+        "all": "All",
+        "read": "Read",
+        "unread": "Unread",
+        "default": "Filter by status"
+      },
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "all": "All"
+    },
+    "acceptedMessage": "The employer has accepted your application",
+    "rejectedMessage": "The employer has rejected your application"
   },
 
   "SectionTitle": {

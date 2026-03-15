@@ -46,7 +46,7 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
     <div className="py-10">
       <div className="content">
         <Card>
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center mb-8">
+          <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-start md:items-center mb-3 sm:mb-8">
             <Avatar
               firstName={user.firstName}
               secondName={user.secondName}
@@ -57,7 +57,7 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
 
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900">
                   {user.firstName} {user.secondName}
                 </h1>
               </div>
@@ -75,17 +75,17 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
             </div>
           </div>
 
-          <div className="border-t border-gray-100 my-6" />
+          <div className="border-t border-gray-100 my-4 sm:my-6" />
 
-          <section className="mb-8">
+          <section className="mb-3 sm:mb-8">
             <Skills skills={user.skills} title={t('skills')} variant="full" />
           </section>
 
-          <section className="mb-8">
+          <section className="mb-3 sm:mb-8">
             <Experience experience={user.experience} variant="full" />
           </section>
 
-          <div className="border-t border-gray-100 my-6" />
+          <div className="border-t border-gray-100 my-4 sm:my-6" />
 
           <div className="flex justify-between items-center">
             <DateInfo date={user.createdAt} title={t('memberSince')} />

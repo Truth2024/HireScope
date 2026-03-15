@@ -51,7 +51,7 @@ export default function Skills({ skills, title, variant = 'full' }: SkillsProps)
   if (isCompact) return content;
 
   return (
-    <section className="mb-8">
+    <section className="mb-3 sm:mb-8">
       <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <span className="w-1 h-5 bg-(--color-brand) rounded-full" />
         {title || defaultTitle}

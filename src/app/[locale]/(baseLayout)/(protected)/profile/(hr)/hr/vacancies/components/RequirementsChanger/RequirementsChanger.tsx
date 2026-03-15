@@ -26,7 +26,9 @@ export const RequirementsChanger = observer(({ store, error }: RequirementsChang
   if (!isEditing) {
     return (
       <div className="flex justify-between">
-        <Skills title={t('requirements')} skills={requirements} />
+        <div className="flex flex-col">
+          <Skills title={t('requirements')} skills={requirements} />
+        </div>
 
         <div className="flex items-start">
           <ActionButton action="edit" onClick={() => setIsEditing(true)} />

@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import type {
   NotificationSort,
   NotificationStatus,
@@ -11,21 +13,25 @@ type NotificationFiltersProps = {
 };
 
 export const NotificationFilters = ({ store }: NotificationFiltersProps) => {
+  const t = useTranslations('NotificationsPage.filters');
+
   const sortOptions = [
-    { key: 'newest', value: 'Сначала новые' },
-    { key: 'oldest', value: 'Сначала старые' },
+    { key: 'newest', value: t('sort.newest') },
+    { key: 'oldest', value: t('sort.oldest') },
   ];
 
   const sortOptionsType = [
-    { key: 'all', value: 'Все' },
-    { key: 'candidate-accepted', value: 'Приняли' },
-    { key: 'candidate-rejected', value: 'Отклонили' },
+    { key: 'all', value: t('all') },
+    { key: 'candidate-accepted', value: t('accepted') },
+    { key: 'candidate-rejected', value: t('rejected') },
   ];
+
   const sortOptionsStatus = [
-    { key: 'all', value: 'Все' },
-    { key: 'read', value: 'Прочитаные' },
-    { key: 'unread', value: 'Непрочитаные' },
+    { key: 'all', value: t('status.all') },
+    { key: 'read', value: t('status.read') },
+    { key: 'unread', value: t('status.unread') },
   ];
+
   const currentSort = sortOptions.find((opt) => opt.key === store.sortBy) || sortOptions[0];
   const currentSortType =
     sortOptionsType.find((opt) => opt.key === store.type) || sortOptionsType[0];

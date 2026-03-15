@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onClick,
       disabled = false,
       type = 'text',
-      height = 'h-11',
+      height = 'h-9 sm:h-11',
       ...props
     },
     ref

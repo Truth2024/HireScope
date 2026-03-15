@@ -51,7 +51,7 @@ export const VacancyEdit = observer(({ vacancy }: VacancyEditProps) => {
 
   return (
     <div className="content">
-      <div className="flex flex-col gap-7.5 mb-10">
+      <div className="flex flex-col gap-4 sm:gap-7.5 mb-6 sm:mb-10">
         <Card>
           <TitleChanger
             initialTitle={vacancyEditStore.title}

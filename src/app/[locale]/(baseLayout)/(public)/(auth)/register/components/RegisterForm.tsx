@@ -63,7 +63,7 @@ export const RegisterForm = observer(({ store, onSubmit }: RegisterFormProps) =>
         )}
 
         <Button className="w-full" form="regForm" type="submit" disabled={store.isLoading}>
-          {store.isLoading ? <Loader color="white" /> : t('regbutton')}
+          {store.isLoading ? <Loader color="white" size="s" /> : t('regbutton')}
         </Button>
       </div>
     </>

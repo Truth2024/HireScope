@@ -23,9 +23,11 @@ export const CompanyChanger = observer(
       return (
         <div className="flex items-center justify-between">
           {!initialCompany ? (
-            <h1 className="text-lg  text-gray-400 italic">{t('companyEmpty')}</h1>
+            <h1 className="text-base sm:text-lg  text-gray-400 italic">{t('companyEmpty')}</h1>
           ) : (
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{initialCompany}</h1>
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+              {initialCompany}
+            </h1>
           )}
 
           <ActionButton action="edit" onClick={() => setIsEditing(true)} />

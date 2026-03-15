@@ -1,5 +1,6 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import { DEFAULT_VACANCIES_SORT } from '@constants/constants';
 import { generatePageMetadata } from '@lib/generateMetadata';
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 export default async function VacanciesPage({ searchParams }: VacanciesPageProps) {
+  const t = await getTranslations('SectionTitle');
   const params = await searchParams;
   const queryClient = new QueryClient();
   const pageParam = Number(params.page) || 1;
@@ -62,7 +64,7 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
   return (
     <div className="py-10">
       <Section>
-        <SectionTitle title="Vacancies" />
+        <SectionTitle title={t('vacancies')} />
         <div className="content">
           <HydrationBoundary state={dehydratedState}>
             <VacanciesClient

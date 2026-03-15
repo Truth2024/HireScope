@@ -28,10 +28,10 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   const messageColorClass = getMessageColor(notification.type);
 
   return (
-    <Card>
-      <div className="space-y-2">
+    <Card className="py-4 sm:py-6">
+      <div className="space-y-1 sm:space-y-2">
         <div className="flex items-start justify-between">
-          <div className="font-semibold text-2xl">{notification.data.title}</div>
+          <div className="font-semibold text-lg sm:text-2xl">{notification.data.title}</div>
           {!notification.read && (
             <span className="inline-block text-xs font-medium bg-(--color-brand)/10 text-(--color-brand) px-3 py-1 rounded-full">
               {t('new')}
@@ -40,15 +40,17 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
         </div>
 
         {notification.data.company && (
-          <span className="bg-(--color-brand)/10 text-(--color-brand) px-3 py-1 text-sm font-medium rounded-full flex items-center gap-1 w-fit">
-            <Logo height={20} width={20} />
+          <span className="bg-(--color-brand)/10 text-(--color-brand) px-3 py-1 text-xs sm:text-sm font-medium rounded-full flex items-center gap-1 w-fit">
+            <Logo height={15} width={15} />
             {notification.data.company}
           </span>
         )}
 
         {notification.data.message && (
-          <div className={`text-sm mt-2 p-2 rounded w-fit ${messageColorClass}`}>
-            {notification.data.message}
+          <div className={`text-xs sm:text-sm mt-2 p-1 sm:p-2 rounded w-fit ${messageColorClass}`}>
+            {notification.type === 'candidate-accepted'
+              ? t('acceptedMessage')
+              : t('rejectedMesage')}
           </div>
         )}
 

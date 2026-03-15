@@ -14,8 +14,8 @@ type CandidateCardProps = {
 const CandidateCard = ({ candidate }: CandidateCardProps) => {
   const t = useTranslations('Card');
   return (
-    <Card className="gap-4 min-h-85.75 flex flex-col">
-      <div className="flex-1 flex flex-col gap-4">
+    <Card className="gap-2 sm:gap-4 min-h-70 sm:min-h-85.75 flex flex-col">
+      <div className="flex-1 flex flex-col gap-2 sm:gap-4">
         <div className="flex items-center gap-3">
           <Avatar
             size="small"
@@ -26,7 +26,7 @@ const CandidateCard = ({ candidate }: CandidateCardProps) => {
           />
 
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 leading-tight line-clamp-2 break-all hyphens-auto">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight line-clamp-2 break-all hyphens-auto">
               {candidate.firstName} <br />
               {candidate.secondName}
             </h3>
@@ -53,7 +53,7 @@ const CandidateCard = ({ candidate }: CandidateCardProps) => {
       <Button
         href={siteNavigation.candidateDetail(candidate.id)}
         variant="primary"
-        className="mt-4 truncate"
+        className="mt-2 sm:mt-4 truncate"
       >
         {t('viewprofile')}
       </Button>

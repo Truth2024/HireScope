@@ -8,7 +8,7 @@ type ResetButtonProps = {
 
 export const ResetButton = ({ onClick }: ResetButtonProps) => {
   return (
-    <Button onClick={onClick} className="h-10 min-w-10 p-0">
+    <Button onClick={onClick} className="h-8 sm:h-10 min-w-8 sm:min-w-10 p-0">
       <RotateCcw
         size={20}
         className="text-white/70 group-hover:text-white group-hover:-rotate-45 transition-all duration-300"

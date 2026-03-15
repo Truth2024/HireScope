@@ -10,7 +10,8 @@ type VacancySalaryProps = {
 const formatMoney = (value: number) => `$${value.toLocaleString()}`;
 
 export const VacancySalary = ({ salary, variant = 'large' }: VacancySalaryProps) => {
-  const textSize = variant === 'large' ? 'text-2xl font-bold' : 'text-base font-semibold';
+  const textSize =
+    variant === 'large' ? 'text-xl sm:text-2xl font-bold' : 'text-base font-semibold';
   const t = useTranslations('Card');
 
   if (!salary || (!salary.min && !salary.max)) {

@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import type { NotificationSort, NotificationStatus } from '@NotificationPageTypes';
 import type { NotificationsStore } from '@NotificationStore';
 import { SingleDropdown } from '@ui';
@@ -7,16 +9,19 @@ type NotificationFiltersProps = {
 };
 
 export const NotificationFilters = ({ store }: NotificationFiltersProps) => {
+  const t = useTranslations('NotificationsPage.filters');
+
   const sortOptions = [
-    { key: 'newest', value: 'Сначала новые' },
-    { key: 'oldest', value: 'Сначала старые' },
+    { key: 'newest', value: t('sort.newest') },
+    { key: 'oldest', value: t('sort.oldest') },
   ];
 
   const sortOptionsStatus = [
-    { key: 'all', value: 'Все' },
-    { key: 'read', value: 'Прочитаные' },
-    { key: 'unread', value: 'Непрочитаные' },
+    { key: 'all', value: t('status.all') },
+    { key: 'read', value: t('status.read') },
+    { key: 'unread', value: t('status.unread') },
   ];
+
   const currentSort = sortOptions.find((opt) => opt.key === store.sortBy) || sortOptions[0];
   const currentSortStatus =
     sortOptionsStatus.find((opt) => opt.key === store.status) || sortOptionsStatus[0];

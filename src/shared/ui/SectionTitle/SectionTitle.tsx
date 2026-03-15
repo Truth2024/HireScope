@@ -17,13 +17,13 @@ const SectionTitle = ({
   className = 'justify-between',
 }: SectionTitleProps) => {
   return (
-    <div className="mb-10">
+    <div className="mb-6 sm:mb-10">
       <div className="content">
         <div className={`flex items-center ${className}`}>
-          <h2 className="text-2xl font-bold">{title}</h2>
+          <h2 className="text-lg sm:text-2xl font-bold">{title}</h2>
           {sectionBtn && path && (
             <Link href={path}>
-              <button className="flex items-center text-lg font-semibold hover:text-(--color-brand-hover) text-(--color-brand) cursor-pointer hover-arrow-right transition-colors duration-300 text-nowrap">
+              <button className="flex items-center text-base sm:text-lg font-semibold hover:text-(--color-brand-hover) text-(--color-brand) cursor-pointer hover-arrow-right transition-colors duration-300 text-nowrap">
                 {sectionBtn}
                 <Arrow />
               </button>

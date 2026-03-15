@@ -27,7 +27,7 @@ export const VacancyEmptyCard = ({
     <div
       className={cn(
         'group relative flex flex-col items-center justify-center gap-4',
-        'min-h-80 h-full w-full',
+        'min-h-50 sm-min-h-80 h-full w-full',
         'border-2 border-dashed border-gray-300 rounded-2xl',
         'bg-gray-50/50 hover:bg-gray-100',
         'transition-all duration-200 cursor-pointer',

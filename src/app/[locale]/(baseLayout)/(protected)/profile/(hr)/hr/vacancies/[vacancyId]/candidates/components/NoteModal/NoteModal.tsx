@@ -11,7 +11,6 @@ import React, { useState, useEffect } from 'react';
 import type { ICandidate } from '@myTypes/mongoTypes';
 import { Card, CloseButton, Input, Button, Loader } from '@ui';
 
-// Стилизованный Card для MUI
 const StyledCard = styled(Card)(({ theme }) => ({
   position: 'relative',
   width: '100%',
@@ -23,7 +22,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-// Анимация появления сверху
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
@@ -64,6 +62,7 @@ export const NoteModal = ({ isOpen, candidate, onClose, onSave }: NoteModalProps
   };
 
   const handleClose = () => {
+    if (isSubmitting) return;
     setNotes('');
     onClose();
   };

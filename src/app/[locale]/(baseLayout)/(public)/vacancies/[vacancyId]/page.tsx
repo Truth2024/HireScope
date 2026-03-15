@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { Skills, DateInfo, VacancySalary, Rating, Logo } from '@components';
 import { COMMENTS_LIMIT } from '@constants/constants';
 import { generateVacancyMetadata } from '@lib/generateMetadata';
-import { Card } from '@ui';
+import { Card, ErrorComponent } from '@ui';
 
 import { vacancyServiceById } from '../services/vacancyService';
 
@@ -17,10 +17,17 @@ type VacancyPageProps = {
 
 export async function generateMetadata({ params }: VacancyPageProps): Promise<Metadata> {
   const { vacancyId, locale } = await params;
+  const result = await vacancyServiceById(vacancyId);
+  if (result.status === 'success') {
+    return generateVacancyMetadata(locale, {
+      title: result.data.title,
+      description: result.data.description,
+      requirements: result.data.requirements,
+      id: result.data.id,
+    });
+  }
 
-  const vacancy = await vacancyServiceById(vacancyId);
-
-  if (!vacancy) {
+  if (result.status === 'notFound') {
     const t = await getTranslations({ locale, namespace: 'SEO' });
     return {
       title: t('notFound.title'),
@@ -28,21 +35,23 @@ export async function generateMetadata({ params }: VacancyPageProps): Promise<Me
     };
   }
 
-  return generateVacancyMetadata(locale, {
-    title: vacancy.title,
-    description: vacancy.description,
-    requirements: vacancy.requirements,
-    id: vacancy.id,
-  });
+  return {
+    title: '500',
+    description: 'error',
+  };
 }
 
 export default async function VacancyPage({ params }: VacancyPageProps) {
   const { vacancyId } = await params;
 
-  const vacancy = await vacancyServiceById(vacancyId);
+  const result = await vacancyServiceById(vacancyId);
 
-  if (!vacancy) {
+  if (result.status === 'notFound') {
     return <VacancyNotFound />;
+  }
+
+  if (result.status === 'error') {
+    return <ErrorComponent code={result.code} />;
   }
 
   const t = await getTranslations('Card');
@@ -52,41 +61,43 @@ export default async function VacancyPage({ params }: VacancyPageProps) {
       <div className="content">
         <Card>
           <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 flex-1">{vacancy.title}</h1>
-            <Rating rating={vacancy.rating} variant="large" />
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 flex-1">
+              {result.data.title}
+            </h1>
+            <Rating rating={result.data.rating} variant="large" />
           </div>
 
           <span className="bg-(--color-brand)/10 text-(--color-brand) px-3 py-1 text-sm font-medium rounded-full flex items-center gap-1 mb-6 w-fit">
             <Logo height={20} width={20} />
-            {vacancy.company}
+            {result.data.company}
           </span>
 
           <div className="mb-8 flex justify-between items-center max-[480px]:flex-col max-[480px]:gap-4">
-            <VacancySalary salary={vacancy.salary} variant="large" />
+            <VacancySalary salary={result.data.salary} variant="large" />
             <VacancyApply
-              vacancyId={vacancy.id}
-              isOwner={vacancy.isOwner}
-              hasApplied={vacancy.hasApplied}
+              vacancyId={result.data.id}
+              isOwner={result.data.isOwner}
+              hasApplied={result.data.hasApplied}
             />
           </div>
 
           <div className="border-t border-gray-100 my-6" />
 
-          <VacancyDescription descr={vacancy.description} />
-          <Skills skills={vacancy.requirements} title={t('requirements')} variant="full" />
+          <VacancyDescription descr={result.data.description} />
+          <Skills skills={result.data.requirements} title={t('requirements')} variant="full" />
 
           <div className="border-t border-gray-100 my-6" />
-          <DateInfo date={vacancy.createdAt} title={t('posted')} className="text-end" />
+          <DateInfo date={result.data.createdAt} title={t('posted')} className="text-end" />
         </Card>
 
         <Comments
-          commentsCount={vacancy.commentsCount}
-          comments={vacancy.comments || []}
-          vacancyId={vacancy.id}
-          rating={vacancy.rating}
-          ratingDistribution={vacancy.ratingDistribution}
+          commentsCount={result.data.commentsCount}
+          comments={result.data.comments || []}
+          vacancyId={result.data.id}
+          rating={result.data.rating}
+          ratingDistribution={result.data.ratingDistribution}
           currentPage={1}
-          totalPages={Math.ceil(vacancy.commentsCount / COMMENTS_LIMIT)}
+          totalPages={Math.ceil(result.data.commentsCount / COMMENTS_LIMIT)}
         />
       </div>
     </div>

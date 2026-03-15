@@ -158,6 +158,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
               avatarBlur: userData.avatarBlur ?? null,
               experience: userData.experience ?? [],
               skills: userData.skills,
+              unreadNotifications: 0,
               createdAt: userData.createdAt.toString(),
             }
           : undefined,

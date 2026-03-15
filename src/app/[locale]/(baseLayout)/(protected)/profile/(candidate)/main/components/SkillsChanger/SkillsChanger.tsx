@@ -22,8 +22,7 @@ export const SkillsChanger = observer(({ className = '', authStore }: SkillsChan
     if (authStore.user) {
       skillsChangerStore.setSkills(authStore.user.skills);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authStore.user]);
+  }, [authStore.user, skillsChangerStore]);
 
   const t = useTranslations('Card');
 
@@ -69,9 +68,12 @@ export const SkillsChanger = observer(({ className = '', authStore }: SkillsChan
           <Button onClick={() => skillsChangerStore.setIsEditing(false)} variant="cancel">
             {t('cancel')}
           </Button>
-          <Button onClick={() => skillsChangerStore.savingSkills(authStore)}>
-            {skillsChangerStore.isLoading ? <Loader color="white" size="s" /> : t('save')}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button onClick={() => skillsChangerStore.savingSkills(authStore)}>
+              {skillsChangerStore.isLoading ? <Loader color="white" size="s" /> : t('save')}
+            </Button>
+            {skillsChangerStore.error && <p className="text-sm text-red-400">{t('applyError')}</p>}
+          </div>
         </div>
       </div>
     </div>

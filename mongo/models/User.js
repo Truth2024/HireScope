@@ -9,9 +9,11 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, enum: ['hr', 'candidate'], default: 'candidate' },
   avatar: { type: String },
   avatarBlur: { type: String },
+   avatarPath: { type: String, default: null }, 
+  avatarBlurPath: { type: String, default: null },  
   skills: [{ 
     type: String, 
-    enum: SKILLS,  // 👈 только из списка
+    enum: SKILLS,  
   }],
   experience: [
     {
@@ -20,6 +22,10 @@ const UserSchema = new mongoose.Schema({
       years: Number,
     },
   ],
+    unreadNotifications: { 
+    type: Number, 
+    default: 0 
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

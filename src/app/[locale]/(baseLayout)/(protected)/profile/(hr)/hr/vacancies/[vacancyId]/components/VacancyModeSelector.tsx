@@ -2,10 +2,12 @@
 
 import { LayoutGroup, motion } from 'framer-motion';
 import Link from 'next/link';
-import { usePathname, useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { useVacancyCandidatesCount } from '@hooks/useVacancyCandidatesCount';
+import { normalizePath } from '@lib/utils';
+import { siteNavigation } from '@siteNav';
 
 type VacancyModeSelectorProps = {
   vacancyId: string;
@@ -18,31 +20,26 @@ export const VacancyModeSelector = ({
 }: VacancyModeSelectorProps) => {
   const t = useTranslations('Card');
   const pathname = usePathname();
-  const params = useParams();
-  const locale = params.locale as string;
 
   const { data: count, isLoading } = useVacancyCandidatesCount(vacancyId);
 
-  // Показываем initialCount пока грузится, или актуальный count после загрузки
   const displayCount = isLoading ? initialCandidatesCount : count;
 
-  const basePath = `/${locale}/profile/hr/vacancies/${vacancyId}`;
-  const editPath = basePath;
-  const candidatesPath = `${basePath}/candidates`;
+  const normalizedPath = normalizePath(pathname);
 
-  const isEditActive = pathname === editPath;
+  const isEditActive = normalizedPath === siteNavigation.hr.vacancyEdit(vacancyId);
   const isCandidatesActive =
-    pathname === candidatesPath || pathname.startsWith(candidatesPath + '?');
+    normalizedPath === siteNavigation.hr.vacancyCandidates(vacancyId) ||
+    normalizedPath.startsWith(siteNavigation.hr.vacancyCandidates(vacancyId) + '/');
 
   return (
     <div className="w-full">
       <LayoutGroup id="vacancy-mode">
         <div className="content">
           <div className="flex w-full p-1 bg-gray-200 rounded-xl mb-6 gap-1 relative">
-            {/* Кнопка Edit */}
             <Link
-              href={editPath}
-              className="flex-1 relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 cursor-pointer z-10 text-center"
+              href={siteNavigation.hr.vacancyEdit(vacancyId)}
+              className="flex-1 relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 cursor-pointer z-10 text-center flex items-center justify-center"
               scroll={false}
             >
               <span
@@ -65,10 +62,9 @@ export const VacancyModeSelector = ({
               )}
             </Link>
 
-            {/* Кнопка Candidates с counter */}
             <Link
-              href={candidatesPath}
-              className="flex-1 relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 cursor-pointer z-10"
+              href={siteNavigation.hr.vacancyCandidates(vacancyId)}
+              className="flex-1 relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 cursor-pointer z-10 flex items-center justify-center"
               scroll={false}
             >
               <span

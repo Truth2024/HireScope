@@ -16,3 +16,4 @@ export { Checkbox } from './Checkbox/Checkbox';
 export { default as ActionButton } from './ActionButton/ActionButton';
 export { EmptyList } from './EmptyList/EmptyList';
 export { ResetButton } from './ResetButton/ResetButton';
+export { ErrorComponent } from './ErrorComponent/ErrorComponent';

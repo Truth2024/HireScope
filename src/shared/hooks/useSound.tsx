@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useMemo } from 'react';
 
 export type SoundType = 'notification' | 'success' | 'error';
 
@@ -12,19 +12,16 @@ export const useSound = () => {
   });
 
   useEffect(() => {
-    // Инициализируем звуки только на клиенте
     audioRef.current = {
       notification: new Audio('/sounds/notification.mp3'),
       success: new Audio('/sounds/success.mp3'),
       error: new Audio('/sounds/error.mp3'),
     };
 
-    // Настраиваем громкость
     Object.values(audioRef.current).forEach((audio) => {
-      if (audio) audio.volume = 0.5;
+      if (audio) audio.volume = 0.2;
     });
 
-    // Очистка
     return () => {
       Object.values(audioRef.current).forEach((audio) => {
         if (audio) {
@@ -43,5 +40,7 @@ export const useSound = () => {
     }
   }, []);
 
-  return { playSound };
+  const soundFunctions = useMemo(() => ({ playSound }), [playSound]);
+
+  return soundFunctions;
 };

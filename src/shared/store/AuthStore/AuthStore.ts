@@ -2,6 +2,7 @@
 
 import { makeAutoObservable, runInAction } from 'mobx';
 
+import { pusherClient } from '@lib/pusherClient';
 import type { IUser } from '@myTypes/mongoTypes';
 
 export class AuthStore {
@@ -46,12 +47,13 @@ export class AuthStore {
   }
 
   async fetchWithAuth(input: RequestInfo, init?: RequestInit) {
+    const isFormData = init?.body instanceof FormData;
     const res = await fetch(input, {
       ...init,
       headers: {
         ...init?.headers,
         ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
-        'Content-Type': 'application/json',
+        ...(!isFormData && { 'Content-Type': 'application/json' }),
       },
       credentials: 'include',
     });
@@ -64,13 +66,13 @@ export class AuthStore {
       this.logout();
       throw new Error('Session expired');
     }
-
+    const isFormDataRetry = init?.body instanceof FormData;
     return fetch(input, {
       ...init,
       headers: {
         ...init?.headers,
         Authorization: `Bearer ${newToken}`,
-        'Content-Type': 'application/json',
+        ...(!isFormDataRetry && { 'Content-Type': 'application/json' }),
       },
       credentials: 'include',
     });
@@ -115,8 +117,26 @@ export class AuthStore {
     this.user = user;
     this.accessToken = accessToken;
   }
+  incrementUnread() {
+    if (!this.user) return null;
+    this.user.unreadNotifications += 1;
+  }
+  resetUnreadCount() {
+    if (!this.user) return null;
+    this.user.unreadNotifications = 0;
+  }
+  setAvatar(value: string) {
+    if (!this.user) return;
+    this.user.avatar = value;
+  }
 
   async logout() {
+    if (this.user?.id) {
+      try {
+        pusherClient.unsubscribe(`user-${this.user.id}`);
+      } catch {}
+    }
+
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (error) {
@@ -124,10 +144,16 @@ export class AuthStore {
         this.error = error as string;
       });
     } finally {
-      this.user = null;
-      this.accessToken = null;
+      runInAction(() => {
+        this.user = null;
+        this.accessToken = null;
+      });
 
-      window.location.href = '/';
+      if (typeof window !== 'undefined') {
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 100);
+      }
     }
   }
 }

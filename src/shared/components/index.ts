@@ -11,3 +11,5 @@ export { Rating } from './Rating/Rating';
 export { SkillButton } from './SkillButton/SkillButton';
 export { ToasterHR } from './Toaster/ToasterHR';
 export { ToasterCandidate } from './Toaster/ToasterCandidate';
+export { NotificationsCounter } from './NotificationsCounter/NotificationsCounter';
+export { ButtonMarkAll } from './ButtonMarkAll/ButtonMarkAll';

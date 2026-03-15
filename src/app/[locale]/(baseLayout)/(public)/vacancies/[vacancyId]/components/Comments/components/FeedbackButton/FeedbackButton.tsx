@@ -9,6 +9,7 @@ import React from 'react';
 import { ModalComment } from '@commentsComponents';
 import type { CommentsStore } from '@commentsStore';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 import { Button, Loader } from '@ui';
 
 type FeedbackButtonProps = {
@@ -55,7 +56,7 @@ export const FeedbackButton = observer(({ store }: FeedbackButtonProps) => {
 
   return (
     <Link
-      href="/login"
+      href={siteNavigation.login}
       className="gap-3 w-full lg:max-w-90 py-5 px-2 h-80 bg-(--color-brand) hover:bg-(--color-brand-hover) transition-colors duration-300 flex flex-col rounded-xl justify-center items-center"
     >
       <Image

@@ -17,11 +17,9 @@ export async function GET(req: NextRequest) {
     await connectToDatabase();
 
     const user = await getAuthUser(req);
-
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
     }
-
     return NextResponse.json(
       {
         user: {
@@ -33,14 +31,15 @@ export async function GET(req: NextRequest) {
           role: user.role,
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
-          skills: user.skills ?? [],
+          skills: user.skills,
+          unreadNotifications: user.unreadNotifications,
           experience: (user.experience || []).map((exp: ExperienceDocument) => ({
             id: exp._id?.toString(),
             company: exp.company,
             position: exp.position,
             years: exp.years,
           })),
-          createdAt: user.createdAt.toISOString(),
+          createdAt: user.createdAt.toString(),
         },
       },
       { status: 200 }

@@ -5,24 +5,24 @@ import { getTranslations } from 'next-intl/server';
 import { VacancyBadgeClient, VacancyEmptyCard } from '@EditVacancyComponents';
 import { getHRVacancies } from '@HRVacanciesServices/HRVacanciesServices';
 import { VacancyCard } from '@components';
-import type { HRVacancyListItem } from '@myTypes/mongoTypes';
-import { Card, Section } from '@ui';
+import { Card, ErrorComponent, Section } from '@ui';
 
 export default async function HRMainPage() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get('refreshToken')?.value;
 
-  if (!refreshToken) redirect('/');
+  const result = await getHRVacancies(refreshToken);
+  const t = await getTranslations('Card');
 
-  let plainVacancies: HRVacancyListItem[] = [];
-
-  try {
-    plainVacancies = await getHRVacancies(refreshToken);
-  } catch {
+  if (result.status === 'unauthorized' || result.status === 'forbidden') {
     redirect('/');
   }
 
-  const t = await getTranslations('Card');
+  if (result.status === 'error') {
+    return <ErrorComponent code={result.code} />;
+  }
+
+  const plainVacancies = result.data;
 
   return (
     <Section>
@@ -31,6 +31,7 @@ export default async function HRMainPage() {
           <h1 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-10">
             {t('myVacancies')}
           </h1>
+
           {plainVacancies.length === 0 ? (
             <p className="text-gray-500 text-center">{t('HRvacanciesNotFound')}</p>
           ) : (
@@ -47,6 +48,7 @@ export default async function HRMainPage() {
               ))}
             </ul>
           )}
+
           <VacancyEmptyCard />
         </Card>
       </div>

@@ -13,7 +13,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     await connectDB();
 
-    // Проверка авторизации
     const cookieStore = await cookies();
     const token = cookieStore.get('refreshToken')?.value;
 
@@ -23,14 +22,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
 
-    // Проверяем, что вакансия принадлежит пользователю
     const vacancy = await Vacancy.findById(id).select('createdBy').lean();
 
     if (!vacancy || vacancy.createdBy?.toString() !== decoded.userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
-    // Получаем количество кандидатов
     const count = await Candidate.countDocuments({ vacancyId: id });
 
     return NextResponse.json({ count });

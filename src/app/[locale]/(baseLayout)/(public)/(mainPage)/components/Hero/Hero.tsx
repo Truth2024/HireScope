@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { Logo } from '@components';
+import { siteNavigation } from '@siteNav';
 import { Button } from '@ui';
 
 export const Hero = () => {
@@ -34,7 +35,7 @@ export const Hero = () => {
               <div className="w-full text-gray-300 text-[14px] mb-7.5">
                 {t('terms.text')}{' '}
                 <Link
-                  href="/terms"
+                  href={siteNavigation.terms}
                   target="_blank"
                   className="underline transition-colors duration-200 hover:text-white tracking-widest"
                 >
@@ -42,7 +43,7 @@ export const Hero = () => {
                 </Link>{' '}
                 &{' '}
                 <Link
-                  href="/privacy"
+                  href={siteNavigation.privacy}
                   target="_blank"
                   className="underline transition-colors duration-200 hover:text-white tracking-widest"
                 >
@@ -51,8 +52,8 @@ export const Hero = () => {
                 .
               </div>
               <div className="flex gap-6">
-                <Button href="/started">{t('buttons.getStarted')}</Button>
-                <Button variant="secondary" href="/vacancies">
+                <Button href={siteNavigation.started}>{t('buttons.getStarted')}</Button>
+                <Button variant="secondary" href={siteNavigation.vacancies}>
                   {t('buttons.exploreJobs')}
                 </Button>
               </div>

@@ -1,9 +1,6 @@
-// ------------------------------
-// Тип пользователя
-
 import type mongoose from 'mongoose';
 
-// ------------------------------
+// Тип пользователя
 export type IUser = {
   id: string;
   firstName: string;
@@ -13,6 +10,9 @@ export type IUser = {
   role: 'hr' | 'candidate';
   avatar?: string | null;
   avatarBlur?: string | null;
+  avatarBlurPath?: string | null;
+  avatarPath?: string | null;
+  unreadNotifications: number;
   skills: string[];
   isOwner?: boolean;
   experience: Array<{
@@ -21,7 +21,7 @@ export type IUser = {
     position?: string;
     years?: number;
   }>;
-  createdAt: string; // ISO дата
+  createdAt: string;
 };
 export type IUserMongo = {
   _id: string;
@@ -32,13 +32,16 @@ export type IUserMongo = {
   role: 'hr' | 'candidate';
   avatar?: string | null;
   avatarBlur?: string | null;
+  avatarBlurPath?: string | null;
+  avatarPath?: string | null;
+  unreadNotifications: number;
   skills: string[];
   experience?: Array<{
     company?: string;
     position?: string;
     years?: number;
   }>;
-  createdAt: string; // ISO дата
+  createdAt: string;
 };
 export type ExperienceItem = {
   id?: string;
@@ -54,9 +57,7 @@ export type UserFilter = {
   role?: string;
   $or?: Array<{ [key: string]: RegExp | { $exists?: boolean; $size?: number } }>;
   skills?: { $all: string[] };
-  experience?:
-    | { $ne: [] } // для фильтра "только с опытом" (не пустой массив)
-    | { $exists: boolean; $size?: number }; // для других случаев
+  experience?: { $ne: [] } | { $exists: boolean; $size?: number };
 };
 
 // ------------------------------
@@ -64,7 +65,7 @@ export type UserFilter = {
 // ------------------------------
 export type IComment = {
   _id: string;
-  user: ICommentUser; // ← исправить
+  user: ICommentUser;
   text: string;
   rating: number;
   createdAt: string;
@@ -99,25 +100,25 @@ export type ISalary = {
 // Тип кандидата
 // ------------------------------
 export type ICandidate = {
-  id: string; // _id.toString()
+  id: string;
   userId: string;
-  user?: IUser; // ссылка на пользователя-кандидата
+  user?: IUser;
   vacancyId: string;
-  status: 'new' | 'viewed' | 'interview' | 'offer' | 'rejected';
+  status?: 'new' | 'viewed' | 'interview' | 'offer' | 'rejected';
   matchScore?: number | null;
   notes?: string | null;
-  appliedAt: string; // ISO дата
+  appliedAt: string;
 };
 
 export type ICandidateMongo = {
-  _id: string; // _id.toString()
+  _id: string;
   userId: string;
-  user?: IUserMongo; // ссылка на пользователя-кандидата
+  user?: IUserMongo;
   vacancyId: string;
   status: 'new' | 'viewed' | 'interview' | 'offer' | 'rejected';
   matchScore?: number | null;
   notes?: string | null;
-  appliedAt: string; // ISO дата
+  appliedAt: string;
 };
 
 // ------------------------------

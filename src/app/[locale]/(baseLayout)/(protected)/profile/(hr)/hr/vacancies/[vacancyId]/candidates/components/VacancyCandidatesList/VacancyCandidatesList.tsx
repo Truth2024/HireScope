@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { VacancyCandidateCard } from '@HRVacancyCandidateComponents';
 import type { ICandidate } from '@myTypes/mongoTypes';
 import { useStore } from '@providers/StoreProvider';
-import { EmptyList, Loader } from '@ui';
+import { EmptyList, ErrorComponent, Loader } from '@ui';
 
 type ListProps = {
   vacancyId: string;
@@ -31,7 +31,6 @@ export const VacancyCandidatesList = ({
       return res.json();
     },
     onSuccess: () => {
-      // Убираем кандидата из списка без перезагрузки (или просто инвалидируем кэш)
       queryClient.invalidateQueries({
         queryKey: ['vacancyCandidates', vacancyId],
       });
@@ -68,7 +67,7 @@ export const VacancyCandidatesList = ({
   }
 
   if (error) {
-    return <div className="text-center text-red-500 p-8">{error}</div>;
+    return <ErrorComponent code={500} />;
   }
 
   if (candidates.length === 0) {

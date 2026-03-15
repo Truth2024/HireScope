@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { NotificationsCounter } from '@components';
 import { normalizePath } from '@lib/utils';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 
 const NAV_ITEMS = [
-  { key: 'profile', href: '/profile/main' },
-  { key: 'resumes', href: '/profile/resumes' },
-  { key: 'applications', href: '/profile/applications' },
+  { key: 'profile', href: siteNavigation.candidate.main },
+  { key: 'notification', href: siteNavigation.notification },
 ];
 
 export const ProfileNavCandidate = observer(() => {
@@ -37,11 +38,11 @@ export const ProfileNavCandidate = observer(() => {
                     className={`
                       relative py-5 text-sm font-medium transition-colors whitespace-nowrap inline-block
                       hover:text-(--color-brand-hover)
-                      ${isActive ? 'text-(--color-brand)' : 'text-(--gray-font-color)'}
+                      ${isActive ? 'text-(--color-brand)' : 'text-(--gray-font-color) absolute'}
                     `}
                   >
                     {t(key)}
-
+                    {key === 'notification' && <NotificationsCounter type="profile" />}
                     {isActive && (
                       <motion.span
                         layoutId="active-nav-line"

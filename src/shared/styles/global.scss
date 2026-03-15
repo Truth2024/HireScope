@@ -20,6 +20,7 @@
   --z-header: #{v.$z-header};
   --z-sticky: #{v.$z-sticky};
   --z-tooltip: #{v.$z-tooltip};
+  --z-header-counter: #{v.$z-header-counter};
 }
 body {
   background-color: var(--color-bg);

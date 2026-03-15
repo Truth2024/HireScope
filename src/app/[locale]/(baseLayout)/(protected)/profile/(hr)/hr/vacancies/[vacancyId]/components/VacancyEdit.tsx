@@ -14,6 +14,7 @@ import {
 import { VacancyEditStore } from '@EditVacancyStore/VacancyEditStore';
 import type { IVacancy } from '@myTypes/mongoTypes';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 import { Button, Card, Loader } from '@ui';
 
 type VacancyEditProps = {
@@ -25,7 +26,6 @@ export const VacancyEdit = observer(({ vacancy }: VacancyEditProps) => {
   const t = useTranslations('Card');
   const router = useRouter();
   const vacancyEditStore = useLocalObservable(() => new VacancyEditStore());
-  const redirectURL = '/profile/hr/vacancies';
 
   React.useEffect(() => {
     vacancyEditStore.init(vacancy);
@@ -36,7 +36,7 @@ export const VacancyEdit = observer(({ vacancy }: VacancyEditProps) => {
 
     const success = await vacancyEditStore.saveChanges(authStore, vacancy.id);
     if (success) {
-      router.push(redirectURL);
+      router.push(siteNavigation.hr.vacancies);
       router.refresh();
     }
   };
@@ -44,7 +44,7 @@ export const VacancyEdit = observer(({ vacancy }: VacancyEditProps) => {
   const handleDelete = async () => {
     const success = await vacancyEditStore.delete(authStore, vacancy.id);
     if (success) {
-      router.push(redirectURL);
+      router.push(siteNavigation.hr.vacancies);
       router.refresh();
     }
   };
@@ -102,17 +102,17 @@ export const VacancyEdit = observer(({ vacancy }: VacancyEditProps) => {
           </div>
         )}
 
-        <div className="flex justify-end gap-7">
+        <div className="flex md:justify-end md:gap-7 gap-4 flex-wrap justify-center">
           <Button
             variant={'cancel'}
-            onClick={() => router.push(redirectURL)}
+            onClick={() => router.push(siteNavigation.hr.vacancies)}
             disabled={vacancyEditStore.isLoading}
           >
             {t('back')}
           </Button>
 
           <Button onClick={handleDelete} variant={'danger'} disabled={vacancyEditStore.isLoading}>
-            {t('delete')}
+            {vacancyEditStore.isLoading ? <Loader color="white" size="s" /> : t('delete')}
           </Button>
 
           <Button

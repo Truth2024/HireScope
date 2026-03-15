@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 export const useNotificationSound = () => {
   const [isSoundEnabled, setIsSoundEnabled] = React.useState(() => {
@@ -9,7 +9,7 @@ export const useNotificationSound = () => {
     return true;
   });
 
-  const toggleSound = React.useCallback(() => {
+  const toggleSound = useCallback(() => {
     setIsSoundEnabled((prev) => {
       const newValue = !prev;
       localStorage.setItem('notificationSound', String(newValue));
@@ -17,5 +17,10 @@ export const useNotificationSound = () => {
     });
   }, []);
 
-  return { isSoundEnabled, toggleSound };
+  const soundSettings = useMemo(
+    () => ({ isSoundEnabled, toggleSound }),
+    [isSoundEnabled, toggleSound]
+  );
+
+  return soundSettings;
 };

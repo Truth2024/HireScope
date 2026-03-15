@@ -1,4 +1,5 @@
 'use client';
+import { useQueryClient } from '@tanstack/react-query';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -15,6 +16,7 @@ export const RegisterClient = observer(() => {
   const router = useRouter();
   const registerStore = useLocalObservable(() => new RegisterFormStore());
   const { authStore } = useStore();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export const RegisterClient = observer(() => {
       const response = await registerStore.register();
 
       authStore.setUser(response.user, response.accessToken);
+      queryClient.clear();
       router.push('/profile');
     }
   };

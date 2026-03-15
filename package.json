@@ -46,6 +46,7 @@
     "react-dom": "19.2.3",
     "react-hot-toast": "^2.6.0",
     "react-insta-stories": "^2.8.0",
+    "sharp": "^0.34.5",
     "swr": "^2.4.1",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
@@ -57,6 +58,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash": "^4.17.24",
     "@types/node": "^20",
+    "@types/node-fetch": "^2.6.13",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.24",

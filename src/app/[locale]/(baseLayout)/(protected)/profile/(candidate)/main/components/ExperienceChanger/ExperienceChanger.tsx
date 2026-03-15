@@ -74,12 +74,7 @@ export const ExperienceChanger = observer(({ store, className = '' }: Experience
       </div>
 
       {experienceChangerStore.error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-red-600 rounded-full" />
-            {experienceChangerStore.error}
-          </p>
-        </div>
+        <p className="text-sm text-red-400">{experienceChangerStore.error}</p>
       )}
 
       <div className="flex items-center justify-end gap-3">

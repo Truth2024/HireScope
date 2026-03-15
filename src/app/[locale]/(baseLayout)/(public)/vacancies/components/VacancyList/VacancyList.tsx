@@ -12,17 +12,12 @@ type VacancyListProps = {
   totalPages: number;
   currentPage: number;
   loading: boolean;
-  error: string | null;
   onPageChange: (page: number) => void;
   search: string;
 };
 
 export const VacancyList = observer(
-  ({ vacancies, totalPages, currentPage, loading, error, onPageChange }: VacancyListProps) => {
-    if (error) {
-      return <div className="text-center py-10 text-red-500">{error}</div>;
-    }
-
+  ({ vacancies, totalPages, currentPage, loading, onPageChange }: VacancyListProps) => {
     return (
       <>
         {!loading && vacancies.length === 0 && <EmptyList type="vacancies" />}

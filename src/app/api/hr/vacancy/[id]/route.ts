@@ -11,7 +11,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     await connectToDatabase();
     const p = await params;
     const user = await getAuthUser(req);
-
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     const vacancyId = p.id;
     const { title, requirements, description, salary, company } = await req.json();
 
@@ -65,8 +67,10 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const { id: vacancyId } = await params;
 
     const user = await getAuthUser(req);
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
 
-    // Удаляем вакансию
     const deletedVacancy = await Vacancy.findOneAndDelete({
       _id: vacancyId,
       createdBy: user._id,
@@ -79,7 +83,6 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
       );
     }
 
-    // Удаляем всех кандидатов, связанных с этой вакансией
     await Candidate.deleteMany({ vacancyId: vacancyId });
 
     return NextResponse.json({

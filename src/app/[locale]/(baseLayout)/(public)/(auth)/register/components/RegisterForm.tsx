@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { siteNavigation } from '@siteNav';
 import { Button, Input } from '@ui';
 
 import type { ErrorField, FormField } from '../RegisterFormStore';
@@ -48,7 +49,10 @@ export const RegisterForm = observer(({ store, onSubmit }: RegisterFormProps) =>
         })}
       </form>
       <div className="flex flex-col items-center gap-5">
-        <Link href="/login" className="hover:text-(--color-brand-hover) transition-colors text-sm">
+        <Link
+          href={siteNavigation.login}
+          className="hover:text-(--color-brand-hover) transition-colors text-sm"
+        >
           {t('regdescr')}
         </Link>
 

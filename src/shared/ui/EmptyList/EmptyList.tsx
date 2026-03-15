@@ -6,7 +6,7 @@ type EmptyListProps = {
   type: 'vacancies' | 'candidates' | 'notifications' | 'messages' | 'custom' | 'candidatesHR';
   customTitle?: string;
   customDescription?: string;
-  icon?: 'vacancy' | 'candidate' | 'search' | 'folder' | 'inbox';
+  icon?: 'vacancy' | 'candidate' | 'search' | 'folder' | 'inbox' | 'candidatesHR';
 };
 
 export const EmptyList = ({
@@ -20,6 +20,7 @@ export const EmptyList = ({
   const getIconPath = () => {
     switch (icon) {
       case 'candidate':
+      case 'candidatesHR':
         return (
           <path
             strokeLinecap="round"
@@ -73,6 +74,8 @@ export const EmptyList = ({
     switch (type) {
       case 'vacancies':
         return t('vacancies.title');
+      case 'candidatesHR':
+        return t('candidatesHR.title');
       case 'candidates':
         return t('candidates.title');
       case 'notifications':
@@ -90,6 +93,8 @@ export const EmptyList = ({
     switch (type) {
       case 'vacancies':
         return t('vacancies.description');
+      case 'candidatesHR':
+        return t('candidatesHR.description');
       case 'candidates':
         return t('candidates.description');
       case 'notifications':

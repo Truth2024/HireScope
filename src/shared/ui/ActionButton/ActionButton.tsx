@@ -81,7 +81,6 @@ const textClasses = {
   never: 'sr-only',
 } as const;
 
-// Компонент лоадера
 const LoaderIcon = ({ className }: { className?: string }) => (
   <svg
     className={cn('animate-spin', className)}

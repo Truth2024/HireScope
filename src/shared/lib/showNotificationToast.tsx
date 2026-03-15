@@ -9,7 +9,7 @@ export const showNotificationToast = (data: Notification) => {
       toast.custom((t) => (
         <ToasterHR
           id={t.id}
-          candidateId={data.candidateId!}
+          vacancyId={data.vacancyId}
           firstName={data.firstName}
           secondName={data.secondName}
           avatar={data.avatar}
@@ -23,7 +23,7 @@ export const showNotificationToast = (data: Notification) => {
         <ToasterCandidate
           id={t.id}
           type="accepted"
-          vacancyId={data.vacancyId!}
+          vacancyId={data.vacancyId}
           title={data.title!}
           company={data.company!}
           message={data.message || 'Работодатель принял вашу кандидатуру'}
@@ -36,7 +36,7 @@ export const showNotificationToast = (data: Notification) => {
         <ToasterCandidate
           id={t.id}
           type="rejected"
-          vacancyId={data.vacancyId!}
+          vacancyId={data.vacancyId}
           title={data.title!}
           company={data.company!}
           message={data.message || 'Работодатель отклонил вашу кандидатуру'}

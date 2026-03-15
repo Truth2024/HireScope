@@ -93,7 +93,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const { id } = await params;
     const { text, rating } = await req.json();
     const user = await getAuthUser(req);
-
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     const comment = await Comment.create({
       text,
       rating,

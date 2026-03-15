@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 import { DEFAULT_VACANCIES_SORT } from '@constants/constants';
 import { generatePageMetadata } from '@lib/generateMetadata';
-import { Section, SectionTitle } from '@ui';
+import { ErrorComponent, Section, SectionTitle } from '@ui';
 
 import { VacanciesClient } from './components/VacanciesClient/VacanciesClient';
 import { vacanciesServiceAll } from './services/vacancyService';
@@ -36,9 +36,25 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
   const skillsParam = params.skills ? params.skills.split(',').filter(Boolean) : [];
   const sortParam = params.sort || DEFAULT_VACANCIES_SORT;
 
+  const result = await vacanciesServiceAll(pageParam, searchParam, skillsParam, sortParam);
+
+  if (result.status === 'error') {
+    return <ErrorComponent code={result.code} />;
+  }
+
   await queryClient.prefetchQuery({
     queryKey: ['vacancies', pageParam, searchParam, skillsParam.join(','), sortParam],
-    queryFn: () => vacanciesServiceAll(pageParam, searchParam, skillsParam, sortParam),
+    queryFn: () =>
+      Promise.resolve(
+        result.status === 'success'
+          ? result.data
+          : {
+              vacancies: [],
+              total: 0,
+              totalPages: 0,
+              currentPage: pageParam,
+            }
+      ),
   });
 
   const dehydratedState = dehydrate(queryClient);
@@ -49,7 +65,12 @@ export default async function VacanciesPage({ searchParams }: VacanciesPageProps
         <SectionTitle title="Vacancies" />
         <div className="content">
           <HydrationBoundary state={dehydratedState}>
-            <VacanciesClient />
+            <VacanciesClient
+              pageParam={pageParam}
+              searchParam={searchParam}
+              skillsParam={skillsParam}
+              sortParam={sortParam}
+            />
           </HydrationBoundary>
         </div>
       </Section>

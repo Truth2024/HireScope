@@ -1,4 +1,5 @@
 'use client';
+import { useQueryClient } from '@tanstack/react-query';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -6,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 import { Button, Input } from '@ui';
 
 import LoginFormStore from './LoginFormStore';
@@ -17,6 +19,8 @@ export const LoginClient = observer(() => {
   const loginFormStore = useLocalObservable(() => new LoginFormStore());
   const { authStore } = useStore();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -24,6 +28,7 @@ export const LoginClient = observer(() => {
       const data = await loginFormStore.login();
       if (data?.user && data?.accessToken) {
         authStore.setUser(data.user, data.accessToken);
+        queryClient.clear();
         router.push('/profile');
       }
     }
@@ -58,7 +63,7 @@ export const LoginClient = observer(() => {
       </form>
       <div className="flex flex-col items-center gap-5">
         <Link
-          href={'/register'}
+          href={siteNavigation.register}
           className="hover:text-(--color-brand-hover) transition-colors duration-300"
         >
           {t('logindescr')}

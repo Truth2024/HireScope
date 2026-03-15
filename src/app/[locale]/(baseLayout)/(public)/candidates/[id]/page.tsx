@@ -6,48 +6,41 @@ import { getTranslations } from 'next-intl/server';
 
 import { Avatar, DateInfo, Skills, Experience } from '@components';
 import { generateCandidateMetadata } from '@lib/generateMetadata';
-import type { IUser } from '@myTypes/mongoTypes';
-import { Card } from '@ui';
+import { siteNavigation } from '@siteNav';
+import { Button, Card, ErrorComponent } from '@ui';
 
 import { CandidateNotFound } from './components/CandidateNotFound/CandidateNotFound';
-import { ContactCandidate } from './components/ContactCandidate/ContactCandidate';
 import { fetchCandidateById } from './services/candidateService';
 
 type UserCandidatePageProps = {
-  params: Promise<{ id: string; locale: string }>; // Добавили locale
+  params: Promise<{ id: string; locale: string }>;
 };
 
-// Генерируем метаданные для страницы кандидата
 export async function generateMetadata({ params }: UserCandidatePageProps): Promise<Metadata> {
   const { id, locale } = await params;
+  const result = await fetchCandidateById(id);
 
-  const user = await fetchCandidateById(id);
-
-  if (!user) {
-    // Если кандидат не найден, возвращаем метаданные для 404
+  if (result.status !== 'success') {
     const t = await getTranslations({ locale, namespace: 'SEO' });
-    return {
-      title: t('notFound.title'),
-      description: t('notFound.description'),
-    };
+    return { title: t('notFound.title'), description: t('notFound.description') };
   }
 
-  // Используем наш генератор метаданных для кандидата
   return generateCandidateMetadata(locale, {
-    firstName: user.firstName,
-    secondName: user.secondName,
-    skills: user.skills,
-    id: id,
+    firstName: result.data.firstName,
+    secondName: result.data.secondName,
+    skills: result.data.skills,
+    id,
   });
 }
 
 const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
   const { id } = await params;
+  const [result, t] = await Promise.all([fetchCandidateById(id), getTranslations('Card')]);
 
-  const user: IUser | null = await fetchCandidateById(id);
-  if (!user) return <CandidateNotFound />;
+  if (result.status === 'error') return <ErrorComponent code={result.code} />;
+  if (result.status === 'notFound') return <CandidateNotFound />;
 
-  const t = await getTranslations('Card');
+  const user = result.data;
 
   return (
     <div className="py-10">
@@ -69,18 +62,16 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
                 </h1>
               </div>
 
-              <div className="space-y-1">
-                {user.email && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Link
-                      href={`mailto:${user.email}`}
-                      className="hover:text-(--color-brand) transition-colors"
-                    >
-                      {user.email}
-                    </Link>
-                  </div>
-                )}
-              </div>
+              {user.email && (
+                <div className="space-y-1">
+                  <Link
+                    href={`mailto:${user.email}`}
+                    className="text-gray-600 hover:text-(--color-brand) transition-colors"
+                  >
+                    {user.email}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
@@ -89,13 +80,20 @@ const UserCandidatePage = async ({ params }: UserCandidatePageProps) => {
           <section className="mb-8">
             <Skills skills={user.skills} title={t('skills')} variant="full" />
           </section>
+
           <section className="mb-8">
             <Experience experience={user.experience} variant="full" />
           </section>
+
           <div className="border-t border-gray-100 my-6" />
+
           <div className="flex justify-between items-center">
             <DateInfo date={user.createdAt} title={t('memberSince')} />
-            <ContactCandidate isOwner={user.isOwner ?? false} />
+            {user.isOwner && (
+              <Button href={siteNavigation.candidate.main} variant="primary">
+                {t('edit')}
+              </Button>
+            )}
           </div>
         </Card>
       </div>

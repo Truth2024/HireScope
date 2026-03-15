@@ -24,6 +24,21 @@
     }
   },
 
+  "NotificationsPage": {
+    "new": "New",
+    "company": "Company",
+    "matchScore": "Match score",
+    "types": {
+      "accepted": "You have been accepted",
+      "rejected": "You have been rejected",
+      "new": "New Candidate"
+    },
+    "details": "Details",
+    "markAllAsRead": "Mark all as read",
+    "markError": "Failed to mark all as read",
+    "applied": "Candidate applied to vacancy {title} at {company}"
+  },
+
   "SectionTitle": {
     "trendingJobs": "Tranding Jobs",
     "newcandidate": "New Candidates",
@@ -163,7 +178,8 @@
     "sortLowMatch": "Lowest Match (AI)",
     "sortNewest": "Newest applications",
     "sortOldest": "Oldest applications",
-    "alreadyApplied": "Already applied"
+    "alreadyApplied": "Already applied",
+    "applyError": "Failed, try again later"
   },
   "Empty": {
     "vacancies": {
@@ -191,6 +207,23 @@
       "description": "Nothing was found for your request. Try changing your search criteria."
     }
   },
+
+  "Error": {
+    "failedAvatar": "Failed to load avatar",
+    "successAvatar": "Success to load avatar",
+    "title": "Something went wrong",
+    "description": "Please try refreshing the page or try again later",
+    "code": "Error code",
+    "invalidType": "File must be an image (JPEG, PNG, WEBP)",
+    "fileTooLarge": "File size must not exceed 5MB",
+    "uploadFailed": "Upload failed"
+  },
+  "notFoundVacancy": {
+    "title": "Vacancy not found",
+    "description": "The vacancy you're looking for doesn't exist or has been removed.",
+    "button": "Back to vacancies"
+  },
+
   "Auth": {
     "regtitle": "Register",
     "regbutton": "Create account",
@@ -211,14 +244,12 @@
   },
   "ProfileNavHR": {
     "profile": "Profile",
-    "resumes": "My Resumes",
-    "applications": "Applications",
+    "notification": "Notification",
     "logout": "Logout"
   },
   "ProfileNavCandidate": {
     "profile": "Profile",
-    "resumes": "My Resumes",
-    "applications": "Applications",
+    "notification": "Notification",
     "logout": "Logout"
   },
   "GetStarted": {

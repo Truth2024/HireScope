@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { Avatar } from '@components';
 import type { ICommentUser } from '@myTypes/mongoTypes';
+import { siteNavigation } from '@siteNav';
 
 type CommentsItemProps = {
   comment: {
@@ -16,7 +17,7 @@ type CommentsItemProps = {
 
 export const CommentItem = ({ comment, showEmail = false }: CommentsItemProps) => {
   return (
-    <Link href={`/candidates/${comment.user._id}`}>
+    <Link href={siteNavigation.candidateDetail(comment.user._id)}>
       <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 hover:border-gray-200 transition-colors">
         <div className="flex items-center gap-3 mb-3">
           <Avatar

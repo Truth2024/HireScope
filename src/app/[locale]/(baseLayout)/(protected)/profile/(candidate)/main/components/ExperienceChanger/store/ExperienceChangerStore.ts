@@ -1,20 +1,10 @@
 'use client';
 
 import { makeAutoObservable, runInAction } from 'mobx';
-import { z } from 'zod';
 
+import { experienceSchema, type ExperienceFields } from '@experienceSchema/schema';
 import type { ExperienceItem, ExperienceItemWithMeta } from '@myTypes/mongoTypes';
 import type { AuthStore } from '@store/AuthStore/AuthStore';
-
-// 1. Централизованная схема валидации
-const experienceSchema = z.object({
-  company: z.string().trim().min(1, 'companyRequired').max(100, 'companyMax'),
-  position: z.string().trim().min(1, 'positionRequired').max(100, 'positionMax'),
-  years: z.number().min(1, 'yearsMin').max(50, 'yearsMax'),
-});
-
-// Тип для валидных ключей полей
-type ExperienceFields = keyof z.infer<typeof experienceSchema>;
 
 export class ExperienceChangerStore {
   myExpMap = new Map<string, ExperienceItemWithMeta>();
@@ -22,7 +12,6 @@ export class ExperienceChangerStore {
   isEditing = false;
   isLoading = false;
 
-  // Типизированная структура ошибок: Record<ID, Record<Field, Message>>
   fieldErrors: Partial<Record<string, Partial<Record<ExperienceFields, string>>>> = {};
 
   constructor(private t: (key: string) => string) {
@@ -124,8 +113,7 @@ export class ExperienceChangerStore {
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || this.t('saveFailed'));
+        throw new Error(this.t('saveFailed'));
       }
 
       runInAction(() => {

@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-// import { Document } from 'mongoose';
 import { NextResponse } from 'next/server';
 
+import { ACCESS_EXPIRES } from '@constants/constants';
 import User from '@models/User';
 import connectToDatabase from 'src/shared/lib/mongodb';
 
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     const accessToken = jwt.sign(
       { userId: user._id.toString(), email: user.email },
       process.env.ACCESS_SECRET!,
-      { expiresIn: '15m' }
+      { expiresIn: ACCESS_EXPIRES }
     );
 
     const refreshToken = jwt.sign({ userId: user._id.toString() }, process.env.REFRESH_SECRET!, {
@@ -81,6 +81,7 @@ export async function POST(req: Request) {
           role: user.role,
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
+          unreadNotifications: user.unreadNotifications,
           skills: user.skills ?? [],
           experience: (user.experience || []).map((exp: ExperienceDocument) => ({
             id: exp._id?.toString(),

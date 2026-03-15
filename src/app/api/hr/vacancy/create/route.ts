@@ -9,7 +9,9 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const user = await getAuthUser(req);
-
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     const { title, requirements, description, salary, company } = await req.json();
 
     if (!title || !requirements || !description || !company) {

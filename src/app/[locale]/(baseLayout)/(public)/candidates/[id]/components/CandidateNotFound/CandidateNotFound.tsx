@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { siteNavigation } from '@siteNav';
 import { Button } from '@ui';
 
 export const CandidateNotFound = () => {
@@ -10,7 +11,7 @@ export const CandidateNotFound = () => {
         <p className="text-gray-500 mb-6">
           The candidate you&apos;re looking for doesn&apos;t exist or has been removed.
         </p>
-        <Link href="/candidates">
+        <Link href={siteNavigation.candidates}>
           <Button variant="primary">Back to candidates</Button>
         </Link>
       </div>

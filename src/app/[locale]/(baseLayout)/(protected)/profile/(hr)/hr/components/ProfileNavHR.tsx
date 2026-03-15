@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { NotificationsCounter } from '@components';
 import { normalizePath } from '@lib/utils';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 
 const NAV_ITEMS = [
-  { key: 'profile', href: '/profile/hr/vacancies' },
-  { key: 'resumes', href: '/profile/hr/resumes' },
-  { key: 'applications', href: '/profile/hr/applications' },
+  { key: 'profile', href: siteNavigation.hr.vacancies },
+  { key: 'notification', href: siteNavigation.hr.notification },
 ];
 
 export const ProfileNavHR = observer(() => {
@@ -41,7 +42,7 @@ export const ProfileNavHR = observer(() => {
                     `}
                   >
                     {t(key)}
-
+                    {key === 'notification' && <NotificationsCounter type="profile" />}
                     {isActive && (
                       <motion.span
                         layoutId="active-nav-line"

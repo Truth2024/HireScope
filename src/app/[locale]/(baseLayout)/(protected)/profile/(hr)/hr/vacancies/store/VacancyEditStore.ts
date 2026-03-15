@@ -83,7 +83,6 @@ export class VacancyEditStore {
     this.validateAll();
   }
 
-  // Сеттеры стали лаконичнее
   setTitle = (v: string) => {
     this._title = v;
     this.validateField('title');
@@ -111,7 +110,6 @@ export class VacancyEditStore {
     this.validateField('requirements');
   };
 
-  // Валидация
   validateField(field: FormField) {
     const result = VacancySchema.safeParse(this.getFormData());
     this.errors[field] = result.success
@@ -144,7 +142,6 @@ export class VacancyEditStore {
 
   reset = () => this._originalVacancy && this.init(this._originalVacancy);
 
-  // Универсальный обработчик запросов
   private async _executeRequest<T>(
     requestFn: () => Promise<Response>,
     onSuccess?: (data: Record<string, unknown>) => T
@@ -176,7 +173,6 @@ export class VacancyEditStore {
     }
   }
 
-  // Лаконичные методы действий
   saveChanges = (auth: AuthStore, id: string) => {
     if (!this.validateAll()) return Promise.resolve(false);
     return this._executeRequest(() =>

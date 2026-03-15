@@ -20,6 +20,7 @@
   --z-header: #{v.$z-header};
   --z-sticky: #{v.$z-sticky};
   --z-tooltip: #{v.$z-tooltip};
+  --z-header-counter: #{v.$z-header-counter};
 }
 body {
   background-color: var(--color-bg);
@@ -124,5 +125,59 @@ body.modal-open {
     // background-image: none !important;
     background-color: black;
     background-image: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  }
+}
+
+.water-canvas {
+  filter: url('#liquid-refraction');
+  transform: scale(1.1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.cloud {
+  position: absolute;
+  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+
+  &-slow {
+    width: 400px;
+    height: 400px;
+    top: 20%;
+    left: -10%;
+    animation: float 20s infinite alternate ease-in-out;
+  }
+
+  &-fast {
+    width: 300px;
+    height: 300px;
+    bottom: 10%;
+    right: -5%;
+    animation: float 15s infinite alternate-reverse ease-in-out;
+  }
+}
+
+@keyframes float {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(100px, 50px);
   }
 }

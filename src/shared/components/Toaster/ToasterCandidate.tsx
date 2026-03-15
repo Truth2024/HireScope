@@ -4,6 +4,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 import { Logo } from '@components';
+import { siteNavigation } from '@siteNav';
 
 type ToasterCandidateProps = {
   id: string;
@@ -60,7 +61,7 @@ export const ToasterCandidate = ({
       </div>
 
       <Link
-        href={`/vacancies/${vacancyId}`}
+        href={siteNavigation.vacancyDetail(vacancyId)}
         onClick={() => toast.dismiss(id)}
         className={`text-xs font-medium ${styles.buttonColor} hover:underline shrink-0`}
       >

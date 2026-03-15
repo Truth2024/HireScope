@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 
+import { ACCESS_EXPIRES } from '@constants/constants';
 import User from '@models/User';
 import connectToDatabase from 'src/shared/lib/mongodb';
 
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
         role: user.role,
       },
       process.env.ACCESS_SECRET!,
-      { expiresIn: '15m' }
+      { expiresIn: ACCESS_EXPIRES }
     );
 
     const refreshToken = jwt.sign(
@@ -95,6 +96,7 @@ export async function POST(req: Request) {
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
           skills: user.skills ?? [],
+          unreadNotifications: user.unreadNotifications,
           experience: (user.experience || []).map((exp: ExperienceDocument) => ({
             id: exp._id?.toString(),
             company: exp.company,

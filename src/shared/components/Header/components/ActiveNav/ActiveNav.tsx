@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { Profile } from '@headerComponents';
+import { getLinkClasses } from '@lib/utils';
+import { siteNavigation } from '@siteNav';
 
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 
@@ -16,19 +18,25 @@ const ActiveNav = () => {
 
   return (
     <nav className="flex flex-1 justify-end items-center gap-6">
-      <Link href="/" className={getLinkClasses('/', pathname)}>
+      <Link href={siteNavigation.home} className={getLinkClasses(siteNavigation.home, pathname)}>
         <span className="hidden sm:inline">{t('nav.home')}</span>
         <span className="sm:hidden text-white">
           <HomeIcon />
         </span>
       </Link>
-      <Link href="/vacancies" className={getLinkClasses('/vacancies', pathname)}>
+      <Link
+        href={siteNavigation.vacancies}
+        className={getLinkClasses(siteNavigation.vacancies, pathname)}
+      >
         <span className="hidden sm:inline">{t('nav.vacancies')}</span>
         <span className="sm:hidden text-white">
           <VacanciesIcon />
         </span>
       </Link>
-      <Link href="/candidates" className={getLinkClasses('/candidates', pathname)}>
+      <Link
+        href={siteNavigation.candidates}
+        className={getLinkClasses(siteNavigation.candidates, pathname)}
+      >
         <span className="hidden sm:inline">{t('nav.candidates')}</span>
         <span className="sm:hidden text-white">
           <CandidatesIcon />
@@ -41,14 +49,3 @@ const ActiveNav = () => {
 };
 
 export default ActiveNav;
-
-export const getLinkClasses = (href: string, pathname: string) => {
-  const base =
-    'text-white font-medium text-sm sm:text-base no-underline transition-colors duration-300 hover:text-(--color-brand-hover) whitespace-nowrap pb-1';
-  const active = 'opacity-100 border-b-2 border-(--color-brand)';
-  const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/') || '/';
-  if (href === '/') {
-    return pathnameWithoutLocale === href ? `${base} ${active}` : base;
-  }
-  return pathnameWithoutLocale.startsWith(href) ? `${base} ${active}` : base;
-};

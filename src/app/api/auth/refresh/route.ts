@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import type mongoose from 'mongoose';
-import { Document } from 'mongoose';
 import { NextResponse } from 'next/server';
 
+import { ACCESS_EXPIRES } from '@constants/constants';
 import User from '@models/User';
 import connectToDatabase from 'src/shared/lib/mongodb';
 
@@ -16,10 +16,7 @@ type ExperienceDocument = {
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _register = { Document };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const cookieHeader = req.headers.get('cookie');
+
     const refreshToken = req.headers.get('cookie')?.split('refreshToken=')[1]?.split(';')[0];
 
     if (!refreshToken) {
@@ -44,7 +41,7 @@ export async function POST(req: Request) {
     const newAccessToken = jwt.sign(
       { userId: user._id.toString(), email: user.email },
       process.env.ACCESS_SECRET!,
-      { expiresIn: '15m' }
+      { expiresIn: ACCESS_EXPIRES }
     );
 
     const newRefreshToken = jwt.sign({ userId: user._id.toString() }, process.env.REFRESH_SECRET!, {
@@ -63,6 +60,7 @@ export async function POST(req: Request) {
           role: user.role,
           avatar: user.avatar ?? null,
           avatarBlur: user.avatarBlur ?? null,
+          unreadNotifications: user.unreadNotifications,
           skills: user.skills ?? [],
           experience: (user.experience || []).map((exp: ExperienceDocument) => ({
             id: exp._id?.toString(),
@@ -75,7 +73,6 @@ export async function POST(req: Request) {
       },
       { status: 200 }
     );
-
     response.cookies.set('refreshToken', newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

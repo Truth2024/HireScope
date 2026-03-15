@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { CandidateClient } from '@candidatesComponents/CandidatesClient/CandidatesClient';
 import { FilterProvider } from '@candidatesProvider/filtersProvider';
 import { generatePageMetadata } from '@lib/generateMetadata';
-import { Section, SectionTitle } from '@ui';
+import { ErrorComponent, Section, SectionTitle } from '@ui';
 
 import { candidatesServiceAll } from './services/candidatesService';
 
@@ -40,12 +40,33 @@ export default async function CandidatesPage({ searchParams }: CandidatesPagePro
   const skillsParam = params.skills?.split(',').filter(Boolean) || [];
   const hasExperienceParam = params.hasExperience === 'true';
 
-  await queryClient.prefetchQuery({
-    queryKey: ['candidates', pageParam, searchParam, skillsParam, hasExperienceParam],
-    queryFn: () => candidatesServiceAll(pageParam, searchParam, skillsParam, hasExperienceParam),
-  });
+  const result = await candidatesServiceAll(
+    pageParam,
+    searchParam,
+    skillsParam,
+    hasExperienceParam
+  );
 
   const t = await getTranslations('SectionTitle');
+
+  if (result.status === 'error') {
+    return (
+      <div className="py-10">
+        <Section>
+          <SectionTitle title={t('candidates')} />
+          <div className="content">
+            <ErrorComponent code={result.code} />
+          </div>
+        </Section>
+      </div>
+    );
+  }
+
+  await queryClient.prefetchQuery({
+    queryKey: ['candidates', pageParam, searchParam, skillsParam, hasExperienceParam],
+    queryFn: () => Promise.resolve(result.data),
+  });
+
   const dehydratedState = dehydrate(queryClient);
 
   return (

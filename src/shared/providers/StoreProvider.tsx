@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { pusherClient } from '@lib/pusherClient';
 import { RootStore } from '@store/RootStore';
 
 const StoreContext = createContext<RootStore | null>(null);
@@ -11,6 +12,16 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     store.authStore.initialize();
+
+    return () => {
+      const userId = store.authStore.user?.id;
+
+      if (userId) {
+        try {
+          pusherClient.unsubscribe(`user-${userId}`);
+        } catch {}
+      }
+    };
   }, [store]);
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;

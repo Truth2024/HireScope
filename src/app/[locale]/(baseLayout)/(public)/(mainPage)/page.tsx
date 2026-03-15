@@ -1,13 +1,12 @@
 import { getTranslations } from 'next-intl/server';
 
-import { EmptyList, Section, SectionTitle } from '@ui';
+import { EmptyList, ErrorComponent, Section, SectionTitle } from '@ui';
 
 import { Hero, Stories, TopCandidateList, TopVacancyList } from './components';
 import { fetchTopCandidates, fetchTopVacancy } from './services/topVacancyAndCandidate';
 
 export default async function MainPage() {
   const [candidates, vacancies] = await Promise.all([fetchTopCandidates(), fetchTopVacancy()]);
-
   const t = await getTranslations('SectionTitle');
 
   return (
@@ -19,11 +18,10 @@ export default async function MainPage() {
 
       <Section>
         <SectionTitle title={t('trendingJobs')} sectionBtn={t('buttonviewall')} path="/vacancies" />
-        {vacancies.length === 0 ? (
-          <EmptyList type="vacancies" />
-        ) : (
-          <TopVacancyList vacancy={vacancies} />
-        )}
+
+        {vacancies.status === 'error' && <ErrorComponent code={vacancies.code} />}
+        {vacancies.status === 'empty' && <EmptyList type="vacancies" icon="vacancy" />}
+        {vacancies.status === 'success' && <TopVacancyList vacancy={vacancies.data} />}
       </Section>
 
       <Section>
@@ -32,10 +30,11 @@ export default async function MainPage() {
           sectionBtn={t('buttonviewall')}
           path="/candidates"
         />
-        {candidates.length === 0 ? (
-          <EmptyList type="candidates" icon="candidate" />
-        ) : (
-          <TopCandidateList newUsersCandidate={candidates} />
+
+        {candidates.status === 'error' && <ErrorComponent code={candidates.code} />}
+        {candidates.status === 'empty' && <EmptyList type="candidates" icon="candidate" />}
+        {candidates.status === 'success' && (
+          <TopCandidateList newUsersCandidate={candidates.data} />
         )}
       </Section>
     </div>

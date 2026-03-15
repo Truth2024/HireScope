@@ -2,7 +2,7 @@ export type Notification = {
   type: string;
   message?: string;
   candidateId?: string;
-  vacancyId?: string;
+  vacancyId: string;
   firstName: string;
   secondName: string;
   matchScore: number;
@@ -16,4 +16,10 @@ export type NotificationContextType = {
   clearNotifications: () => void;
   toggleSound: () => void;
   isSoundEnabled: boolean;
+};
+
+export type StoredNotification = Notification & {
+  id: string;
+  read: boolean;
+  createdAt: string;
 };

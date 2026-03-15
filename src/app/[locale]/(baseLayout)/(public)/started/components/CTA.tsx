@@ -3,6 +3,7 @@ import { Zap, ShieldCheck, Star } from 'lucide-react';
 import type { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
+import { siteNavigation } from '@siteNav';
 import { Button } from '@ui';
 
 type TranslationFn = ReturnType<typeof useTranslations>;
@@ -56,10 +57,10 @@ export const CTA = ({ t }: { t: TranslationFn }) => (
     <div className="bg-[rgb(35,31,30)] p-12 md:p-20 rounded-[3rem] text-white text-center relative z-10">
       <h2 className="text-4xl md:text-5xl font-black mb-8">{t('cta.title')}</h2>
       <div className="flex flex-col sm:flex-row justify-center gap-6">
-        <Button href="/register" className="shadow-2xl shadow-indigo-500/20">
+        <Button href={siteNavigation.register} className="shadow-2xl shadow-indigo-500/20">
           {t('cta.register')}
         </Button>
-        <Button href="/vacancies" variant="secondary">
+        <Button href={siteNavigation.vacancies} variant="secondary">
           {t('cta.vacancies')}
         </Button>
       </div>

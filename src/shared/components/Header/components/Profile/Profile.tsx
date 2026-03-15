@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { Avatar } from '@components';
+import { Avatar, NotificationsCounter } from '@components';
+import { getLinkClasses } from '@lib/utils';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 import { Loader } from '@ui';
-
-import { getLinkClasses } from '../ActiveNav/ActiveNav';
 
 export const Profile = observer(() => {
   const t = useTranslations('Header');
@@ -31,14 +31,14 @@ export const Profile = observer(() => {
 
   if (!authStore.user) {
     return (
-      <Link href="/login" className={getLinkClasses('/login', pathname)}>
+      <Link href={siteNavigation.login} className={getLinkClasses(siteNavigation.login, pathname)}>
         {t('nav.signIn')}
       </Link>
     );
   }
-
   return (
-    <Link href={'/profile'}>
+    <Link href={siteNavigation.profile} className="relative">
+      <NotificationsCounter type="header" />
       <Avatar
         firstName={authStore.user.firstName}
         secondName={authStore.user.secondName}

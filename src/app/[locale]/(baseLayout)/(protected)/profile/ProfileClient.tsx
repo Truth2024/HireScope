@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -15,20 +16,21 @@ const ROLE_REDIRECTS = {
 export const ProfileClient = observer(() => {
   const { authStore } = useStore();
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   const { user, isLoading } = authStore;
 
   useEffect(() => {
     if (isLoading) return;
 
     if (!user) {
+      queryClient.clear();
       router.replace('/');
       return;
     }
 
     const targetPath = ROLE_REDIRECTS[user.role as keyof typeof ROLE_REDIRECTS];
     router.replace(targetPath);
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, queryClient]);
 
   if (isLoading) {
     return (

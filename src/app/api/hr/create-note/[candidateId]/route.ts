@@ -1,12 +1,10 @@
-import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { getAuthUser } from '@lib/auth';
 import connectDB from '@lib/mongodb';
 import Candidate from '@models/Candidate';
 import Vacancy from '@models/Vacancy';
-
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 
 export async function PATCH(
   request: NextRequest,
@@ -20,15 +18,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid note' }, { status: 400 });
     }
 
-    const authHeader = request.headers.get('authorization');
-
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const user = await getAuthUser(request);
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
     }
-
-    const token = authHeader.replace('Bearer ', '');
-
-    const { userId } = jwt.verify(token, ACCESS_SECRET) as { userId: string };
 
     await connectDB();
 
@@ -40,7 +33,7 @@ export async function PATCH(
 
     const vacancy = await Vacancy.findById(candidate.vacancyId).select('createdBy').lean();
 
-    if (!vacancy || vacancy.createdBy?.toString() !== userId) {
+    if (!vacancy || vacancy.createdBy?.toString() !== user._id.toString()) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 

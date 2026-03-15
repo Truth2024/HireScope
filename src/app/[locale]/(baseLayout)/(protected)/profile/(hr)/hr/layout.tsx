@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 
 import { generatePageMetadata } from '@lib/generateMetadata';
 
-import { ProfileNavHR } from './components/ProfileNavHR/ProfileNavHR';
+import { ProfileNavHR } from './components/ProfileNavHR';
+
 type Props = {
   params: Promise<{ locale: string }>;
 };

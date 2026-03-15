@@ -2,6 +2,7 @@ export const COMMENTS_LIMIT = 5;
 export const VACANCY_LIMIT = 4;
 export const CANDIDATES_LIMIT = 4;
 export const CANDIDATES_LIMIT_IN_VACANCY = 1;
+export const NOTIFICATION_LIMIT = 1;
 
 export const skills = [
   { key: 'JavaScript', value: 'JavaScript' },
@@ -58,4 +59,14 @@ export const CANDIDATES_CONFIG = {
 } as const;
 
 export const DEFAULT_VACANCIES_SORT = 'newest';
+export const DEFAULT_NOTIFICATION_HR_SORT = 'newest';
+export const DEFAULT_NOTIFICATION_HR_STATUS = 'unread';
+export const DEFAULT_NOTIFICATION_HR_TYPE = 'all';
+
+export const DEFAULT_NOTIFICATION_CANDIDATE_SORT = 'newest';
+export const DEFAULT_NOTIFICATION_CANDIDATE_STATUS = 'unread';
+export const DEFAULT_NOTIFICATION_CANDIDATE_TYPE = 'all';
+
 export const SEARCH_DEBOUNCE_DELAY = 500;
+
+export const ACCESS_EXPIRES = '15m';

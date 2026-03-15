@@ -34,6 +34,7 @@ export const NotificationProvider = observer(({ children }: { children: React.Re
 
     if (!userId) {
       setNotifications([]);
+
       return;
     }
 
@@ -42,11 +43,18 @@ export const NotificationProvider = observer(({ children }: { children: React.Re
     const handler = (data: Notification) => {
       setNotifications((prev) => [data, ...prev]);
 
+      if (authStore.user) {
+        authStore.incrementUnread();
+      }
       if (isSoundEnabled) {
         playNotificationSound(data.type, playSound);
       }
 
       showNotificationToast(data);
+
+      queryClient.invalidateQueries({
+        queryKey: ['notifications'],
+      });
 
       if (data.type === 'new_candidate') {
         invalidateCandidateQueries(queryClient, data.vacancyId);
@@ -59,7 +67,7 @@ export const NotificationProvider = observer(({ children }: { children: React.Re
       channel.unbind('notification', handler);
       pusherClient.unsubscribe(`user-${userId}`);
     };
-  }, [authStore.user?.id, queryClient, isSoundEnabled, playSound]);
+  }, [authStore.user?.id, queryClient, isSoundEnabled, playSound, authStore]);
 
   return (
     <NotificationContext.Provider

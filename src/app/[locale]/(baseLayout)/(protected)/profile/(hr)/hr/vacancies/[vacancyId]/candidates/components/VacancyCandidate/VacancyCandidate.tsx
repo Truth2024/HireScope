@@ -128,7 +128,9 @@ export const VacancyCandidate = observer((props: Props) => {
           setIsNoteModalOpen(false);
           setSelectedCandidate(null);
         }}
-        onSave={(candidateId, notes) => updateNoteMutation.mutate({ candidateId, note: notes })}
+        onSave={async (candidateId, notes) => {
+          await updateNoteMutation.mutateAsync({ candidateId, note: notes });
+        }}
       />
     </div>
   );

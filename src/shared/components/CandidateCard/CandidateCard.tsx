@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 
 import { Experience, Avatar, Skills } from '@components';
 import type { IUser } from '@myTypes/mongoTypes';
+import { siteNavigation } from '@siteNav';
 import { Button, Card } from '@ui';
 
 type CandidateCardProps = {
@@ -25,8 +26,9 @@ const CandidateCard = ({ candidate }: CandidateCardProps) => {
           />
 
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 leading-tight line-clamp-2 wrap-break-word break-all">
-              {candidate.firstName} {candidate.secondName}
+            <h3 className="text-lg font-semibold text-gray-900 leading-tight line-clamp-2 break-all hyphens-auto">
+              {candidate.firstName} <br />
+              {candidate.secondName}
             </h3>
           </div>
         </div>
@@ -48,7 +50,11 @@ const CandidateCard = ({ candidate }: CandidateCardProps) => {
         </div>
       </div>
 
-      <Button href={`/candidates/${candidate.id}`} variant="primary" className="mt-4 truncate">
+      <Button
+        href={siteNavigation.candidateDetail(candidate.id)}
+        variant="primary"
+        className="mt-4 truncate"
+      >
         {t('viewprofile')}
       </Button>
     </Card>

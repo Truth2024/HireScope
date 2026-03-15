@@ -80,8 +80,6 @@ export class SkillChangerStore {
         this.error = error instanceof Error ? error.message : 'Error saving skills';
         this.isLoading = false;
       });
-
-      throw error;
     }
   }
 }

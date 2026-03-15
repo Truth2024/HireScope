@@ -4,10 +4,12 @@ import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { Avatar, DateInfo } from '@components';
+import { DateInfo } from '@components';
 import { ExperienceChanger, SkillsChanger } from '@profileMainCandidate';
 import { useStore } from '@providers/StoreProvider';
 import { Card, Loader } from '@ui';
+
+import { AvatarWithUpload } from '../AvatarWithUpload/AvatarWithUpload';
 
 export const ProfileMainClient = observer(() => {
   const { authStore } = useStore();
@@ -24,11 +26,12 @@ export const ProfileMainClient = observer(() => {
   return (
     <Card>
       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center mb-8">
-        <Avatar
+        <AvatarWithUpload
           firstName={authStore.user.firstName}
           secondName={authStore.user.secondName}
           avatar={authStore.user.avatar ?? null}
           size="large"
+          store={authStore}
         />
 
         <div className="flex-1">

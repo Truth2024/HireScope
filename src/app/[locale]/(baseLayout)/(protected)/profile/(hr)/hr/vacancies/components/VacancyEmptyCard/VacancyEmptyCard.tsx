@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { cn } from '@lib/utils';
+import { siteNavigation } from '@siteNav';
 
 type VacancyEmptyCardProps = {
   href?: string;
@@ -15,7 +16,7 @@ type VacancyEmptyCardProps = {
 };
 
 export const VacancyEmptyCard = ({
-  href = '/profile/hr/vacancies/create',
+  href = siteNavigation.hr.vacancyCreate,
   onClick,
   className,
   description,

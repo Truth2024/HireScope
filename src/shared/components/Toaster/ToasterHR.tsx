@@ -4,10 +4,11 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 import { Avatar } from '@components';
+import { siteNavigation } from '@siteNav';
 
 type ToasterHRProps = {
   id: string;
-  candidateId: string;
+  vacancyId: string;
   firstName: string;
   secondName: string;
   avatar: string;
@@ -16,7 +17,8 @@ type ToasterHRProps = {
 
 export const ToasterHR = ({
   id,
-  candidateId,
+
+  vacancyId,
   firstName,
   secondName,
   avatar,
@@ -39,7 +41,7 @@ export const ToasterHR = ({
       </div>
 
       <Link
-        href={`/candidates/${candidateId}`}
+        href={siteNavigation.hr.vacancyCandidates(vacancyId)}
         onClick={() => toast.dismiss(id)}
         className="text-xs font-medium text-[#6366f1] hover:text-[#4f46e5]"
       >

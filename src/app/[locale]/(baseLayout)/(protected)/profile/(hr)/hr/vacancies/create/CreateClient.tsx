@@ -14,6 +14,7 @@ import {
 } from '@EditVacancyComponents';
 import { VacancyEditStore } from '@EditVacancyStore/VacancyEditStore';
 import { useStore } from '@providers/StoreProvider';
+import { siteNavigation } from '@siteNav';
 import { Button, Card, Loader } from '@ui';
 
 export const CreateClient = observer(() => {
@@ -21,7 +22,6 @@ export const CreateClient = observer(() => {
   const { authStore } = useStore();
   const t = useTranslations('Card');
   const router = useRouter();
-  const redirectURL = '/profile/hr/vacancies';
 
   useEffect(() => {
     vacancyEditStore.validateAll();
@@ -33,7 +33,7 @@ export const CreateClient = observer(() => {
     const result = await vacancyEditStore.create(authStore);
 
     if (typeof result === 'object' && result.success) {
-      router.push(redirectURL);
+      router.push(siteNavigation.hr.vacancies);
       router.refresh();
     }
   };
@@ -83,18 +83,13 @@ export const CreateClient = observer(() => {
 
       <Card>
         {vacancyEditStore.errorServer && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
-            <p className="text-sm text-red-600 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-red-600 rounded-full" />
-              {vacancyEditStore.errorServer}
-            </p>
-          </div>
+          <p className="text-sm text-red-400 ">{vacancyEditStore.errorServer}</p>
         )}
 
         <div className="flex justify-end gap-7">
           <Button
             variant={'cancel'}
-            onClick={() => router.push(redirectURL)}
+            onClick={() => router.push(siteNavigation.hr.vacancies)}
             disabled={vacancyEditStore.isLoading}
           >
             {t('back')}

@@ -11,6 +11,9 @@ export async function PUT(req: NextRequest) {
     await connectDB();
 
     const decoded = await getAuthUser(req);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     const { skills } = await req.json();
 
     if (!Array.isArray(skills)) {
@@ -59,9 +62,11 @@ export async function GET(req: NextRequest) {
     await connectDB();
 
     const user = await getAuthUser(req);
-
+    if (!user) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     return NextResponse.json({
-      skills: user.skills || [],
+      skills: user.skills,
     });
   } catch (error) {
     return NextResponse.json(

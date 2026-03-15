@@ -46,7 +46,9 @@ export default async function RootLayout({
             <QueryProvider>
               <StoreProvider>
                 <ToasterProvider>
-                  <NotificationProvider>{children}</NotificationProvider>
+                  <NotificationProvider>
+                    <Suspense fallback={<RootLoading />}>{children}</Suspense>
+                  </NotificationProvider>
                 </ToasterProvider>
               </StoreProvider>
             </QueryProvider>

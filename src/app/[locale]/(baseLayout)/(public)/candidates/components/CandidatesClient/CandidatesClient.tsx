@@ -7,6 +7,8 @@ import { CandidatesFiltersBar } from '@candidatesComponents/CandidatesClient/com
 import { CandidatesList } from '@candidatesComponents/CandidatesList/CandidatesList';
 import { useFilters } from '@candidatesProvider/filtersProvider';
 import type { CandidateFilterState } from '@candidatesStore/CandidateFilterStore';
+import { ApiError } from '@lib/error';
+import { ErrorComponent } from '@ui';
 
 export const CandidateClient = observer(() => {
   const filterStore = useFilters();
@@ -27,10 +29,27 @@ export const CandidateClient = observer(() => {
     refetchOnWindowFocus: false,
   });
 
+  if (error) {
+    if (error instanceof ApiError) {
+      return (
+        <div>
+          <CandidatesFiltersBar />
+          <ErrorComponent code={error.code} />
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <CandidatesFiltersBar />
+        <ErrorComponent code={500} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <CandidatesFiltersBar />
-      {error && error.message}
       <CandidatesList
         candidates={data?.candidates || []}
         totalPages={data?.totalPages || 1}
@@ -42,6 +61,7 @@ export const CandidateClient = observer(() => {
     </div>
   );
 });
+
 const fetchCandidates = async (filters: CandidateFilterState) => {
   const params = new URLSearchParams({
     page: String(filters.page),
@@ -59,7 +79,8 @@ const fetchCandidates = async (filters: CandidateFilterState) => {
   const response = await fetch(`/api/candidate?${params.toString()}`);
 
   if (!response.ok) {
-    throw new Error('Ошибка загрузки кандидатов');
+    const errorData = await response.json().catch(() => ({}));
+    throw new ApiError(errorData.message || 'Ошибка загрузки кандидатов', response.status);
   }
 
   return response.json();

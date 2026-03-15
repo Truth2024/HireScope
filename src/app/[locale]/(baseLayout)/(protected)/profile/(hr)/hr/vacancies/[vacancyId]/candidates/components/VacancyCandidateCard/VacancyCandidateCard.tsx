@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { MatchScoreBar } from '@HRVacancyCandidateComponents';
 import { Avatar, DateInfo, Skills } from '@components';
 import type { ICandidate } from '@myTypes/mongoTypes';
+import { siteNavigation } from '@siteNav';
 import { ActionButton, Button, Card } from '@ui';
 
 type VacancyCandidateCardProps = {
@@ -87,7 +88,7 @@ export const VacancyCandidateCard = observer(
             </div>
 
             <Button
-              href={`/candidates/${candidate.user.id}`}
+              href={siteNavigation.hr.candidateDetail(candidate.user.id)}
               className="w-full sm:w-auto lg:w-full mt-0 sm:mt-2 lg:mt-4"
             >
               {t('moreDetails')}

@@ -9,7 +9,9 @@ export async function PUT(req: NextRequest) {
   try {
     await connectDB();
     const decoded = await getAuthUser(req);
-
+    if (!decoded) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
     const { experience } = await req.json();
 
     if (!Array.isArray(experience)) {

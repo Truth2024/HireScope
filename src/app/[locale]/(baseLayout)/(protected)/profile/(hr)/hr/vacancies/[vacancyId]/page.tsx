@@ -4,39 +4,57 @@ import { getTranslations } from 'next-intl/server';
 
 import { vacancyBaseService } from '@HRVacanciesServices/HRVacanciesServices';
 import { generatePageMetadata } from '@lib/generateMetadata';
+import { EmptyList, ErrorComponent } from '@ui';
 
 import { VacancyEdit } from './components/VacancyEdit';
 
 type EditPageProps = {
-  params: {
-    vacancyId: string;
-  };
-};
-type Props = {
-  params: Promise<{ locale: string; vacancyId: string }>;
+  params: Promise<{ vacancyId: string; locale: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: EditPageProps): Promise<Metadata> {
   const { locale, vacancyId } = await params;
-  const t = await getTranslations('Card');
-  const vacancy = await vacancyBaseService(vacancyId);
 
-  return generatePageMetadata({
-    locale,
-    namespace: 'vacancyEdit',
-    title: `${t('edit')}: ${vacancy!.title}`,
-    path: `profile/hr/vacancies/vacancyId`,
-    noIndex: true,
-  });
+  const result = await vacancyBaseService(vacancyId);
+
+  if (result.status === 'success') {
+    const t = await getTranslations('Card');
+    return generatePageMetadata({
+      locale,
+      namespace: 'vacancyEdit',
+      title: `${t('edit')}: ${result.data.title}`,
+      path: `profile/hr/vacancies/vacancyId`,
+      noIndex: true,
+    });
+  }
+
+  const t = await getTranslations({ locale, namespace: 'SEO' });
+  return {
+    title: t('notFound.title'),
+    description: t('notFound.description'),
+  };
 }
 
 export default async function EditPage({ params }: EditPageProps) {
   const { vacancyId } = await params;
 
-  const vacancy = await vacancyBaseService(vacancyId);
+  const result = await vacancyBaseService(vacancyId);
 
-  if (!vacancy || !vacancy.isOwner) {
+  if (result.status === 'error') {
+    return <ErrorComponent code={result.code} />;
+  }
+
+  if (result.status === 'notFound') {
+    return <EmptyList type="vacancies" icon="vacancy" />;
+  }
+
+  if (result.status === 'unauthorized') {
     redirect('/');
   }
-  return <VacancyEdit vacancy={vacancy} />;
+
+  if (!result.data.isOwner) {
+    redirect('/');
+  }
+
+  return <VacancyEdit vacancy={result.data} />;
 }

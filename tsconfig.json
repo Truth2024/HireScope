@@ -20,8 +20,10 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@siteConfig": ["src/config/seo"],
       "@styles/*": ["src/shared/styles/*"],
       "@lib/*": ["src/shared/lib/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
       "@constants/*": ["src/shared/constants/*"],
       "@myTypes/*": ["src/shared/types/*"],
       "@i18n/*": ["src/i18n/*"],
@@ -43,6 +45,8 @@
       "@vacanciesStore": [
         "src/app/[locale]/(baseLayout)/(public)/vacancies/store/VacanciesStore.ts"
       ],
+      "@vacanciesServices/*": ["src/app/[locale]/(baseLayout)/(public)/vacancies/services/*"],
+
       "@vacanciesHooks/*": ["src/app/[locale]/(baseLayout)/(public)/vacancies/hooks/*"],
       "@vacanciesComponents/*": ["src/app/[locale]/(baseLayout)/(public)/vacancies/components/*"],
       "@candidatesHooks/*": ["src/app/[locale]/(baseLayout)/(public)/candidates/hooks/*"],
@@ -60,6 +64,24 @@
       ],
       "@profileMainCandidate": [
         "src/app/[locale]/(baseLayout)/(protected)/profile/(candidate)/main/components/index.ts"
+      ],
+      "@EditVacancyComponents": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/components/index.ts"
+      ],
+      "@EditVacancyStore/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/store/*"
+      ],
+      "@EditVacancySchema/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/schema/*"
+      ],
+      "@HRVacanciesServices/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/services/*"
+      ],
+      "@HRVacancyCandidateComponents": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/[vacancyId]/candidates/components/index.ts"
+      ],
+      "@HRVacancyCandidateStore/*": [
+        "src/app/[locale]/(baseLayout)/(protected)/profile/(hr)/hr/vacancies/[vacancyId]/candidates/store/*"
       ]
     }
   },

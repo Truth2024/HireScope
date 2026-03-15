@@ -7,8 +7,6 @@ import connectDB from '@lib/mongodb';
 import User from '@models/User';
 import type { IUser, IUserMongo, UserFilter } from '@myTypes/mongoTypes';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export const candidatesServiceAll = async (
   page: number = 1,
   searchParam: string = '',
@@ -28,7 +26,7 @@ export const candidatesServiceAll = async (
 
   if (refreshToken) {
     try {
-      const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as { userId: string };
       if (decoded.userId) {
         isAuthorized = true;
       }
@@ -67,6 +65,8 @@ export const candidatesServiceAll = async (
     id: u._id.toString(),
     firstName: u.firstName,
     surname: u.surname,
+    role: u.role,
+    email: u.email,
     secondName: u.secondName,
     avatar: isAuthorized ? (u.avatar ?? null) : (u.avatarBlur ?? null),
     avatarBlur: u.avatarBlur ?? null,

@@ -7,30 +7,23 @@ import connectDB from '@lib/mongodb';
 import Comment from '@models/Comment';
 import User from '@models/User';
 import Vacancy from '@models/Vacancy';
-import type {
-  CommentWithUser,
-  ICandidate,
-  IVacancy,
-  IVacancyMongo,
-  VacancyFilter,
-} from '@myTypes/mongoTypes';
-
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
+import type { CommentWithUser, IVacancy, IVacancyMongo, VacancyFilter } from '@myTypes/mongoTypes';
 
 export const vacancyServiceById = async (
   vacancyId: string,
-
   page: number = 1
 ): Promise<IVacancy | null> => {
   await connectDB();
   const cookieStore = await cookies();
   const token = cookieStore.get('refreshToken')?.value;
+  let currentUserId: string | null = null;
   let isAuthorized = false;
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
-      const authUser = await User.findById(decoded.userId).lean();
+      const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
+      currentUserId = decoded.userId;
+      const authUser = await User.findById(currentUserId).lean();
       if (authUser) isAuthorized = true;
     } catch {
       isAuthorized = false;
@@ -113,6 +106,10 @@ export const vacancyServiceById = async (
     },
   }));
 
+  const hasApplied: boolean = vacancy.candidates.some(
+    (c: string) => c.toString() === currentUserId
+  );
+
   const formattedVacancy: IVacancy = {
     id: vacancy._id.toString(),
     title: vacancy.title,
@@ -121,16 +118,13 @@ export const vacancyServiceById = async (
     company: vacancy.company ?? '',
     salary: vacancy.salary ?? null,
     department: vacancy.department ?? null,
-    level: vacancy.level ?? null,
     rating: vacancy.rating ?? 0,
     comments: formattedComments,
     commentsCount: totalComments,
     ratingDistribution: commentsStats[0]?.distribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
     createdBy: vacancy.createdBy?.toString() || null,
-    candidates: Array.isArray(vacancy.candidates)
-      ? vacancy.candidates.map((id: ICandidate) => id.toString())
-      : [],
-
+    isOwner: currentUserId ? vacancy.createdBy?.toString() === currentUserId : false,
+    hasApplied,
     createdAt:
       vacancy.createdAt instanceof Date
         ? vacancy.createdAt.toISOString()
@@ -207,17 +201,20 @@ export const vacanciesServiceAll = async (
     description: vacancy.description,
     requirements: Array.isArray(vacancy.requirements) ? vacancy.requirements : [],
     company: vacancy.company,
-    salary: vacancy.salary ?? null,
+    salary: vacancy.salary
+      ? {
+          min: vacancy.salary.min ?? null,
+          max: vacancy.salary.max ?? null,
+        }
+      : null,
     department: vacancy.department ?? null,
-    level: vacancy.level,
+
     rating: vacancy.rating ?? 0,
     comments: [],
     commentsCount: 0,
     ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
     createdBy: vacancy.createdBy?.toString() || null,
-    candidates: Array.isArray(vacancy.candidates)
-      ? vacancy.candidates.map((id) => id.toString())
-      : [],
+
     createdAt:
       vacancy.createdAt instanceof Date
         ? vacancy.createdAt.toISOString()

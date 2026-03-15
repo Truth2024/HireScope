@@ -22,10 +22,10 @@ export const ExperienceChanger = observer(({ store, className = '' }: Experience
   const user = store.user;
 
   React.useEffect(() => {
-    if (store.user && store.user.experience) {
+    if (store.user) {
       experienceChangerStore.setExp(store.user.experience);
     }
-  }, [store.user]);
+  }, [store.user, experienceChangerStore]);
 
   if (!user) return null;
 
@@ -37,7 +37,9 @@ export const ExperienceChanger = observer(({ store, className = '' }: Experience
           action="edit"
           showText="mobile-hidden"
           position="absolute"
-          onClick={() => experienceChangerStore.setIsEditing(true)}
+          onClick={() => {
+            experienceChangerStore.isEditing = true;
+          }}
         />
       </div>
     );
@@ -70,6 +72,7 @@ export const ExperienceChanger = observer(({ store, className = '' }: Experience
           ))
         )}
       </div>
+
       {experienceChangerStore.error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-600 flex items-center gap-2">
@@ -78,8 +81,16 @@ export const ExperienceChanger = observer(({ store, className = '' }: Experience
           </p>
         </div>
       )}
+
       <div className="flex items-center justify-end gap-3">
-        <Button onClick={() => experienceChangerStore.cancel(user.experience)} variant="cancel">
+        <Button
+          onClick={() => {
+            experienceChangerStore.setExp(user.experience);
+            experienceChangerStore.isEditing = false;
+            experienceChangerStore.error = null;
+          }}
+          variant="cancel"
+        >
           {t('cancel')}
         </Button>
         <Button onClick={() => experienceChangerStore.savingExp(store)}>

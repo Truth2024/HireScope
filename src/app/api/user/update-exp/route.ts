@@ -1,29 +1,14 @@
-import jwt from 'jsonwebtoken';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getAuthUser } from '@lib/auth';
 import User from '@models/User';
 import connectDB from 'src/shared/lib/mongodb';
-
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
 
 export async function PUT(req: NextRequest) {
   try {
     await connectDB();
-
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-
-    let decoded;
-    try {
-      decoded = jwt.verify(token, ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-    }
+    const decoded = await getAuthUser(req);
 
     const { experience } = await req.json();
 
@@ -31,7 +16,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Experience must be an array' }, { status: 400 });
     }
 
-    const user = await User.findByIdAndUpdate(decoded.userId, { experience }, { new: true }).select(
+    const user = await User.findByIdAndUpdate(decoded._id, { experience }, { new: true }).select(
       '-password'
     );
 

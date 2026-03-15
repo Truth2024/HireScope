@@ -5,17 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { normalizePath } from '@lib/utils';
 import { useStore } from '@providers/StoreProvider';
 
 const NAV_ITEMS = [
-  { key: 'profile', href: '/profile/hr/main' },
+  { key: 'profile', href: '/profile/hr/vacancies' },
   { key: 'resumes', href: '/profile/hr/resumes' },
   { key: 'applications', href: '/profile/hr/applications' },
 ];
-
-const normalizePath = (path: string) => {
-  return path.replace(/^\/(ru|en)(\/|$)/, '/').replace(/\/$/, '') || '/';
-};
 
 export const ProfileNavHR = observer(() => {
   const { authStore } = useStore();
@@ -25,7 +22,7 @@ export const ProfileNavHR = observer(() => {
   const currentPath = normalizePath(rawPathname);
 
   return (
-    <nav className="relative w-full border-b border-gray-200 bg-white mb-8 z-10">
+    <nav className="relative w-full border-b border-gray-200 bg-white mb-8 z-(--z-header)">
       <div className="content">
         <div className="flex items-center justify-between">
           <LayoutGroup id="profile-navigation">

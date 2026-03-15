@@ -44,8 +44,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     onChange?.(e.target.checked);
   };
 
-  const sizeKey = checkBoxSize as 'sm' | 'md' | 'lg';
-  const iconSizeKey = checkBoxSize as 'sm' | 'md' | 'lg';
+  const sizeKey = checkBoxSize;
+  const iconSizeKey = checkBoxSize;
 
   return (
     <label

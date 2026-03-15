@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { useFilters } from '@candidatesProvider/filtersProvider';
 import { CANDIDATES_CONFIG } from '@constants/constants';
-import { MultiDropdown, Search, Checkbox } from '@ui';
+import { MultiDropdown, Search, Checkbox, ResetButton } from '@ui';
 import type { Option } from '@ui';
 
 export const CandidatesFiltersBar = observer(() => {
@@ -26,13 +26,15 @@ export const CandidatesFiltersBar = observer(() => {
   return (
     <div className="mb-10 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-        <Search
-          placeholder={`${t('search')}...`}
-          buttonText={t('search')}
-          handleSearch={(val) => filterStore.setSearch(val)}
-          initialValue={filters.search}
-          className="flex-1"
-        />
+        <div className="w-full flex-1">
+          <Search
+            placeholder={`${t('search')}...`}
+            buttonText={t('search')}
+            handleSearch={(val) => filterStore.setSearch(val)}
+            initialValue={filters.search}
+            className="flex-1 min-w-75"
+          />
+        </div>
 
         <MultiDropdown
           options={CANDIDATES_CONFIG.skills}
@@ -50,6 +52,8 @@ export const CandidatesFiltersBar = observer(() => {
           checked={filters.hasExperience}
           onChange={(checked) => filterStore.setHasExperience(checked)}
         />
+
+        <ResetButton onClick={filterStore.resetFilters} />
       </div>
     </div>
   );

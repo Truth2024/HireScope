@@ -85,7 +85,7 @@ export const ModalComment = ({ isOpen, setClose, store }: ModalCommentProps) => 
       }}
     >
       <DialogContent sx={{ p: 0, overflow: 'visible' }}>
-        <StyledCard>
+        <StyledCard sx={{ width: '360px' }}>
           <CommentForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
           <CloseButton
             className="absolute top-2 right-2 md:-top-9.5 md:-right-9.5"

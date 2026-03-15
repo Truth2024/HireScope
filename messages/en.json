@@ -59,6 +59,7 @@
     "allcomments": "Total comments",
     "avgrate": "Average rating",
     "entryaccount": "Sign in",
+    "editVacancy": "Edit vacancy",
     "search": "Search",
     "unauthorized": "You are not logged in.",
     "unauthorizedDescr": "Log in to leave a comment.",
@@ -107,9 +108,89 @@
     "fixFormErrors": "Please fix the errors in the form",
     "saveFailed": "Failed to save",
     "unknownError": "Unknown error",
-    "userNotAuthenticated": "User not authenticated"
+    "userNotAuthenticated": "User not authenticated",
+    "HRvacanciesNotFound": "You have no created vacancies yet.",
+    "myVacancies": "My vacancies",
+    "Validation": {
+      "title": "Description",
+      "placeholder": "Enter job description (minimum {min} characters)",
+      "empty": "Field cannot be empty",
+      "tooShort": "Minimum {count} chars",
+      "tooLong": "Maximum {count} chars",
+      "noDigits": "Digits are not allowed",
+      "onlySpaces": "Field cannot consist of spaces only",
+      "salaryOrder": "Min cannot be greater than max",
+      "salaryNegative": "Salary cannot be negative",
+      "atLeastOne": "Add at least one requirement"
+    },
+    "selectedSkills": "Selected skills",
+    "placeholderTitleChanger": "Enter the job title",
+    "placeholderCompanyChanger": "Enter the company name",
+    "from": "From",
+    "to": "To",
+    "ready": "Ready",
+    "createVacancy": "Create vacancy",
+    "Clue": "Click to create",
+    "titleEmpty": "Job Title",
+    "SalaryNotSpecified": "Salary not specified",
+    "back": "Back",
+    "delete": "Delete",
+    "companyEmpty": "No company specified",
+    "Invalid input: expected number, received NaN": "Please enter a valid number",
+    "candidates": " Responses to the vacancy",
+    "notes": "Note",
+    "actions": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "addNote": "Add note",
+      "edit": "Edit",
+      "add": "Add",
+      "delete": "Delete",
+      "check": "Confirm"
+    },
+    "moreDetails": "More details",
+    "matchScore": "Match score",
+    "appliedAt": "applied",
+    "errorLoading": "Loading error",
+    "updating": "Updating...",
+    "page": "Page",
+    "noCandidates": "No candidates yet",
+    "noCandidatesDescription": "There are no candidates who have responded to this vacancy yet.",
+    "Notesfor": "Notes for",
+    "enterNote": "Enter a note...",
+    "sortBy": "Sort by",
+    "sortBestMatch": "Highest Match (AI)",
+    "sortLowMatch": "Lowest Match (AI)",
+    "sortNewest": "Newest applications",
+    "sortOldest": "Oldest applications",
+    "alreadyApplied": "Already applied"
   },
-
+  "Empty": {
+    "vacancies": {
+      "title": "No vacancies found",
+      "description": "There are no vacancies available at the moment. Please check back later or create a new vacancy."
+    },
+    "candidatesHR": {
+      "title": "No responses",
+      "description": "At the moment, there are no responses to this vacancy. Please wait until candidates start applying."
+    },
+    "candidates": {
+      "title": "No candidates found",
+      "description": "At the moment, there are no candidates available. Please check back later."
+    },
+    "notifications": {
+      "title": "No notifications",
+      "description": "You don't have any notifications yet. They will appear when something happens."
+    },
+    "messages": {
+      "title": "No messages",
+      "description": "You don't have any messages yet. Start a conversation with a candidate or employer."
+    },
+    "default": {
+      "title": "Nothing found",
+      "description": "Nothing was found for your request. Try changing your search criteria."
+    }
+  },
   "Auth": {
     "regtitle": "Register",
     "regbutton": "Create account",
@@ -293,5 +374,76 @@
     },
 
     "copyright": "© 2026 HireScope"
+  },
+  "SEO": {
+    "keywords": "job,vacancies,job search,employers,career,IT,programmer,developer",
+    "siteName": "HireScope",
+    "defaultTitle": "HireScope - Find your dream job",
+    "defaultDescription": "Platform for job search and hiring. Thousands of vacancies and candidates.",
+
+    "vacancies": {
+      "title": "Vacancies",
+      "description": "Browse thousands of IT job openings. Find your dream job today!"
+    },
+
+    "vacancy": {
+      "title": "{title}",
+      "description": "{description}",
+      "keywords": "vacancy {title}, job at {company}, {skills}"
+    },
+
+    "candidates": {
+      "title": "Candidates",
+      "description": "Find the best IT specialists for your company. Thousands of verified resumes."
+    },
+
+    "candidate": {
+      "title": "{firstName} {secondName} - resume",
+      "description": "Candidate with skills: {skills}. Looking for job in IT.",
+      "keywords": "resume {firstName} {secondName}, {skills}"
+    },
+
+    "profile": {
+      "title": "Profile",
+      "description": "Manage your profile, vacancies and responses in your personal account."
+    },
+
+    "profileEdit": {
+      "title": "Edit Profile",
+      "description": "Update your information, skills and personal data."
+    },
+
+    "vacancyEdit": {
+      "title": "Edit Vacancy",
+      "description": "Edit vacancy information, requirements and working conditions."
+    },
+
+    "vacancyCreate": {
+      "title": "Create Vacancy",
+      "description": "Create a new vacancy and find the best employees."
+    },
+
+    "responses": {
+      "title": "Vacancy Responses",
+      "description": "View candidates' responses to the vacancy {title}.",
+      "simpleTitle": "Vacancy Responses",
+      "simpleDescription": "Manage candidate responses. View, filter and sort applications."
+    },
+
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The requested page does not exist or has been removed."
+    },
+
+    "auth": {
+      "signIn": {
+        "title": "Sign In",
+        "description": "Sign in to your account to continue"
+      },
+      "signUp": {
+        "title": "Sign Up",
+        "description": "Create a new account to find jobs or employees"
+      }
+    }
   }
 }

@@ -9,7 +9,7 @@ import { Loader } from '@ui';
 
 const ROLE_REDIRECTS = {
   candidate: '/profile/main',
-  hr: '/profile/hr/main',
+  hr: '/profile/hr/vacancies',
 } as const;
 
 export const ProfileClient = observer(() => {
@@ -27,9 +27,7 @@ export const ProfileClient = observer(() => {
     }
 
     const targetPath = ROLE_REDIRECTS[user.role as keyof typeof ROLE_REDIRECTS];
-    if (targetPath) {
-      router.replace(targetPath);
-    }
+    router.replace(targetPath);
   }, [user, isLoading, router]);
 
   if (isLoading) {

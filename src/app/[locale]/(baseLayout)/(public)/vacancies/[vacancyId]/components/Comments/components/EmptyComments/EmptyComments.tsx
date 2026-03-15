@@ -1,5 +1,6 @@
 'use client';
 
+import { observer } from 'mobx-react-lite';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
@@ -7,7 +8,7 @@ type EmptyCommentsProps = {
   children: ReactNode;
 };
 
-export const EmptyComments = ({ children }: EmptyCommentsProps) => {
+export const EmptyComments = observer(({ children }: EmptyCommentsProps) => {
   const t = useTranslations('Card');
 
   return (
@@ -20,4 +21,4 @@ export const EmptyComments = ({ children }: EmptyCommentsProps) => {
       </div>
     </div>
   );
-};
+});

@@ -24,7 +24,7 @@ type SingleDropdownProps = {
   getTitle: (option?: Option) => string;
 };
 
-export const SingleDropdown: React.FC<SingleDropdownProps> = ({
+export const SingleDropdown = ({
   options,
   value,
   onChange,
@@ -32,7 +32,7 @@ export const SingleDropdown: React.FC<SingleDropdownProps> = ({
   className = '',
   disabled = false,
   someError = false,
-}) => {
+}: SingleDropdownProps) => {
   const { isOpen, dropdownRef, toggleDropdown, closeDropdown } = useSingleDropdown();
 
   const { filteredOptions, handleSelect, isSelected } = useSingleDropdownOptions({

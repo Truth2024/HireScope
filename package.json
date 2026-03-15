@@ -5,12 +5,17 @@
   "author": "Lev leszczynski",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "v22.14.0",
+    "npm": "11.6.2"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
     "format": "prettier --write '**/*.{ts,tsx,js,jsx,mjs}'",
     "seed": "node mongo/seed.js"
   },
@@ -35,9 +40,13 @@
     "next": "16.1.6",
     "next-intl": "^4.8.3",
     "node-fetch": "^3.3.2",
+    "pusher": "^5.3.2",
+    "pusher-js": "^8.4.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hot-toast": "^2.6.0",
     "react-insta-stories": "^2.8.0",
+    "swr": "^2.4.1",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },

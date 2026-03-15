@@ -4,16 +4,14 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { COMMENTS_LIMIT } from '@constants/constants';
+import { getAuthUser } from '@lib/auth';
 import Comment from '@models/Comment';
 import User from '@models/User';
 import Vacancy from '@models/Vacancy';
 import type { CommentWithUser } from '@myTypes/mongoTypes';
 import connectDB from 'src/shared/lib/mongodb';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
 
@@ -28,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     if (token) {
       try {
-        const decoded = jwt.verify(token, REFRESH_SECRET) as { userId: string };
+        const decoded = jwt.verify(token, process.env.REFRESH_SECRET!) as { userId: string };
         const authUser = await User.findById(decoded.userId).lean();
         if (authUser) isAuthorized = true;
       } catch {
@@ -89,27 +87,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await params;
     const { text, rating } = await req.json();
-
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    let decoded;
-    try {
-      decoded = jwt.verify(token, ACCESS_SECRET) as { userId: string };
-    } catch {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = await User.findById(decoded.userId);
-    if (!user) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    const user = await getAuthUser(req);
 
     const comment = await Comment.create({
       text,
@@ -146,7 +129,6 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
           avatarBlur: populatedComment.user.avatarBlur ?? null,
         },
       },
-
       stats: {
         totalComments: updatedVacancy?.commentsStats?.total || 0,
         averageRating: updatedVacancy?.rating || 0,

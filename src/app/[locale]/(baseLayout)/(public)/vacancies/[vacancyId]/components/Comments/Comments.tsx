@@ -50,7 +50,7 @@ export const Comments = observer(
     );
 
     const t = useTranslations('Card');
-    const loaderRef = React.useRef<HTMLDivElement>(null);
+    const loaderRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
       if (!loaderRef.current) return;
@@ -71,8 +71,7 @@ export const Comments = observer(
       return () => observer.disconnect();
     }, [store]);
 
-    const hasNoComments = commentsCount === 0;
-
+    const hasNoComments = store.commentsCount === 0;
     if (hasNoComments) {
       return (
         <Card className="mt-10">

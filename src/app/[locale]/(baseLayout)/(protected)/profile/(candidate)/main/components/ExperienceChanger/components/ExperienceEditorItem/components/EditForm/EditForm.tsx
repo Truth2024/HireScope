@@ -53,12 +53,6 @@ export const EditForm = observer(
             <p className="text-sm text-red-500 mt-1">{store.getFieldError(item.id!, 'years')}</p>
           )}
         </div>
-
-        {store.getFieldError(item.id!, 'form') && (
-          <p className="text-sm text-red-500 mt-2 p-2 bg-red-50 rounded">
-            {store.getFieldError(item.id!, 'form')}
-          </p>
-        )}
       </div>
     );
   }

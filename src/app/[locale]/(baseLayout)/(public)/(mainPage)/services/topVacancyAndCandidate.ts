@@ -6,8 +6,6 @@ import User from '@models/User';
 import Vacancy from '@models/Vacancy';
 import type { IUser, IUserMongo, IVacancy, IVacancyMongo } from '@myTypes/mongoTypes';
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export const fetchTopCandidates = async (limit = 4): Promise<IUser[]> => {
   await connectDB();
 
@@ -18,7 +16,7 @@ export const fetchTopCandidates = async (limit = 4): Promise<IUser[]> => {
 
   if (refreshToken) {
     try {
-      const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as { userId: string };
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as { userId: string };
       const authUser = await User.findById(decoded.userId).lean();
       isAuthorized = !!authUser;
     } catch {
@@ -58,27 +56,31 @@ export const fetchTopVacancy = async (limit = 4): Promise<IVacancy[]> => {
     const vacancies = await Vacancy.find({ rating: { $gte: 4 } })
       .populate('createdBy', 'name')
       .sort({ createdAt: -1 })
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     return vacancies.map((v: IVacancyMongo) => ({
       id: v._id.toString(),
       title: v.title,
       description: v.description.substring(0, 120) + '...',
       company: v.company,
-      level: v.level,
+      commentsCount: v.commentsStats?.total ?? 0,
+
+      ratingDistribution: v.commentsStats?.distribution ?? {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      },
       salary: {
         min: v.salary?.min ?? null,
         max: v.salary?.max ?? null,
       },
-      rating: v.rating,
+      rating: v.rating ?? 0,
       department: v.department || 'Разработка',
       requirements: v.requirements?.slice(0, 4) || [],
-      createdBy: v.createdBy
-        ? {
-            id: v.createdBy._id.toString(),
-            name: v.createdBy.name,
-          }
-        : null,
+      createdBy: v.createdBy ? v.createdBy._id.toString() : null,
       createdAt: v.createdAt.toISOString(),
     }));
   } catch {

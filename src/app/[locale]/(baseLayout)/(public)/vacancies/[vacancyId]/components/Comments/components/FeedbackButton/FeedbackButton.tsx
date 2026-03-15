@@ -18,8 +18,8 @@ type FeedbackButtonProps = {
 export const FeedbackButton = observer(({ store }: FeedbackButtonProps) => {
   const t = useTranslations('Card');
   const { authStore } = useStore();
-  const [isOpenModal, setOpenModal] = React.useState(false);
-  const [isClient, setIsClient] = React.useState(false);
+  const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
+  const [isClient, setIsClient] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setIsClient(true);
@@ -35,6 +35,10 @@ export const FeedbackButton = observer(({ store }: FeedbackButtonProps) => {
         <Loader size="m" />
       </div>
     );
+  }
+
+  if (authStore.user?.role === 'hr') {
+    return null;
   }
 
   const openModal = () => setOpenModal(true);

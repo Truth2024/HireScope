@@ -8,9 +8,9 @@ type TopVacancyListProps = {
 export const TopVacancyList = ({ vacancy }: TopVacancyListProps) => {
   return (
     <div className="content">
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <ul className="grid gap-6 grid-cols-1 min-[757px]:grid-cols-2 min-[1341px]:grid-cols-4">
         {vacancy.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} className="min-w-75 w-full">
             <VacancyCard vacancy={item} />
           </li>
         ))}

@@ -63,7 +63,7 @@ export class CommentsStore {
       const data = await res.json();
 
       runInAction(() => {
-        this.comments = [...this.comments, ...data.comments];
+        this.comments = page === 1 ? data.comments : [...this.comments, ...data.comments];
         this.currentPage = data.page;
         this.totalPages = data.totalPages;
       });

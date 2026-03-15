@@ -7,6 +7,12 @@ import { RegisterSchema } from './registerSchema';
 
 export type UserRole = 'candidate' | 'hr';
 
+type RegisterResponse = {
+  message: string;
+  accessToken: string;
+  user: IUser;
+};
+
 export type FormField =
   | 'firstName'
   | 'surname'
@@ -98,7 +104,7 @@ class RegisterFormStore {
     }
   };
 
-  register = async (): Promise<IUser> => {
+  register = async (): Promise<RegisterResponse> => {
     runInAction(() => {
       this.isLoading = true;
       this.errorServer = null;
@@ -128,7 +134,7 @@ class RegisterFormStore {
         this.errorServer = null;
       });
 
-      return data;
+      return data as RegisterResponse;
     } catch (error: unknown) {
       runInAction(() => {
         this.isLoading = false;

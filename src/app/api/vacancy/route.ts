@@ -1,125 +1,94 @@
-import type { NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
+import type { SortOrder } from 'mongoose';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { VACANCY_LIMIT } from '@constants/constants';
 import Vacancy from '@models/Vacancy';
-import type { IVacancyMongo, VacancyFilter } from '@myTypes/mongoTypes';
+import type { IVacancy, IVacancyMongo, VacancyFilter } from '@myTypes/mongoTypes';
 import connectDB from 'src/shared/lib/mongodb';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     await connectDB();
+
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get('refreshToken')?.value;
+    let isAuthorized = false;
+
+    if (refreshToken) {
+      try {
+        jwt.verify(refreshToken, process.env.REFRESH_SECRET!);
+        isAuthorized = true;
+      } catch {
+        isAuthorized = false;
+      }
+    }
 
     const { searchParams } = new URL(req.url);
     const pageParam = Number(searchParams.get('page'));
     const page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
+
     const search = searchParams.get('search')?.trim() || '';
     const skills = searchParams.get('skills')?.split(',').filter(Boolean) || [];
-    const minSalary = searchParams.get('minSalary')
-      ? Number(searchParams.get('minSalary'))
-      : undefined;
-    const maxSalary = searchParams.get('maxSalary')
-      ? Number(searchParams.get('maxSalary'))
-      : undefined;
-    const sort = searchParams.get('sort') || 'newest';
+    const sortParam = searchParams.get('sort') || 'newest';
 
     const skip = (page - 1) * VACANCY_LIMIT;
 
     const filter: VacancyFilter = {};
-
     if (search) {
-      const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escaped, 'i');
+      const regex = new RegExp(search, 'i');
       filter.$or = [{ title: regex }, { description: regex }];
     }
-
     if (skills.length > 0) {
       filter.requirements = { $all: skills };
     }
 
-    // Фильтр по зарплате
-    if (minSalary !== undefined || maxSalary !== undefined) {
-      filter.salary = { $and: [] };
+    const sortOptions: Record<string, Record<string, SortOrder>> = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+      salary: { 'salary.max': -1 },
+    };
+    const sort = sortOptions[sortParam];
 
-      if (minSalary !== undefined) {
-        filter.salary.$and?.push({
-          'salary.max': { $gte: minSalary },
-        });
-      }
+    const [totalResult, vacancies] = await Promise.all([
+      Vacancy.countDocuments(filter),
+      Vacancy.find(filter).sort(sort).skip(skip).limit(VACANCY_LIMIT).lean<IVacancyMongo[]>(),
+    ]);
 
-      if (maxSalary !== undefined) {
-        filter.salary.$and?.push({
-          'salary.min': { $lte: maxSalary },
-        });
-      }
-    }
+    const totalPages = Math.ceil(totalResult / VACANCY_LIMIT);
 
-    // Определяем сортировку
-    let sortOption = {};
-    switch (sort) {
-      case 'rating':
-        sortOption = { rating: -1, createdAt: -1 };
-        break;
-      case 'oldest':
-        sortOption = { createdAt: 1, _id: 1 };
-        break;
-      case 'salary_high':
-        sortOption = { 'salary.max': -1, 'salary.min': -1, createdAt: -1 };
-        break;
-      case 'salary_low':
-        sortOption = { 'salary.min': 1, 'salary.max': 1, createdAt: -1 };
-        break;
-      case 'newest':
-      default:
-        sortOption = { createdAt: -1, _id: -1 };
-        break;
-    }
-
-    const total = await Vacancy.countDocuments(filter);
-    const totalPages = Math.ceil(total / VACANCY_LIMIT);
-
-    const vacancies = await Vacancy.find(filter)
-      .populate('createdBy', 'name')
-      .sort(sortOption)
-      .skip(skip)
-      .limit(VACANCY_LIMIT)
-      .lean();
-
-    const formattedVacancies = vacancies.map((v: IVacancyMongo) => ({
+    const formattedVacancies: IVacancy[] = vacancies.map((v) => ({
       id: v._id.toString(),
       title: v.title,
-      description: v.description.substring(0, 120) + (v.description.length > 120 ? '...' : ''),
-      company: v.company,
-      level: v.level,
-      salary: v.salary ?? null,
-      rating: v.rating,
-      department: v.department || 'Разработка',
-      requirements: v.requirements?.slice(0, 4) || [],
-      createdBy: v.createdBy
+      description: v.description || '',
+      requirements: v.requirements || [],
+      company: v.company || '',
+      salary: v.salary
         ? {
-            id: v.createdBy._id.toString(),
-            name: v.createdBy.name,
+            min: v.salary.min ?? null,
+            max: v.salary.max ?? null,
           }
         : null,
-      createdAt: v.createdAt.toISOString(),
+      department: v.department || null,
+      rating: v.rating || 0,
+      commentsStats: v.commentsStats || null,
+      createdAt: v.createdAt instanceof Date ? v.createdAt.toISOString() : new Date().toISOString(),
+      createdBy: isAuthorized ? v.createdBy?.toString() || null : null,
+      ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      commentsCount: 0,
     }));
 
     return NextResponse.json({
-      success: true,
       vacancies: formattedVacancies,
-      total,
+      totalResult,
       totalPages,
       currentPage: page,
     });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
-
+    const details = error instanceof Error ? error.message : 'Неизвестная ошибка';
     return NextResponse.json(
-      {
-        success: false,
-        message: 'Ошибка при загрузке вакансий',
-        details: message,
-      },
+      { success: false, message: 'Ошибка при загрузке вакансий', details },
       { status: 500 }
     );
   }

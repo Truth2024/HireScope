@@ -5,9 +5,9 @@ const VacancySchema = new mongoose.Schema({
   description: { type: String, required: true },
   requirements: [{ 
     type: String, 
-    enum: SKILLS,  // 👈 только из списка
+    enum: SKILLS,  
   }],
-  company: String,
+  company:{ type: String, required: true },
   salary: {
     min: Number,
     max: Number,
@@ -24,8 +24,8 @@ const VacancySchema = new mongoose.Schema({
     lastUpdated: { type: Date, default: Date.now }
   },
   department: String,
-  level: { type: String, enum: ['junior', 'middle', 'senior'] },
-  // ИСПРАВЛЕНИЕ ТУТ: меняем min: 1 на min: 0 или убираем min совсем
+
+
   rating: { type: Number, min: 0, max: 5, default: 0 }, 
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -33,9 +33,9 @@ const VacancySchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// Улучшенный метод для обновления рейтинга И статистики
+
 VacancySchema.methods.updateRating = async function () {
-  // Важно: проверяй путь до файла Comment. Если он в той же папке, то './Comment'
+
   const Comment = require('./Comment');
   
   const stats = await Comment.aggregate([

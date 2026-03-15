@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { Document } from 'mongoose';
 import { NextResponse } from 'next/server';
 
 import User from '@models/User';
@@ -14,13 +13,7 @@ type ExperienceDocument = {
   years?: number;
 };
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
-
 export async function POST(req: Request) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _register = { Document };
-
   await connectToDatabase();
 
   const session = await mongoose.startSession();
@@ -73,7 +66,7 @@ export async function POST(req: Request) {
         email: user.email,
         role: user.role,
       },
-      ACCESS_SECRET,
+      process.env.ACCESS_SECRET!,
       { expiresIn: '15m' }
     );
 
@@ -81,7 +74,7 @@ export async function POST(req: Request) {
       {
         userId: user._id.toString(),
       },
-      REFRESH_SECRET,
+      process.env.REFRESH_SECRET!,
       { expiresIn: '7d' }
     );
 

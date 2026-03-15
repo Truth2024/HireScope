@@ -1,5 +1,6 @@
 'use client';
 import { observer, useLocalObservable } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
@@ -11,6 +12,7 @@ import { RoleSelector } from './components/RoleSelector';
 
 export const RegisterClient = observer(() => {
   const t = useTranslations('Auth');
+  const router = useRouter();
   const registerStore = useLocalObservable(() => new RegisterFormStore());
   const { authStore } = useStore();
 
@@ -18,12 +20,10 @@ export const RegisterClient = observer(() => {
     e.preventDefault();
 
     if (registerStore.validation()) {
-      const data = await registerStore.register();
+      const response = await registerStore.register();
 
-      if (data.user && data.accessToken) {
-        authStore.setUser(data.user, data.accessToken);
-        window.location.href = data.user.role === 'hr' ? '/profile/hr/main' : '/profile/main';
-      }
+      authStore.setUser(response.user, response.accessToken);
+      router.push('/profile');
     }
   };
 

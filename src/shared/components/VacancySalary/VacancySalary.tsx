@@ -43,7 +43,7 @@ export const VacancySalary = ({ salary, variant = 'large' }: VacancySalaryProps)
   if (salary.min) {
     return (
       <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
-        From {formatMoney(salary.min)}
+        {t('from')} {formatMoney(salary.min)}
       </span>
     );
   }
@@ -51,7 +51,7 @@ export const VacancySalary = ({ salary, variant = 'large' }: VacancySalaryProps)
   if (salary.max) {
     return (
       <span className={`${textSize} text-(--color-brand)`} suppressHydrationWarning>
-        Up to {formatMoney(salary.max)}
+        {t('upto')} {formatMoney(salary.max)}
       </span>
     );
   }

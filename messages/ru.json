@@ -134,6 +134,7 @@
     "placeholderTitleChanger": "Введите название вакансии",
     "placeholderCompanyChanger": "Введите название компании",
     "from": "От",
+    "upto": "До",
     "to": "До",
     "ready": "Готово",
     "createVacancy": "Создать вакансию",

@@ -160,6 +160,7 @@
     "placeholderTitleChanger": "Enter the job title",
     "placeholderCompanyChanger": "Enter the company name",
     "from": "From",
+    "upto": "Up to",
     "to": "To",
     "ready": "Ready",
     "createVacancy": "Create vacancy",

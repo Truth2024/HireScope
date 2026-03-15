@@ -8,7 +8,7 @@ import React from 'react';
 
 import { useStore } from '@providers/StoreProvider';
 import { siteNavigation } from '@siteNav';
-import { Button, Input } from '@ui';
+import { Button, Input, Loader } from '@ui';
 
 import LoginFormStore from './LoginFormStore';
 import { useLoginInputs } from './useLoginInputs';
@@ -74,7 +74,7 @@ export const LoginClient = observer(() => {
           </div>
         )}
         <Button className="w-full" form="loginForm" type="submit">
-          {t('loginbutton')}
+          {loginFormStore.isLoading ? <Loader color="white" /> : t('loginbutton')}
         </Button>
       </div>
     </>

@@ -25,7 +25,7 @@ export const NotificationsCounter = observer(({ type = 'header' }: Notifications
   if (authStore.isLoading) {
     return (
       <div className={cn(baseClasses, positionClasses)}>
-        <Loader size="xs" />
+        <Loader size="xs" color="white" />
       </div>
     );
   }

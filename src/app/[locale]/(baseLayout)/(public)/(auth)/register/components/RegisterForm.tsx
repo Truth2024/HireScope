@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { siteNavigation } from '@siteNav';
-import { Button, Input } from '@ui';
+import { Button, Input, Loader } from '@ui';
 
 import type { ErrorField, FormField } from '../RegisterFormStore';
 import type RegisterFormStore from '../RegisterFormStore';
@@ -63,7 +63,7 @@ export const RegisterForm = observer(({ store, onSubmit }: RegisterFormProps) =>
         )}
 
         <Button className="w-full" form="regForm" type="submit" disabled={store.isLoading}>
-          {t('regbutton')}
+          {store.isLoading ? <Loader color="white" /> : t('regbutton')}
         </Button>
       </div>
     </>

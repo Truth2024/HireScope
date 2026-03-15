@@ -13,3 +13,4 @@ export { ToasterHR } from './Toaster/ToasterHR';
 export { ToasterCandidate } from './Toaster/ToasterCandidate';
 export { NotificationsCounter } from './NotificationsCounter/NotificationsCounter';
 export { ButtonMarkAll } from './ButtonMarkAll/ButtonMarkAll';
+export { ButtonNotFound } from './ButtonNotFound/ButtonNotFound';

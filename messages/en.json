@@ -207,6 +207,12 @@
       "description": "Nothing was found for your request. Try changing your search criteria."
     }
   },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "If you don't see the page, it doesn't mean it doesn't exist.",
+    "backHome": "Back to home",
+    "notFound": "404 — Page not found"
+  },
 
   "Error": {
     "failedAvatar": "Failed to load avatar",

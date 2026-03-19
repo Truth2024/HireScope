@@ -8,11 +8,14 @@ import { useStories } from './hooks/useStrories';
 import { stories } from './mockData/mockData';
 
 export default function Stories() {
+  const [isMounted, setIsMounted] = useState(false);
+
   const {
     isOpen,
     currentIndex,
     progress,
     isPaused,
+    viewedStories,
     openStory,
     closeStory,
     goToNextStory,
@@ -22,6 +25,12 @@ export default function Stories() {
   } = useStories(stories);
 
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Устанавливаем флаг монтирования для корректного отображения обводки на сервере и клиенте
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
 
   // Preload всех изображений при монтировании
   useEffect(() => {
@@ -74,24 +83,36 @@ export default function Stories() {
       <div className="w-full bg-white">
         <div className="content">
           <div className="flex gap-4 py-3 overflow-x-auto justify-center">
-            {stories.map((story, index) => (
-              <button
-                key={story.id}
-                onClick={() => openStory(index)}
-                className="w-16 h-16 rounded-full p-0.5 bg-(--color-brand) shrink-0 hover:scale-105 transition-transform cursor-pointer"
-              >
-                <div className="w-full h-full rounded-full bg-white p-0.5">
-                  <Image
-                    src={story.image}
-                    alt={`Story ${story.id}`}
-                    height={60}
-                    width={60}
-                    quality={75}
-                    className="rounded-full object-cover"
-                  />
-                </div>
-              </button>
-            ))}
+            {stories.map((story, index) => {
+              const buttonColor = !isMounted
+                ? 'bg-(--color-brand)'
+                : viewedStories.has(story.id)
+                  ? 'bg-gray-200'
+                  : 'bg-(--color-brand)';
+
+              return (
+                <button
+                  key={story.id}
+                  onClick={() => openStory(index)}
+                  className={`
+                    w-16 h-16 rounded-full p-0.5 shrink-0 
+                    hover:scale-105 transition-transform cursor-pointer
+                    ${buttonColor}
+                  `}
+                >
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <Image
+                      src={story.image}
+                      alt={`Story ${story.id}`}
+                      height={60}
+                      width={60}
+                      quality={75}
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

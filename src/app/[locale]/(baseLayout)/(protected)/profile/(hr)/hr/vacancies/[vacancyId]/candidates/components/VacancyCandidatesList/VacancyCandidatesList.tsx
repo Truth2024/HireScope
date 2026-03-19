@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 import { VacancyCandidateCard } from '@HRVacancyCandidateComponents';
 import type { ICandidate } from '@myTypes/mongoTypes';
@@ -20,6 +21,7 @@ export const VacancyCandidatesList = ({
   candidates,
   onAddNote,
 }: ListProps) => {
+  const t = useTranslations('Error');
   const queryClient = useQueryClient();
   const { authStore } = useStore();
   const acceptCandidateMutation = useMutation({
@@ -76,21 +78,27 @@ export const VacancyCandidatesList = ({
 
   return (
     <div className="space-y-4">
-      {candidates.map((item) => (
-        <VacancyCandidateCard
-          isAcceptLoading={
-            acceptCandidateMutation.isPending && acceptCandidateMutation.variables === item.id
-          }
-          isRejectLoading={
-            rejectCandidateMutation.isPending && rejectCandidateMutation.variables === item.id
-          }
-          key={item.id}
-          candidate={item}
-          onAccept={() => acceptCandidateMutation.mutate(item.id)}
-          onReject={() => rejectCandidateMutation.mutate(item.id)}
-          onAddNote={() => onAddNote(item)}
-        />
-      ))}
+      {candidates.map((item) => {
+        const isError =
+          rejectCandidateMutation.error && rejectCandidateMutation.variables === item.id;
+        return (
+          <div key={item.id}>
+            <VacancyCandidateCard
+              isAcceptLoading={
+                acceptCandidateMutation.isPending && acceptCandidateMutation.variables === item.id
+              }
+              isRejectLoading={
+                rejectCandidateMutation.isPending && rejectCandidateMutation.variables === item.id
+              }
+              candidate={item}
+              onAccept={() => acceptCandidateMutation.mutate(item.id)}
+              onReject={() => rejectCandidateMutation.mutate(item.id)}
+              onAddNote={() => onAddNote(item)}
+            />
+            {isError && <div className="text-red-500 text-sm mt-1">{t('title')}</div>}
+          </div>
+        );
+      })}
     </div>
   );
 };

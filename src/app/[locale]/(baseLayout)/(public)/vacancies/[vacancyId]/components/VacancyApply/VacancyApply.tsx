@@ -85,8 +85,8 @@ export const VacancyApply = observer(
     }
 
     return (
-      <div className="flex flex-col gap-2">
-        <Button onClick={handleApply} variant="primary" className="max-[480px]:w-full">
+      <div className="flex flex-col gap-2 max-[480px]:w-full">
+        <Button onClick={handleApply} variant="primary">
           {loadingSub ? <Loader color="white" size="s" /> : t('apply')}
         </Button>
         {isError && <p className="text-sm text-red-400">{t('applyError')}</p>}

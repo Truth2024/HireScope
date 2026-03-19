@@ -50,7 +50,7 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
           <div className={`text-xs sm:text-sm mt-2 p-1 sm:p-2 rounded w-fit ${messageColorClass}`}>
             {notification.type === 'candidate-accepted'
               ? t('acceptedMessage')
-              : t('rejectedMesage')}
+              : t('rejectedMessage')}
           </div>
         )}
 
